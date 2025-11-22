@@ -101,7 +101,16 @@ export function DailyLogTab({
 
   const dailyTotals = sumMacros(meals as MealEntryWithDetails[]);
 
-  const formatDate = (dateStr: string) => {
+  const formatDateShort = (dateStr: string) => {
+    const date = new Date(dateStr + "T00:00:00");
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  const formatDateLong = (dateStr: string) => {
     const date = new Date(dateStr + "T00:00:00");
     return date.toLocaleDateString("en-US", {
       weekday: "long",
@@ -112,135 +121,137 @@ export function DailyLogTab({
   };
 
   return (
-    <div className="space-y-4 pb-6">
-      {/* Header Section */}
-      <div className="rounded-2xl bg-zinc-900 p-4 dark:bg-zinc-800 sm:p-6">
-        <div className="space-y-3 sm:space-y-0 sm:flex sm:items-start sm:justify-between sm:gap-4">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              onClick={() => {
-                const date = new Date(selectedDate);
-                date.setDate(date.getDate() - 1);
-                setSelectedDate(date.toISOString().split("T")[0]);
-              }}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white active:bg-zinc-700"
-            >
-              ←
-            </button>
+    <div className="space-y-3 pb-6">
+      {/* Compact Mobile Header */}
+      <div className="rounded-xl bg-zinc-900 p-4 dark:bg-zinc-800">
+        {/* Top row - Title and Add button */}
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <Heading
+            level={2}
+            className="text-base font-semibold text-white sm:text-lg"
+          >
+            Daily Log
+          </Heading>
+          <Button
+            onClick={() => setShowAddDialog(true)}
+            className="whitespace-nowrap text-sm"
+          >
+            + Add
+          </Button>
+        </div>
 
-            <div className="min-w-0 flex-1">
-              <Heading
-                level={2}
-                className="text-lg font-semibold text-white sm:text-xl"
-              >
-                Daily Nutrition Log
-              </Heading>
-              <Text className="mt-1 text-xs text-zinc-400 sm:text-sm truncate">
-                {formatDate(selectedDate)} • {userName}
-              </Text>
-            </div>
+        {/* Date navigation */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              const date = new Date(selectedDate);
+              date.setDate(date.getDate() - 1);
+              setSelectedDate(date.toISOString().split("T")[0]);
+            }}
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white"
+          >
+            ←
+          </button>
 
-            <button
-              onClick={() => {
-                const date = new Date(selectedDate);
-                date.setDate(date.getDate() + 1);
-                setSelectedDate(date.toISOString().split("T")[0]);
-              }}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white active:bg-zinc-700"
-            >
-              →
-            </button>
+          <div className="flex-1 min-w-0">
+            <Text className="text-sm font-medium text-white truncate sm:text-base">
+              {formatDateShort(selectedDate)}
+            </Text>
+            <Text className="text-xs text-zinc-400 truncate">{userName}</Text>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="flex-1 bg-zinc-800 text-sm text-white border-zinc-700 sm:flex-initial"
-            />
-            <Button
-              onClick={() => setShowAddDialog(true)}
-              className="whitespace-nowrap text-sm sm:text-base"
-            >
-              + Add
-            </Button>
-          </div>
+          <Input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="w-32 bg-zinc-800 text-xs text-white border-zinc-700 sm:w-auto sm:text-sm"
+          />
+
+          <button
+            onClick={() => {
+              const date = new Date(selectedDate);
+              date.setDate(date.getDate() + 1);
+              setSelectedDate(date.toISOString().split("T")[0]);
+            }}
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white"
+          >
+            →
+          </button>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900 sm:p-5">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Total Calories
+      {/* Compact Stats Grid */}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+        <div className="rounded-xl bg-white p-3 dark:bg-zinc-900 sm:p-4">
+          <Text className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
+            Calories
           </Text>
-          <div className="mt-2 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2.5 sm:text-2xl lg:text-3xl">
+          <div className="mt-1.5 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2 sm:text-2xl">
             {meals.length > 0
               ? Math.round(dailyTotals.calories).toLocaleString()
               : "0"}
           </div>
           {meals.length > 0 && (
-            <Text className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 sm:mt-1.5">
+            <Text className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 sm:text-xs">
               {meals.length} {meals.length === 1 ? "entry" : "entries"}
             </Text>
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900 sm:p-5">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-xl bg-white p-3 dark:bg-zinc-900 sm:p-4">
+          <Text className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
             Protein
           </Text>
-          <div className="mt-2 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2.5 sm:text-2xl lg:text-3xl">
+          <div className="mt-1.5 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2 sm:text-2xl">
             {meals.length > 0 ? Math.round(dailyTotals.protein * 10) / 10 : "0"}
             <span className="text-sm font-normal text-zinc-500 sm:text-base">
               g
             </span>
           </div>
           {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 sm:mt-1.5">
+            <Text className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 sm:text-xs">
               {Math.round(
                 ((dailyTotals.protein * 4) / dailyTotals.calories) * 100
               )}
-              % of calories
+              %
             </Text>
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900 sm:p-5">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-xl bg-white p-3 dark:bg-zinc-900 sm:p-4">
+          <Text className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
             Carbs
           </Text>
-          <div className="mt-2 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2.5 sm:text-2xl lg:text-3xl">
+          <div className="mt-1.5 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2 sm:text-2xl">
             {meals.length > 0 ? Math.round(dailyTotals.carbs * 10) / 10 : "0"}
             <span className="text-sm font-normal text-zinc-500 sm:text-base">
               g
             </span>
           </div>
           {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 sm:mt-1.5">
+            <Text className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 sm:text-xs">
               {Math.round(
                 ((dailyTotals.carbs * 4) / dailyTotals.calories) * 100
               )}
-              % of calories
+              %
             </Text>
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900 sm:p-5">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-xl bg-white p-3 dark:bg-zinc-900 sm:p-4">
+          <Text className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
             Fat
           </Text>
-          <div className="mt-2 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2.5 sm:text-2xl lg:text-3xl">
+          <div className="mt-1.5 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2 sm:text-2xl">
             {meals.length > 0 ? Math.round(dailyTotals.fat * 10) / 10 : "0"}
             <span className="text-sm font-normal text-zinc-500 sm:text-base">
               g
             </span>
           </div>
           {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 sm:mt-1.5">
+            <Text className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 sm:text-xs">
               {Math.round(((dailyTotals.fat * 9) / dailyTotals.calories) * 100)}
-              % of calories
+              %
             </Text>
           )}
         </div>
@@ -248,44 +259,42 @@ export function DailyLogTab({
 
       {/* Meal Breakdown */}
       {meals.length > 0 ? (
-        <div className="space-y-3">
-          <Text className="px-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Meal Breakdown
+        <div className="space-y-2">
+          <Text className="px-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
+            Meals
           </Text>
           <MealBreakdown groupedMeals={groupedMeals} onDelete={handleDelete} />
         </div>
       ) : (
-        <div className="rounded-2xl bg-white p-8 text-center dark:bg-zinc-900 sm:p-12">
+        <div className="rounded-xl bg-white p-8 text-center dark:bg-zinc-900 sm:p-12">
           <div className="mx-auto max-w-sm">
-            <div className="mb-3 text-3xl sm:text-4xl">🍽️</div>
+            <div className="mb-2 text-3xl sm:text-4xl">🍽️</div>
             <Text className="text-sm font-semibold text-zinc-900 dark:text-white sm:text-base">
               No meals logged yet
             </Text>
-            <Text className="mt-2 text-xs text-zinc-500 dark:text-zinc-400 sm:text-sm">
-              Click "+ Add" to start tracking your nutrition
+            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400 sm:text-sm">
+              Tap "+ Add" to start tracking
             </Text>
           </div>
         </div>
       )}
 
       {/* Add Entry Dialog */}
-      {showAddDialog && (
-        <Dialog
-          open={showAddDialog}
-          onClose={() => setShowAddDialog(false)}
-          size="lg"
-        >
-          <DialogTitle>Add Meal Entry</DialogTitle>
-          <DialogBody>
-            <AddMealForm
-              foods={foods}
-              recipes={recipes}
-              onAdd={handleAddEntry}
-              isAdding={isAdding}
-            />
-          </DialogBody>
-        </Dialog>
-      )}
+      <Dialog
+        open={showAddDialog}
+        onClose={() => setShowAddDialog(false)}
+        size="lg"
+      >
+        <DialogTitle>Add Meal Entry</DialogTitle>
+        <DialogBody>
+          <AddMealForm
+            foods={foods}
+            recipes={recipes}
+            onAdd={handleAddEntry}
+            isAdding={isAdding}
+          />
+        </DialogBody>
+      </Dialog>
     </div>
   );
 }
