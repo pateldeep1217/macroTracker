@@ -1,4 +1,4 @@
-import type { MealEntryWithDetails } from "@/lib/supabase/queries";
+import type { MealEntryWithDetails } from "@/utils/supabase/queries";
 
 export interface MacroTotals {
   readonly calories: number;
