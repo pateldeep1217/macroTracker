@@ -19,7 +19,7 @@ export function TodaySummary({
 }: TodaySummaryProps) {
   return (
     <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-800 dark:ring-white/10">
-      <Subheading>Today's Summary - {selectedDate}</Subheading>
+      <Subheading>Today&apos;s Summary - {selectedDate}</Subheading>
       <Text className="mt-1 text-sm text-zinc-500">for {userName}</Text>
 
       <div className="mt-6">

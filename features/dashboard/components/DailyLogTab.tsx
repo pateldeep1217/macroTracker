@@ -116,18 +116,8 @@ export function DailyLogTab({
     });
   };
 
-  const formatDateLong = (dateStr: string) => {
-    const date = new Date(dateStr + "T00:00:00");
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
   return (
-    <div className="space-y-3 pb-6">
+    <div className="space-y-4 pb-6">
       {/* Compact Mobile Header */}
       <div className="rounded-xl bg-zinc-900 p-4 dark:bg-zinc-800">
         {/* Top row - Title and Add button */}
@@ -186,36 +176,34 @@ export function DailyLogTab({
         </div>
       </div>
 
-      {/* Compact Stats Grid */}
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
-        <div className="rounded-xl bg-white p-3 dark:bg-zinc-900 sm:p-4">
-          <Text className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
+      {/* Stats Grid - More spacious */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Calories
           </Text>
-          <div className="mt-1.5 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2 sm:text-2xl">
+          <div className="mt-2 font-mono text-2xl font-bold text-zinc-900 dark:text-white">
             {meals.length > 0
               ? Math.round(dailyTotals.calories).toLocaleString()
               : "0"}
           </div>
           {meals.length > 0 && (
-            <Text className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 sm:text-xs">
+            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
               {meals.length} {meals.length === 1 ? "entry" : "entries"}
             </Text>
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-3 dark:bg-zinc-900 sm:p-4">
-          <Text className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
+        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Protein
           </Text>
-          <div className="mt-1.5 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2 sm:text-2xl">
+          <div className="mt-2 font-mono text-2xl font-bold text-zinc-900 dark:text-white">
             {meals.length > 0 ? Math.round(dailyTotals.protein * 10) / 10 : "0"}
-            <span className="text-sm font-normal text-zinc-500 sm:text-base">
-              g
-            </span>
+            <span className="text-base font-normal text-zinc-500">g</span>
           </div>
           {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 sm:text-xs">
+            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
               {Math.round(
                 ((dailyTotals.protein * 4) / dailyTotals.calories) * 100
               )}
@@ -224,18 +212,16 @@ export function DailyLogTab({
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-3 dark:bg-zinc-900 sm:p-4">
-          <Text className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
+        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Carbs
           </Text>
-          <div className="mt-1.5 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2 sm:text-2xl">
+          <div className="mt-2 font-mono text-2xl font-bold text-zinc-900 dark:text-white">
             {meals.length > 0 ? Math.round(dailyTotals.carbs * 10) / 10 : "0"}
-            <span className="text-sm font-normal text-zinc-500 sm:text-base">
-              g
-            </span>
+            <span className="text-base font-normal text-zinc-500">g</span>
           </div>
           {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 sm:text-xs">
+            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
               {Math.round(
                 ((dailyTotals.carbs * 4) / dailyTotals.calories) * 100
               )}
@@ -244,18 +230,16 @@ export function DailyLogTab({
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-3 dark:bg-zinc-900 sm:p-4">
-          <Text className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
+        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Fat
           </Text>
-          <div className="mt-1.5 font-mono text-xl font-bold text-zinc-900 dark:text-white sm:mt-2 sm:text-2xl">
+          <div className="mt-2 font-mono text-2xl font-bold text-zinc-900 dark:text-white">
             {meals.length > 0 ? Math.round(dailyTotals.fat * 10) / 10 : "0"}
-            <span className="text-sm font-normal text-zinc-500 sm:text-base">
-              g
-            </span>
+            <span className="text-base font-normal text-zinc-500">g</span>
           </div>
           {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400 sm:text-xs">
+            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
               {Math.round(((dailyTotals.fat * 9) / dailyTotals.calories) * 100)}
               %
             </Text>
@@ -263,10 +247,10 @@ export function DailyLogTab({
         </div>
       </div>
 
-      {/* Meal Breakdown */}
+      {/* Meal Breakdown - More space */}
       {meals.length > 0 ? (
-        <div className="space-y-2">
-          <Text className="px-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 sm:text-xs">
+        <div className="space-y-3">
+          <Text className="px-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Meals
           </Text>
           <MealBreakdown groupedMeals={groupedMeals} onDelete={handleDelete} />
