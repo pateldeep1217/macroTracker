@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { UserSelectionScreen } from "../customComponents/user-selection-screen";
+import { UserSelectionScreen } from "@/features/user/components/UserSelectionScreen";
 
 import type { AppUser } from "@/utils/supabase/queries";
-import { MainDashboard } from "../customComponents/dashboard-view";
+import { MainDashboard } from "@/features/dashboard/components/MainDashboard";
 
 interface HomeContentProps {
   users: AppUser[];
