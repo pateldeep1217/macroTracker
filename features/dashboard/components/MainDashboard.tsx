@@ -12,20 +12,49 @@ import {
   getUserRecipes,
   getMealsByDate,
 } from "@/utils/supabase/queries";
-import { Heading } from "@/app/components/heading";
-import { Text } from "@/app/components/text";
+import { Avatar } from "@/app/components/avatar";
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownDivider,
+  DropdownItem,
+  DropdownLabel,
+  DropdownMenu,
+} from "@/app/components/dropdown";
+import {
+  Navbar,
+  NavbarDivider,
+  NavbarItem,
+  NavbarSection,
+  NavbarSpacer,
+} from "@/app/components/navbar";
+import {
+  Sidebar,
+  SidebarBody,
+  SidebarHeader,
+  SidebarItem,
+  SidebarLabel,
+  SidebarSection,
+} from "@/app/components/sidebar";
+import { StackedLayout } from "@/app/components/stacked-layout";
 import { DailyLogTab } from "./DailyLogTab";
 import { FoodItemsTab } from "./FoodItemsTab";
 import { RecipesTab } from "./RecipesTab";
 import { SummaryTab } from "./SummaryTab";
-import { TabNavigation } from "./TabNavigation";
 import { LoadingState } from "@/features/shared/components/LoadingState";
+import {
+  ChartBarIcon,
+  ClipboardDocumentListIcon,
+  Squares2X2Icon,
+  BeakerIcon,
+} from "@heroicons/react/20/solid";
+import { UserIcon } from "@heroicons/react/16/solid";
 
 const TABS = [
-  { id: "log", label: "Daily Log" },
-  { id: "foods", label: "Food Items" },
-  { id: "recipes", label: "Recipes" },
-  { id: "summary", label: "Summary" },
+  { id: "log", label: "Daily Log", icon: ClipboardDocumentListIcon },
+  { id: "foods", label: "Food Items", icon: Squares2X2Icon },
+  { id: "recipes", label: "Recipes", icon: BeakerIcon },
+  { id: "summary", label: "Summary", icon: ChartBarIcon },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -106,49 +135,105 @@ export function MainDashboard({
     return <LoadingState message="Loading your dashboard..." />;
   }
 
-  return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      {/* Compact Header - Sticky */}
-      <div className="sticky top-0 z-10 border-b border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex-1 min-w-0">
-              <Heading level={1} className="text-lg font-bold sm:text-xl">
-                Food Macro Tracker
-              </Heading>
-              <Text className="hidden text-sm text-zinc-600 dark:text-zinc-400 sm:block">
-                Track your daily nutrition
-              </Text>
-            </div>
+  function UserDropdownMenu() {
+    return (
+      <DropdownMenu className="min-w-64" anchor="bottom end">
+        <DropdownItem href="#">
+          <UserIcon />
+          <DropdownLabel>{currentUser.name}</DropdownLabel>
+        </DropdownItem>
+        <DropdownDivider />
+        <DropdownItem onClick={onSwitchUser}>
+          <DropdownLabel>Switch User</DropdownLabel>
+        </DropdownItem>
+      </DropdownMenu>
+    );
+  }
 
+  return (
+    <StackedLayout
+      navbar={
+        <Navbar>
+          <NavbarSection className="max-lg:hidden">
             <div className="flex items-center gap-3">
-              <div className="text-right">
-                <Text className="text-sm font-medium">{currentUser.name}</Text>
-                <button
-                  onClick={onSwitchUser}
-                  className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 sm:text-sm"
-                >
-                  Switch User
-                </button>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-zinc-900">
+                <span className="text-lg font-bold">🍎</span>
+              </div>
+              <div>
+                <div className="text-base font-semibold">
+                  Food Macro Tracker
+                </div>
+                <div className="text-xs text-zinc-500">
+                  Track your nutrition
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Tabs Navigation - Scrollable on Mobile */}
-        <div className="border-t border-zinc-200 dark:border-zinc-800">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <TabNavigation
-              tabs={TABS}
-              activeTab={activeTab}
-              onTabChange={(tabId) => setActiveTab(tabId as TabId)}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Tab Content */}
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+          </NavbarSection>
+          <NavbarDivider className="max-lg:hidden" />
+          <NavbarSection className="max-lg:hidden">
+            {TABS.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <NavbarItem
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  current={activeTab === tab.id}
+                >
+                  <Icon />
+                  {tab.label}
+                </NavbarItem>
+              );
+            })}
+          </NavbarSection>
+          <NavbarSpacer />
+          <NavbarSection>
+            <Dropdown>
+              <DropdownButton as={NavbarItem}>
+                <Avatar initials={currentUser.name.substring(0, 2)} square />
+              </DropdownButton>
+              <UserDropdownMenu />
+            </Dropdown>
+          </NavbarSection>
+        </Navbar>
+      }
+      sidebar={
+        <Sidebar>
+          <SidebarHeader>
+            <div className="flex items-center gap-3 px-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 text-white dark:bg-white dark:text-zinc-900">
+                <span className="text-lg font-bold">🍎</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <SidebarLabel className="text-sm font-semibold">
+                  Food Tracker
+                </SidebarLabel>
+                <div className="text-xs text-zinc-500 truncate">
+                  {currentUser.name}
+                </div>
+              </div>
+            </div>
+          </SidebarHeader>
+          <SidebarBody>
+            <SidebarSection>
+              {TABS.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <SidebarItem
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    current={activeTab === tab.id}
+                  >
+                    <Icon />
+                    <SidebarLabel>{tab.label}</SidebarLabel>
+                  </SidebarItem>
+                );
+              })}
+            </SidebarSection>
+          </SidebarBody>
+        </Sidebar>
+      }
+    >
+      <div className="mx-auto max-w-6xl">
         {activeTab === "log" && (
           <DailyLogTab
             userId={selectedUserId}
@@ -185,6 +270,6 @@ export function MainDashboard({
           />
         )}
       </div>
-    </div>
+    </StackedLayout>
   );
 }

@@ -11,7 +11,13 @@ import { Heading } from "@/app/components/heading";
 import { Text } from "@/app/components/text";
 import { Input } from "@/app/components/input";
 import { Button } from "@/app/components/button";
-import { Dialog, DialogTitle, DialogBody } from "@/app/components/dialog";
+import {
+  Dialog,
+  DialogTitle,
+  DialogDescription,
+  DialogBody,
+  DialogActions,
+} from "@/app/components/dialog";
 import { AddMealForm } from "@/features/meals/components/AddMealForm";
 import { MealBreakdown } from "@/features/meals/components/MealBreakdown";
 import type { MealType } from "@/features/shared/utils/constatns";
@@ -280,12 +286,12 @@ export function DailyLogTab({
       )}
 
       {/* Add Entry Dialog */}
-      <Dialog
-        open={showAddDialog}
-        onClose={() => setShowAddDialog(false)}
-        size="lg"
-      >
+      <Dialog open={showAddDialog} onClose={setShowAddDialog} size="xl">
         <DialogTitle>Add Meal Entry</DialogTitle>
+        <DialogDescription>
+          Select a food item or recipe to add to your daily log for{" "}
+          {formatDateShort(selectedDate)}.
+        </DialogDescription>
         <DialogBody>
           <AddMealForm
             foods={foods}
@@ -294,6 +300,11 @@ export function DailyLogTab({
             isAdding={isAdding}
           />
         </DialogBody>
+        <DialogActions>
+          <Button plain onClick={() => setShowAddDialog(false)}>
+            Cancel
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );
