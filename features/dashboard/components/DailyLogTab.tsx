@@ -117,7 +117,7 @@ export function DailyLogTab({
     <div className="space-y-4 pb-6">
       {/* Header with Date Navigation */}
       <div className="rounded-xl bg-zinc-900 p-3 dark:bg-zinc-800 sm:p-4">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 ">
           {/* Date Navigation Group */}
           <div className="flex items-center gap-1">
             <button
@@ -133,12 +133,10 @@ export function DailyLogTab({
             </button>
 
             <div className="px-3 text-center">
-              <Text className="text-base font-semibold text-white sm:text-lg whitespace-nowrap">
+              <Text className="text-base font-semibold text-white sm:text-lg">
                 {formatDateShort(selectedDate)}
               </Text>
-              <Text className="text-xs text-zinc-400 whitespace-nowrap">
-                {userName}
-              </Text>
+              <Text className="text-xs text-zinc-400 ">{userName}</Text>
             </div>
 
             <button
@@ -171,7 +169,7 @@ export function DailyLogTab({
           {/* Add Button */}
           <Button
             onClick={() => setShowAddDialog(true)}
-            className="whitespace-nowrap h-9"
+            className="whitespace-nowrap h-9 flex justify-center items-center"
           >
             + Add
           </Button>
