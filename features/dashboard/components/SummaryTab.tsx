@@ -7,8 +7,8 @@ import { Text } from "@/app/components/text";
 import { Button } from "@/app/components/button";
 import { sumMacros, calculateMealMacros } from "@/features/shared/utils/macors";
 import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
-
 import { MEAL_TYPES } from "@/features/shared/utils/constatns";
+import { MealBreakdown } from "@/features/meals/components/MealBreakdown";
 
 interface SummaryTabProps {
   readonly userId: string;
@@ -39,6 +39,10 @@ export function SummaryTab({
   };
 
   const generateSummaryText = () => {
+    const groupedMeals = MEAL_TYPES.map(
+      (type) => [type, meals.filter((m) => m.meal_type === type)] as const
+    );
+
     const mealsList = groupedMeals
       .flatMap(([mealType, mealEntries]) => {
         if (mealEntries.length === 0) return [];
@@ -81,10 +85,6 @@ ${mealsList}
 
 Tracked with Food Macro Tracker`;
   };
-
-  const groupedMeals = MEAL_TYPES.map(
-    (type) => [type, meals.filter((m) => m.meal_type === type)] as const
-  );
 
   return (
     <div className="space-y-4 pb-6">
@@ -187,58 +187,7 @@ Tracked with Food Macro Tracker`;
           <Text className="px-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Meals
           </Text>
-
-          {groupedMeals.map(([mealType, mealEntries]) => {
-            if (mealEntries.length === 0) return null;
-
-            const mealTotals = sumMacros(mealEntries);
-
-            return (
-              <div
-                key={mealType}
-                className="rounded-xl bg-white dark:bg-zinc-900 overflow-hidden"
-              >
-                {/* Meal Type Header */}
-                <div className="bg-zinc-50 dark:bg-zinc-800/50 px-4 py-3 border-b border-zinc-200 dark:border-zinc-700">
-                  <div className="flex items-center justify-between">
-                    <Text className="font-semibold text-sm capitalize">
-                      {mealType}
-                    </Text>
-                    <div className="flex gap-4 text-xs text-zinc-600 dark:text-zinc-400">
-                      <span>{Math.round(mealTotals.calories)} cal</span>
-                      <span>P: {Math.round(mealTotals.protein)}g</span>
-                      <span>C: {Math.round(mealTotals.carbs)}g</span>
-                      <span>F: {Math.round(mealTotals.fat)}g</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Meal Items */}
-                <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                  {mealEntries.map((meal) => {
-                    const macros = calculateMealMacros(meal);
-                    return (
-                      <div key={meal.id} className="px-4 py-3">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex-1 min-w-0">
-                            <Text className="font-medium text-sm truncate">
-                              {meal.food_items?.name || meal.recipes?.name}
-                            </Text>
-                            <Text className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                              {Math.round(macros.calories)} cal • P:{" "}
-                              {Math.round(macros.protein * 10) / 10}g • C:{" "}
-                              {Math.round(macros.carbs * 10) / 10}g • F:{" "}
-                              {Math.round(macros.fat * 10) / 10}g
-                            </Text>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
+          <MealBreakdown meals={meals} readOnly />
         </div>
       ) : (
         <div className="rounded-xl bg-white p-8 text-center dark:bg-zinc-900 sm:p-12">

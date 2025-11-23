@@ -1,3 +1,6 @@
+// ============================================
+// FILE 1: DailyLogTab.tsx - UPDATED
+// ============================================
 "use client";
 
 import { useState } from "react";
@@ -21,7 +24,6 @@ import {
 import { AddMealForm } from "@/features/meals/components/AddMealForm";
 import { MealBreakdown } from "@/features/meals/components/MealBreakdown";
 import type { MealType } from "@/features/shared/utils/constatns";
-import { MEAL_TYPES } from "@/features/shared/utils/constatns";
 import { sumMacros } from "@/features/shared/utils/macors";
 
 interface DailyLogTabProps {
@@ -100,11 +102,6 @@ export function DailyLogTab({
     }
   };
 
-  const groupedMeals = MEAL_TYPES.reduce((acc, type) => {
-    acc[type] = meals.filter((m) => m.meal_type === type);
-    return acc;
-  }, {} as Record<MealType, MealEntryWithDetails[]>);
-
   const dailyTotals = sumMacros(meals as MealEntryWithDetails[]);
 
   const formatDateShort = (dateStr: string) => {
@@ -118,65 +115,70 @@ export function DailyLogTab({
 
   return (
     <div className="space-y-4 pb-6">
-      {/* Compact Mobile Header */}
-      <div className="rounded-xl bg-zinc-900 p-4 dark:bg-zinc-800">
-        {/* Top row - Title and Add button */}
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <Heading
-            level={2}
-            className="text-base font-semibold text-white sm:text-lg"
-          >
-            Daily Log
-          </Heading>
+      {/* Header with Date Navigation */}
+      <div className="rounded-xl bg-zinc-900 p-3 dark:bg-zinc-800 sm:p-4">
+        <div className="flex items-center justify-between gap-3">
+          {/* Date Navigation Group */}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => {
+                const date = new Date(selectedDate);
+                date.setDate(date.getDate() - 1);
+                setSelectedDate(date.toISOString().split("T")[0]);
+              }}
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
+              aria-label="Previous day"
+            >
+              ←
+            </button>
+
+            <div className="px-3 text-center">
+              <Text className="text-base font-semibold text-white sm:text-lg whitespace-nowrap">
+                {formatDateShort(selectedDate)}
+              </Text>
+              <Text className="text-xs text-zinc-400 whitespace-nowrap">
+                {userName}
+              </Text>
+            </div>
+
+            <button
+              onClick={() => {
+                const date = new Date(selectedDate);
+                date.setDate(date.getDate() + 1);
+                setSelectedDate(date.toISOString().split("T")[0]);
+              }}
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
+              aria-label="Next day"
+            >
+              →
+            </button>
+
+            <div className="relative ml-1">
+              <Input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="h-9 w-9 flex-shrink-0 bg-zinc-800 text-white border-zinc-700 cursor-pointer hover:bg-zinc-700 transition-colors opacity-0 absolute inset-0"
+                style={{ colorScheme: "dark" }}
+                aria-label="Select date"
+              />
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-800 text-zinc-400 hover:bg-zinc-700 transition-colors pointer-events-none">
+                📅
+              </div>
+            </div>
+          </div>
+
+          {/* Add Button */}
           <Button
             onClick={() => setShowAddDialog(true)}
-            className="whitespace-nowrap text-sm"
+            className="whitespace-nowrap h-9"
           >
             + Add
           </Button>
         </div>
-
-        {/* Date navigation */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
-              const date = new Date(selectedDate);
-              date.setDate(date.getDate() - 1);
-              setSelectedDate(date.toISOString().split("T")[0]);
-            }}
-            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white"
-          >
-            ←
-          </button>
-
-          <div className="flex-1 min-w-0">
-            <Text className="text-sm font-medium text-white truncate sm:text-base">
-              {formatDateShort(selectedDate)}
-            </Text>
-            <Text className="text-xs text-zinc-400 truncate">{userName}</Text>
-          </div>
-
-          <Input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-32 bg-zinc-800 text-xs text-white border-zinc-700 sm:w-auto sm:text-sm"
-          />
-
-          <button
-            onClick={() => {
-              const date = new Date(selectedDate);
-              date.setDate(date.getDate() + 1);
-              setSelectedDate(date.toISOString().split("T")[0]);
-            }}
-            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white"
-          >
-            →
-          </button>
-        </div>
       </div>
 
-      {/* Stats Grid - More spacious */}
+      {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
           <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
@@ -247,13 +249,13 @@ export function DailyLogTab({
         </div>
       </div>
 
-      {/* Meal Breakdown - More space */}
+      {/* Meal Breakdown */}
       {meals.length > 0 ? (
         <div className="space-y-3">
           <Text className="px-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Meals
           </Text>
-          <MealBreakdown groupedMeals={groupedMeals} onDelete={handleDelete} />
+          <MealBreakdown meals={meals} onDelete={handleDelete} />
         </div>
       ) : (
         <div className="rounded-xl bg-white p-8 text-center dark:bg-zinc-900 sm:p-12">
