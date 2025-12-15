@@ -19,12 +19,14 @@ import type { MealType } from "@/features/shared/utils/constatns";
 interface MealBreakdownProps {
   readonly meals: readonly MealEntryWithDetails[];
   readonly onDelete?: (mealId: string) => Promise<void>;
+  readonly onEdit?: (meal: MealEntryWithDetails) => void;
   readonly readOnly?: boolean;
 }
 
 export function MealBreakdown({
   meals,
   onDelete,
+  onEdit,
   readOnly = false,
 }: MealBreakdownProps) {
   const groupedMeals = MEAL_TYPES.map((type) => ({
@@ -72,6 +74,7 @@ export function MealBreakdown({
                   onDelete={
                     readOnly || !onDelete ? undefined : () => onDelete(meal.id)
                   }
+                  onEdit={readOnly || !onEdit ? undefined : () => onEdit(meal)}
                 />
               ))}
             </div>
@@ -86,9 +89,11 @@ export function MealBreakdown({
 function MealEntryRow({
   meal,
   onDelete,
+  onEdit,
 }: {
   meal: MealEntryWithDetails;
   onDelete?: () => Promise<void>;
+  onEdit?: () => void;
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -130,15 +135,24 @@ function MealEntryRow({
             {formatted.carbs}g • F: {formatted.fat}g
           </Text>
         </div>
-        {onDelete && (
-          <Button
-            plain
-            className="text-xs flex-shrink-0"
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
-            {isDeleting ? "..." : "Delete"}
-          </Button>
+        {(onEdit || onDelete) && (
+          <div className="flex gap-2 flex-shrink-0">
+            {onEdit && (
+              <Button plain className="text-xs" onClick={onEdit}>
+                Edit
+              </Button>
+            )}
+            {onDelete && (
+              <Button
+                plain
+                className="text-xs"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "..." : "Delete"}
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </div>

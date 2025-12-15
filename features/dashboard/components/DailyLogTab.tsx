@@ -1,5 +1,5 @@
 // ============================================
-// FILE 1: DailyLogTab.tsx - UPDATED
+// FILE: DailyLogTab.tsx - USING CUSTOM SHEET
 // ============================================
 "use client";
 
@@ -9,18 +9,26 @@ import type {
   Recipe,
   MealEntryWithDetails,
 } from "@/utils/supabase/queries";
-import { logFood, logRecipe, deleteMealEntry } from "@/utils/supabase/queries";
+import {
+  logFood,
+  logRecipe,
+  deleteMealEntry,
+  updateMealEntry,
+} from "@/utils/supabase/queries";
 import { Heading } from "@/app/components/heading";
 import { Text } from "@/app/components/text";
 import { Input } from "@/app/components/input";
 import { Button } from "@/app/components/button";
 import {
-  Dialog,
-  DialogTitle,
-  DialogDescription,
-  DialogBody,
-  DialogActions,
-} from "@/app/components/dialog";
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/app/components/sheet"; // Adjust path to where you save the sheet component
 import { AddMealForm } from "@/features/meals/components/AddMealForm";
 import { MealBreakdown } from "@/features/meals/components/MealBreakdown";
 import type { MealType } from "@/features/shared/utils/constatns";
@@ -48,7 +56,10 @@ export function DailyLogTab({
   onRefreshMeals,
 }: DailyLogTabProps) {
   const [isAdding, setIsAdding] = useState(false);
-  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [showAddSheet, setShowAddSheet] = useState(false);
+  const [editingMeal, setEditingMeal] = useState<MealEntryWithDetails | null>(
+    null
+  );
 
   const handleAddEntry = async (data: {
     entryType: "food" | "recipe";
@@ -83,13 +94,43 @@ export function DailyLogTab({
       }
 
       await onRefreshMeals();
-      setShowAddDialog(false);
+      setShowAddSheet(false);
+      setEditingMeal(null);
     } catch (error) {
       console.error("Error adding entry:", error);
       throw error;
     } finally {
       setIsAdding(false);
     }
+  };
+
+  const handleEditEntry = async (data: {
+    mealId: string;
+    quantity: number;
+    mealType: MealType;
+  }) => {
+    setIsAdding(true);
+    try {
+      await updateMealEntry({
+        id: data.mealId,
+        quantity: data.quantity,
+        mealType: data.mealType,
+      });
+
+      await onRefreshMeals();
+      setShowAddSheet(false);
+      setEditingMeal(null);
+    } catch (error) {
+      console.error("Error updating entry:", error);
+      throw error;
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const handleEdit = (meal: MealEntryWithDetails) => {
+    setEditingMeal(meal);
+    setShowAddSheet(true);
   };
 
   const handleDelete = async (mealId: string) => {
@@ -126,7 +167,7 @@ export function DailyLogTab({
                 date.setDate(date.getDate() - 1);
                 setSelectedDate(date.toISOString().split("T")[0]);
               }}
-              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
               aria-label="Previous day"
             >
               ←
@@ -145,7 +186,7 @@ export function DailyLogTab({
                 date.setDate(date.getDate() + 1);
                 setSelectedDate(date.toISOString().split("T")[0]);
               }}
-              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
               aria-label="Next day"
             >
               →
@@ -156,7 +197,7 @@ export function DailyLogTab({
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="h-9 w-9 flex-shrink-0 bg-zinc-800 text-white border-zinc-700 cursor-pointer hover:bg-zinc-700 transition-colors opacity-0 absolute inset-0"
+                className="h-9 w-9 shrink-0 bg-zinc-800 text-white border-zinc-700 cursor-pointer hover:bg-zinc-700 transition-colors opacity-0 absolute inset-0"
                 style={{ colorScheme: "dark" }}
                 aria-label="Select date"
               />
@@ -168,7 +209,7 @@ export function DailyLogTab({
 
           {/* Add Button */}
           <Button
-            onClick={() => setShowAddDialog(true)}
+            onClick={() => setShowAddSheet(true)}
             className="whitespace-nowrap h-9 flex justify-center items-center"
           >
             + Add
@@ -253,7 +294,11 @@ export function DailyLogTab({
           <Text className="px-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Meals
           </Text>
-          <MealBreakdown meals={meals} onDelete={handleDelete} />
+          <MealBreakdown
+            meals={meals}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+          />
         </div>
       ) : (
         <div className="rounded-xl bg-white p-8 text-center dark:bg-zinc-900 sm:p-12">
@@ -263,33 +308,50 @@ export function DailyLogTab({
               No meals logged yet
             </Text>
             <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400 sm:text-sm">
-              Tap "+ Add" to start tracking
+              Tap &quot;+ Add&quot; to start tracking
             </Text>
           </div>
         </div>
       )}
 
-      {/* Add Entry Dialog */}
-      <Dialog open={showAddDialog} onClose={setShowAddDialog} size="xl">
-        <DialogTitle>Add Meal Entry</DialogTitle>
-        <DialogDescription>
-          Select a food item or recipe to add to your daily log for{" "}
-          {formatDateShort(selectedDate)}.
-        </DialogDescription>
-        <DialogBody>
-          <AddMealForm
-            foods={foods}
-            recipes={recipes}
-            onAdd={handleAddEntry}
-            isAdding={isAdding}
-          />
-        </DialogBody>
-        <DialogActions>
-          <Button plain onClick={() => setShowAddDialog(false)}>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {/* Add/Edit Entry Sheet */}
+      <Sheet
+        open={showAddSheet}
+        onOpenChange={(open) => {
+          setShowAddSheet(open);
+          if (!open) setEditingMeal(null);
+        }}
+      >
+        <SheetContent side="bottom" className="sm:rounded-l-xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>
+              {editingMeal ? "Edit Meal Entry" : "Add Meal Entry"}
+            </SheetTitle>
+            <SheetDescription>
+              {editingMeal
+                ? "Update the quantity or meal type for this entry."
+                : `Select a food item or recipe to add to your daily log for ${formatDateShort(
+                    selectedDate
+                  )}.`}
+            </SheetDescription>
+          </SheetHeader>
+          <div className="py-6">
+            <AddMealForm
+              foods={foods}
+              recipes={recipes}
+              onAdd={handleAddEntry}
+              onEdit={handleEditEntry}
+              isAdding={isAdding}
+              editingMeal={editingMeal}
+            />
+          </div>
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button plain>Cancel</Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
