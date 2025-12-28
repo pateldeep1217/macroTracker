@@ -169,6 +169,8 @@ export type Database = {
           id: string
           name: string
           protein: number | null
+          serving_label: string | null
+          serving_size: number | null
         }
         Insert: {
           base_unit?: string
@@ -180,6 +182,8 @@ export type Database = {
           id?: string
           name: string
           protein?: number | null
+          serving_label?: string | null
+          serving_size?: number | null
         }
         Update: {
           base_unit?: string
@@ -191,6 +195,8 @@ export type Database = {
           id?: string
           name?: string
           protein?: number | null
+          serving_label?: string | null
+          serving_size?: number | null
         }
         Relationships: []
       }

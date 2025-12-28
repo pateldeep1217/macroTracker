@@ -1,5 +1,5 @@
 // utils/supabase/queries.ts
-// Simple queries using your existing setup
+// Updated to preserve original serving information
 
 import { MealType } from "@/features/shared/utils/constatns";
 import { createClient } from "./client";
@@ -58,19 +58,20 @@ export async function searchFoods(searchTerm: string) {
 export type CreateFoodFromLabelInput = {
   name: string;
   brand?: string;
-  labelServingSize: number;
+  labelServingSize: number; // e.g., 30 (from label)
   labelServingUnit: "g" | "ml";
-  labelCalories: number;
+  labelCalories: number; // e.g., 120 (from label)
   labelProtein: number;
   labelCarbs: number;
   labelFat: number;
   labelFiber?: number;
+  servingLabel?: string; // NEW: "1 scoop", "1 cup", "1 medium", etc.
 };
 
 export async function createFoodFromLabel(input: CreateFoodFromLabelInput) {
   const supabase = createClient();
 
-  // Convert to per-100
+  // Convert to per-100 for calculations
   const per100 = (value: number) =>
     Math.round((value / input.labelServingSize) * 100 * 100) / 100;
 
@@ -79,11 +80,17 @@ export async function createFoodFromLabel(input: CreateFoodFromLabelInput) {
     .insert({
       name: input.name,
       base_unit: input.labelServingUnit,
+
+      // Macros per 100g/100ml (for calculations)
       calories: per100(input.labelCalories),
       protein: per100(input.labelProtein),
       carbs: per100(input.labelCarbs),
       fat: per100(input.labelFat),
       fiber: input.labelFiber ? per100(input.labelFiber) : null,
+
+      // NEW: Keep original serving info (for display)
+      serving_label: input.servingLabel || null,
+      serving_size: input.labelServingSize,
     })
     .select()
     .single();
@@ -97,6 +104,34 @@ export async function deleteFood(id: string) {
   const { error } = await supabase.from("food_items").delete().eq("id", id);
 
   if (error) throw error;
+}
+
+export async function updateFood(id: string, input: CreateFoodFromLabelInput) {
+  const supabase = createClient();
+
+  // Convert to per-100 for calculations
+  const per100 = (value: number) =>
+    Math.round((value / input.labelServingSize) * 100 * 100) / 100;
+
+  const { data, error } = await supabase
+    .from("food_items")
+    .update({
+      name: input.name,
+      base_unit: input.labelServingUnit,
+      calories: per100(input.labelCalories),
+      protein: per100(input.labelProtein),
+      carbs: per100(input.labelCarbs),
+      fat: per100(input.labelFat),
+      fiber: input.labelFiber ? per100(input.labelFiber) : null,
+      serving_label: input.servingLabel || null,
+      serving_size: input.labelServingSize,
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as FoodItem;
 }
 
 // ==========================================
@@ -295,9 +330,17 @@ export async function updateMealEntry(input: {
   if (error) throw error;
   return data as MealEntryWithDetails;
 }
+
 export async function deleteMealEntry(id: string) {
   const supabase = createClient();
   const { error } = await supabase.from("meal_entries").delete().eq("id", id);
+
+  if (error) throw error;
+}
+
+export async function deleteRecipe(id: string) {
+  const supabase = createClient();
+  const { error } = await supabase.from("recipes").delete().eq("id", id);
 
   if (error) throw error;
 }

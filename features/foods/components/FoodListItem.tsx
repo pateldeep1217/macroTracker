@@ -9,9 +9,10 @@ import { Button } from "@/app/components/button";
 interface FoodListItemProps {
   readonly food: FoodItem;
   readonly onDelete: () => Promise<void>;
+  readonly onEdit?: (food: FoodItem) => void;
 }
 
-export function FoodListItem({ food, onDelete }: FoodListItemProps) {
+export function FoodListItem({ food, onDelete, onEdit }: FoodListItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -40,23 +41,38 @@ export function FoodListItem({ food, onDelete }: FoodListItemProps) {
   };
 
   return (
-    <div className="flex items-center justify-between rounded-lg bg-zinc-50 p-4 dark:bg-zinc-900">
-      <div className="flex-1">
-        <Text className="font-medium">{food.name}</Text>
+    <div className="flex items-start justify-between rounded-lg bg-zinc-50 p-4 dark:bg-zinc-900">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-2">
+          <Text className="font-medium">{food.name}</Text>
+          {food.serving_label && food.serving_size && (
+            <Text className="text-xs text-zinc-500">
+              {food.serving_label} = {food.serving_size}
+              {food.base_unit}
+            </Text>
+          )}
+        </div>
         <Text className="mt-1 text-sm text-zinc-500">
           Per 100{food.base_unit}: {macros.calories} cal • P: {macros.protein}g
           • C: {macros.carbs}g • F: {macros.fat}g
           {macros.fiber && ` • Fiber: ${macros.fiber}g`}
         </Text>
       </div>
-      <Button
-        plain
-        className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-        onClick={handleDelete}
-        disabled={isDeleting}
-      >
-        {isDeleting ? "Deleting..." : "Delete"}
-      </Button>
+      <div className="flex gap-2 flex-shrink-0">
+        {onEdit && (
+          <Button plain className="text-sm" onClick={() => onEdit(food)}>
+            Edit
+          </Button>
+        )}
+        <Button
+          plain
+          className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+          onClick={handleDelete}
+          disabled={isDeleting}
+        >
+          {isDeleting ? "..." : "Delete"}
+        </Button>
+      </div>
     </div>
   );
 }

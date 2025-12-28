@@ -12,9 +12,11 @@ import { EmptyState } from "@/features/shared/components/EmptyState";
 interface FoodListProps {
   readonly foods: readonly FoodItem[];
   readonly onFoodDeleted: () => Promise<void>;
+  readonly onFoodEdit?: (food: FoodItem) => void; // ADD THIS LINE
 }
 
-export function FoodList({ foods, onFoodDeleted }: FoodListProps) {
+export function FoodList({ foods, onFoodDeleted, onFoodEdit }: FoodListProps) {
+  // ADD onFoodEdit HERE
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredFoods = foods.filter((food) =>
@@ -40,7 +42,12 @@ export function FoodList({ foods, onFoodDeleted }: FoodListProps) {
       {filteredFoods.length > 0 ? (
         <div className="space-y-2">
           {filteredFoods.map((food) => (
-            <FoodListItem key={food.id} food={food} onDelete={onFoodDeleted} />
+            <FoodListItem
+              key={food.id}
+              food={food}
+              onDelete={onFoodDeleted}
+              onEdit={onFoodEdit} // ADD THIS LINE
+            />
           ))}
         </div>
       ) : (

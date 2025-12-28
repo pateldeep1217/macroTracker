@@ -115,15 +115,45 @@ function MealEntryRow({
   const macros = calculateMealMacros(meal);
   const formatted = formatMacros(macros);
 
-  const displayName = meal.food_items
-    ? `${meal.food_items.name} (${formatNumber(meal.quantity, 1)}${
+  // Build display name with smart serving info
+  let displayName = "Unknown";
+
+  if (meal.food_items) {
+    const food = meal.food_items;
+    const qty = meal.quantity;
+
+    // Check if this food has serving info
+    if (food.serving_label && food.serving_size && qty === food.serving_size) {
+      // Exact serving match: "Protein Powder (1 scoop)"
+      displayName = `${food.name} (${food.serving_label})`;
+    } else if (food.serving_label && food.serving_size) {
+      // Multiple servings: "Protein Powder (2 scoops)" or "Protein Powder (60g ≈ 2 scoops)"
+      const servingCount = qty / food.serving_size;
+      if (Number.isInteger(servingCount)) {
+        // Clean multiple: 2 scoops, 3 cups, etc.
+        const pluralLabel =
+          servingCount > 1
+            ? food.serving_label.replace(/^1 /, `${servingCount} `)
+            : food.serving_label;
+        displayName = `${food.name} (${pluralLabel})`;
+      } else {
+        // Fractional: show grams + approximate servings
+        displayName = `${food.name} (${formatNumber(qty, 1)}${
+          meal.quantity_type
+        } ≈ ${formatNumber(servingCount, 1)}×)`;
+      }
+    } else {
+      // No serving info: just show grams/ml
+      displayName = `${food.name} (${formatNumber(qty, 1)}${
         meal.quantity_type
-      })`
-    : meal.recipes
-    ? `${meal.recipes.name} (${formatNumber(meal.quantity, 1)} serving${
-        meal.quantity > 1 ? "s" : ""
-      })`
-    : "Unknown";
+      })`;
+    }
+  } else if (meal.recipes) {
+    displayName = `${meal.recipes.name} (${formatNumber(
+      meal.quantity,
+      1
+    )} serving${meal.quantity > 1 ? "s" : ""})`;
+  }
 
   return (
     <div className="px-4 py-3">

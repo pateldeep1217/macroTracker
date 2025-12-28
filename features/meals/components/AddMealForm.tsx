@@ -10,7 +10,7 @@ import { Button } from "@/app/components/button";
 import { Field, Label } from "@/app/components/fieldset";
 import { Input } from "@/app/components/input";
 import { Select } from "@/app/components/select";
-import { Subheading } from "@/app/components/heading";
+import { Text } from "@/app/components/text";
 import {
   MEAL_TYPES,
   MEAL_TYPE_LABELS,
@@ -45,55 +45,104 @@ export function AddMealForm({
 }: AddMealFormProps) {
   const isEditMode = !!editingMeal;
 
-  // Determine initial values based on edit mode
-  const initialEntryType = editingMeal?.food_id ? "food" : "recipe";
-  const initialItemId = editingMeal?.food_id || editingMeal?.recipe_id || "";
-  const initialQuantity = editingMeal?.quantity?.toString() || "";
-  const initialMealType = editingMeal?.meal_type || "Breakfast";
-
-  const [entryType, setEntryType] = useState<"food" | "recipe">(
-    initialEntryType
+  const [entryType, setEntryType] = useState<"food" | "recipe">(() =>
+    editingMeal?.food_id ? "food" : "recipe"
   );
-  const [selectedItemId, setSelectedItemId] = useState(initialItemId);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedItemId, setSelectedItemId] = useState(
+    () => editingMeal?.food_id || editingMeal?.recipe_id || ""
+  );
+  const [searchQuery, setSearchQuery] = useState(
+    () => editingMeal?.food_items?.name || editingMeal?.recipes?.name || ""
+  );
   const [showDropdown, setShowDropdown] = useState(false);
-  const [quantity, setQuantity] = useState(initialQuantity);
-  const [mealType, setMealType] = useState<MealType>(initialMealType);
+  const [quantity, setQuantity] = useState(
+    () => editingMeal?.quantity?.toString() || ""
+  );
+  const [mealType, setMealType] = useState<MealType>(
+    () => (editingMeal?.meal_type as MealType) || "Breakfast"
+  );
   const [error, setError] = useState<string | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Set initial values when editingMeal changes
-  useEffect(() => {
-    if (editingMeal) {
-      const itemName =
-        editingMeal.food_items?.name || editingMeal.recipes?.name || "";
-      const entryType = editingMeal.food_id ? "food" : "recipe";
-      const itemId = editingMeal.food_id || editingMeal.recipe_id || "";
-      const qty = editingMeal.quantity?.toString() || "";
-      const mType = editingMeal.meal_type as MealType;
-
-      // Batch updates to avoid cascading renders
-      setSearchQuery(itemName);
-      setEntryType(entryType);
-      setSelectedItemId(itemId);
-      setQuantity(qty);
-      setMealType(mType);
-    } else {
-      // Reset form when not editing
-      setSearchQuery("");
-      setSelectedItemId("");
-      setQuantity("");
-      setMealType("Breakfast");
-    }
-  }, [editingMeal]);
-
   const availableItems = entryType === "food" ? foods : recipes;
   const selectedFood =
     entryType === "food" ? foods.find((f) => f.id === selectedItemId) : null;
+  const selectedRecipe =
+    entryType === "recipe"
+      ? recipes.find((r) => r.id === selectedItemId)
+      : null;
 
-  // Filter items based on search query
+  // Check if selected food has serving info
+  const hasServingInfo =
+    selectedFood?.serving_label && selectedFood?.serving_size;
+
+  // Calculate preview macros
+  const previewMacros = useMemo(() => {
+    if (!quantity || !selectedItemId) return null;
+
+    const qty = parseFloat(quantity);
+    if (isNaN(qty) || qty <= 0) return null;
+
+    if (entryType === "food" && selectedFood) {
+      // Validate that we have the required nutrition data
+      if (
+        typeof selectedFood.calories !== "number" ||
+        typeof selectedFood.protein !== "number" ||
+        typeof selectedFood.carbs !== "number" ||
+        typeof selectedFood.fat !== "number"
+      ) {
+        console.warn("Food item missing nutrition data:", selectedFood.name);
+        return null; // Don't show preview if data is incomplete
+      }
+
+      // Food macros are per 100g/100ml
+      const multiplier = qty / 100;
+      return {
+        calories: Math.round(selectedFood.calories * multiplier),
+        protein: Math.round(selectedFood.protein * multiplier * 10) / 10,
+        carbs: Math.round(selectedFood.carbs * multiplier * 10) / 10,
+        fat: Math.round(selectedFood.fat * multiplier * 10) / 10,
+      };
+    } else if (entryType === "recipe" && selectedRecipe) {
+      // Validate recipe has required data
+      const calories = selectedRecipe.total_calories;
+      const protein = selectedRecipe.total_protein;
+      const carbs = selectedRecipe.total_carbs;
+      const fat = selectedRecipe.total_fat;
+      const servings = selectedRecipe.total_servings;
+
+      if (
+        typeof calories !== "number" ||
+        typeof protein !== "number" ||
+        typeof carbs !== "number" ||
+        typeof fat !== "number" ||
+        typeof servings !== "number" ||
+        servings <= 0
+      ) {
+        console.warn("Recipe missing nutrition data:", selectedRecipe.name);
+        return null;
+      }
+
+      // Recipe macros are total, divide by servings
+      const perServing = {
+        calories: calories / servings,
+        protein: protein / servings,
+        carbs: carbs / servings,
+        fat: fat / servings,
+      };
+      return {
+        calories: Math.round(perServing.calories * qty),
+        protein: Math.round(perServing.protein * qty * 10) / 10,
+        carbs: Math.round(perServing.carbs * qty * 10) / 10,
+        fat: Math.round(perServing.fat * qty * 10) / 10,
+      };
+    }
+
+    return null;
+  }, [quantity, selectedItemId, entryType, selectedFood, selectedRecipe]);
+
   const filteredItems = useMemo(() => {
     if (!searchQuery.trim()) return availableItems;
 
@@ -103,7 +152,6 @@ export function AddMealForm({
     );
   }, [searchQuery, availableItems]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -128,14 +176,12 @@ export function AddMealForm({
 
     try {
       if (isEditMode && onEdit && editingMeal) {
-        // Edit mode
         await onEdit({
           mealId: editingMeal.id,
           quantity: parseFloat(quantity),
           mealType,
         });
       } else {
-        // Add mode
         await onAdd({
           entryType,
           itemId: selectedItemId,
@@ -144,7 +190,6 @@ export function AddMealForm({
         });
       }
 
-      // Reset form (only in add mode)
       if (!isEditMode) {
         setSelectedItemId("");
         setSearchQuery("");
@@ -168,9 +213,15 @@ export function AddMealForm({
     setShowDropdown(false);
   };
 
+  const handleServingSizeClick = () => {
+    if (selectedFood?.serving_size) {
+      setQuantity(selectedFood.serving_size.toString());
+    }
+  };
+
   return (
     <div className="space-y-4">
-      {/* Entry Type - Disabled in edit mode */}
+      {/* Entry Type */}
       <Field>
         <Label>Entry Type</Label>
         <Select
@@ -179,6 +230,7 @@ export function AddMealForm({
             setEntryType(e.target.value as "food" | "recipe");
             setSelectedItemId("");
             setSearchQuery("");
+            setQuantity("");
           }}
           disabled={isEditMode}
         >
@@ -187,7 +239,7 @@ export function AddMealForm({
         </Select>
       </Field>
 
-      {/* Item Selector with Search - Disabled in edit mode */}
+      {/* Item Selector */}
       <Field>
         <Label>{entryType === "food" ? "Food Item" : "Recipe"}</Label>
         <div className="relative" ref={dropdownRef}>
@@ -230,25 +282,82 @@ export function AddMealForm({
         </div>
       </Field>
 
+      {/* Serving Size Quick Button (only for foods with serving info) */}
+      {hasServingInfo && !isEditMode && (
+        <div className="rounded-lg bg-zinc-50 dark:bg-zinc-800/50 p-3">
+          <Text className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2">
+            Quick Add
+          </Text>
+          <Button
+            type="button"
+            plain
+            onClick={handleServingSizeClick}
+            className="text-sm"
+          >
+            {selectedFood.serving_label} ({selectedFood.serving_size}
+            {selectedFood.base_unit})
+          </Button>
+        </div>
+      )}
+
       {/* Quantity */}
       <Field>
-        <Label>
-          Quantity{" "}
-          {selectedFood
-            ? `(${selectedFood.base_unit})`
-            : entryType === "recipe"
-            ? "(servings)"
-            : ""}
-        </Label>
+        <Label>{entryType === "recipe" ? "Servings" : "Amount"}</Label>
         <Input
           type="number"
-          placeholder="Amount"
+          placeholder={
+            entryType === "recipe"
+              ? "Enter servings"
+              : selectedFood?.base_unit === "g"
+              ? "Enter grams"
+              : selectedFood?.base_unit === "ml"
+              ? "Enter milliliters"
+              : "Enter amount"
+          }
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
           min="0"
           step="0.1"
         />
+        {hasServingInfo && quantity && (
+          <Text className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+            {parseFloat(quantity) === selectedFood?.serving_size
+              ? `= ${selectedFood.serving_label}`
+              : parseFloat(quantity) > 0 &&
+                selectedFood?.serving_size &&
+                `≈ ${(parseFloat(quantity) / selectedFood.serving_size).toFixed(
+                  1
+                )} × ${selectedFood.serving_label}`}
+          </Text>
+        )}
       </Field>
+
+      {/* Macro Preview */}
+      {previewMacros && (
+        <div className="rounded-lg bg-zinc-50 dark:bg-zinc-800/50 p-3">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
+            Nutrition Preview
+          </Text>
+          <div className="flex gap-4 text-sm">
+            <div>
+              <span className="font-semibold">{previewMacros.calories}</span>
+              <span className="text-zinc-500 ml-1">cal</span>
+            </div>
+            <div>
+              <span className="font-semibold">P:</span>
+              <span className="ml-1">{previewMacros.protein}g</span>
+            </div>
+            <div>
+              <span className="font-semibold">C:</span>
+              <span className="ml-1">{previewMacros.carbs}g</span>
+            </div>
+            <div>
+              <span className="font-semibold">F:</span>
+              <span className="ml-1">{previewMacros.fat}g</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Meal Type */}
       <Field>

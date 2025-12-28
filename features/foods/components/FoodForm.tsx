@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { createFoodFromLabel } from "@/utils/supabase/queries";
+import { createFoodFromLabel, updateFood } from "@/utils/supabase/queries";
+import type { FoodItem } from "@/utils/supabase/queries";
 import { Subheading } from "@/app/components/heading";
 import { Text } from "@/app/components/text";
 import { Button } from "@/app/components/button";
@@ -11,6 +12,7 @@ import { Select } from "@/app/components/select";
 
 interface FoodFormProps {
   readonly onFoodAdded: () => Promise<void>;
+  readonly editingFood?: FoodItem | null;
 }
 
 interface FormData {
@@ -18,6 +20,7 @@ interface FormData {
   brand: string;
   servingSize: string;
   servingUnit: "g" | "ml";
+  servingLabel: string; // NEW: "1 scoop", "1 cup", etc.
   calories: string;
   protein: string;
   carbs: string;
@@ -30,6 +33,7 @@ const INITIAL_FORM_DATA: FormData = {
   brand: "",
   servingSize: "",
   servingUnit: "g",
+  servingLabel: "", // NEW
   calories: "",
   protein: "",
   carbs: "",
@@ -37,8 +41,33 @@ const INITIAL_FORM_DATA: FormData = {
   fiber: "",
 };
 
-export function FoodForm({ onFoodAdded }: FoodFormProps) {
-  const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
+export function FoodForm({ onFoodAdded, editingFood }: FoodFormProps) {
+  const isEditMode = !!editingFood;
+
+  // Initialize form with editing food data if in edit mode
+  const [formData, setFormData] = useState<FormData>(() => {
+    if (editingFood) {
+      // Convert from per-100 back to label values
+      // We'll use serving_size if available, otherwise default to 100
+      const servingSize = editingFood.serving_size || 100;
+      const toLabel = (per100Value: number) =>
+        Math.round(((per100Value * servingSize) / 100) * 100) / 100;
+
+      return {
+        name: editingFood.name,
+        brand: "",
+        servingSize: servingSize.toString(),
+        servingUnit: editingFood.base_unit as "g" | "ml",
+        servingLabel: editingFood.serving_label || "",
+        calories: toLabel(editingFood.calories).toString(),
+        protein: toLabel(editingFood.protein || 0).toString(),
+        carbs: toLabel(editingFood.carbs || 0).toString(),
+        fat: toLabel(editingFood.fat || 0).toString(),
+        fiber: editingFood.fiber ? toLabel(editingFood.fiber).toString() : "",
+      };
+    }
+    return INITIAL_FORM_DATA;
+  });
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,17 +91,33 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
 
     setIsAdding(true);
     try {
-      await createFoodFromLabel({
-        name: formData.name,
-        brand: formData.brand || undefined,
-        labelServingSize: parseFloat(formData.servingSize),
-        labelServingUnit: formData.servingUnit,
-        labelCalories: parseFloat(formData.calories),
-        labelProtein: parseFloat(formData.protein) || 0,
-        labelCarbs: parseFloat(formData.carbs) || 0,
-        labelFat: parseFloat(formData.fat) || 0,
-        labelFiber: formData.fiber ? parseFloat(formData.fiber) : undefined,
-      });
+      if (isEditMode && editingFood) {
+        await updateFood(editingFood.id, {
+          name: formData.name,
+          brand: formData.brand || undefined,
+          labelServingSize: parseFloat(formData.servingSize),
+          labelServingUnit: formData.servingUnit,
+          servingLabel: formData.servingLabel || undefined,
+          labelCalories: parseFloat(formData.calories),
+          labelProtein: parseFloat(formData.protein) || 0,
+          labelCarbs: parseFloat(formData.carbs) || 0,
+          labelFat: parseFloat(formData.fat) || 0,
+          labelFiber: formData.fiber ? parseFloat(formData.fiber) : undefined,
+        });
+      } else {
+        await createFoodFromLabel({
+          name: formData.name,
+          brand: formData.brand || undefined,
+          labelServingSize: parseFloat(formData.servingSize),
+          labelServingUnit: formData.servingUnit,
+          servingLabel: formData.servingLabel || undefined,
+          labelCalories: parseFloat(formData.calories),
+          labelProtein: parseFloat(formData.protein) || 0,
+          labelCarbs: parseFloat(formData.carbs) || 0,
+          labelFat: parseFloat(formData.fat) || 0,
+          labelFiber: formData.fiber ? parseFloat(formData.fiber) : undefined,
+        });
+      }
 
       // Reset form
       setFormData(INITIAL_FORM_DATA);
@@ -97,7 +142,7 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
           <Label>Food Name *</Label>
           <Input
             type="text"
-            placeholder="e.g., Chicken Breast"
+            placeholder="e.g., Protein Powder"
             value={formData.name}
             onChange={(e) => updateField("name", e.target.value)}
           />
@@ -107,7 +152,7 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
           <Label>Brand (optional)</Label>
           <Input
             type="text"
-            placeholder="e.g., Tyson"
+            placeholder="e.g., Optimum Nutrition"
             value={formData.brand}
             onChange={(e) => updateField("brand", e.target.value)}
           />
@@ -117,7 +162,7 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
           <Label>Serving Size *</Label>
           <Input
             type="number"
-            placeholder="100"
+            placeholder="30"
             value={formData.servingSize}
             onChange={(e) => updateField("servingSize", e.target.value)}
             min="0"
@@ -138,11 +183,26 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
           </Select>
         </Field>
 
+        {/* NEW FIELD: Serving Label */}
+        <Field className="sm:col-span-2">
+          <Label>Serving Label (optional)</Label>
+          <Input
+            type="text"
+            placeholder='e.g., "1 scoop", "1 cup", "1 medium banana"'
+            value={formData.servingLabel}
+            onChange={(e) => updateField("servingLabel", e.target.value)}
+          />
+          <Text className="mt-1 text-xs text-zinc-500">
+            Include the number in the label (e.g., &quot;1 scoop&quot;, not just
+            &quot;scoop&quot;). This helps users log food more easily.
+          </Text>
+        </Field>
+
         <Field>
           <Label>Calories *</Label>
           <Input
             type="number"
-            placeholder="165"
+            placeholder="120"
             value={formData.calories}
             onChange={(e) => updateField("calories", e.target.value)}
             min="0"
@@ -154,7 +214,7 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
           <Label>Protein (g)</Label>
           <Input
             type="number"
-            placeholder="31"
+            placeholder="24"
             value={formData.protein}
             onChange={(e) => updateField("protein", e.target.value)}
             min="0"
@@ -166,7 +226,7 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
           <Label>Carbs (g)</Label>
           <Input
             type="number"
-            placeholder="0"
+            placeholder="1"
             value={formData.carbs}
             onChange={(e) => updateField("carbs", e.target.value)}
             min="0"
@@ -178,7 +238,7 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
           <Label>Fat (g)</Label>
           <Input
             type="number"
-            placeholder="3.6"
+            placeholder="2"
             value={formData.fat}
             onChange={(e) => updateField("fat", e.target.value)}
             min="0"
@@ -207,7 +267,13 @@ export function FoodForm({ onFoodAdded }: FoodFormProps) {
 
       <div className="mt-6">
         <Button onClick={handleSubmit} disabled={isAdding}>
-          {isAdding ? "Adding..." : "+ Add Food Item"}
+          {isAdding
+            ? isEditMode
+              ? "Updating..."
+              : "Adding..."
+            : isEditMode
+            ? "Update Food Item"
+            : "+ Add Food Item"}
         </Button>
       </div>
     </div>
