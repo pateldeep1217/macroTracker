@@ -4,6 +4,18 @@ import * as React from "react";
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 
+/* ===========================
+   Shared Types
+=========================== */
+
+type ClickableChild = React.ReactElement<{
+  onClick?: React.MouseEventHandler<any>;
+}>;
+
+/* ===========================
+   Context
+=========================== */
+
 interface SheetContextType {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -20,6 +32,10 @@ function useSheet() {
   }
   return context;
 }
+
+/* ===========================
+   Sheet Root
+=========================== */
 
 interface SheetProps {
   open?: boolean;
@@ -44,10 +60,14 @@ export function Sheet({
   );
 }
 
+/* ===========================
+   Sheet Trigger
+=========================== */
+
 interface SheetTriggerProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
-  children: React.ReactElement<any>; // <-- REQUIRED
+  children: ClickableChild;
 }
 
 export function SheetTrigger({
@@ -62,11 +82,9 @@ export function SheetTrigger({
       ...props,
       onClick: (e: React.MouseEvent) => {
         onOpenChange(true);
-        if (children.props.onClick) {
-          children.props.onClick(e);
-        }
+        children.props.onClick?.(e);
       },
-    } as any);
+    });
   }
 
   return (
@@ -75,6 +93,10 @@ export function SheetTrigger({
     </button>
   );
 }
+
+/* ===========================
+   Portal
+=========================== */
 
 interface SheetPortalProps {
   children: React.ReactNode;
@@ -92,6 +114,10 @@ export function SheetPortal({ children }: SheetPortalProps) {
 
   return createPortal(children, document.body);
 }
+
+/* ===========================
+   Overlay
+=========================== */
 
 interface SheetOverlayProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -127,6 +153,10 @@ export const SheetOverlay = React.forwardRef<HTMLDivElement, SheetOverlayProps>(
   }
 );
 SheetOverlay.displayName = "SheetOverlay";
+
+/* ===========================
+   Content
+=========================== */
 
 type SheetSide = "top" | "right" | "bottom" | "left";
 
@@ -165,6 +195,7 @@ export const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
       document.addEventListener("keydown", handleEscape);
       return () => document.removeEventListener("keydown", handleEscape);
     }, [open, onOpenChange]);
+
     React.useEffect(() => {
       const checkMobile = () => {
         setIsMobile(window.innerWidth < 640);
@@ -176,7 +207,6 @@ export const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
 
     if (!isVisible) return null;
 
-    // Determine effective side based on screen size
     const effectiveSide = side === "bottom" && !isMobile ? "right" : side;
 
     const sideStyles: Record<SheetSide, React.CSSProperties> = {
@@ -184,7 +214,6 @@ export const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
         top: 0,
         right: 0,
         height: "100vh",
-        width: "auto",
         minWidth: "400px",
         maxWidth: "90vw",
         transform: open ? "translateX(0)" : "translateX(100%)",
@@ -193,7 +222,6 @@ export const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
         top: 0,
         left: 0,
         height: "100vh",
-        width: "auto",
         minWidth: "400px",
         maxWidth: "90vw",
         transform: open ? "translateX(0)" : "translateX(-100%)",
@@ -202,7 +230,6 @@ export const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
         top: 0,
         left: 0,
         right: 0,
-        width: "100%",
         maxHeight: "85vh",
         transform: open ? "translateY(0)" : "translateY(-100%)",
       },
@@ -210,7 +237,6 @@ export const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
         bottom: 0,
         left: 0,
         right: 0,
-        width: "100%",
         maxHeight: "85vh",
         transform: open ? "translateY(0)" : "translateY(100%)",
       },
@@ -239,7 +265,7 @@ export const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
           {children}
           <button
             onClick={() => onOpenChange(false)}
-            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:pointer-events-none dark:ring-offset-zinc-950 dark:focus:ring-zinc-300"
+            className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100"
           >
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
@@ -250,6 +276,10 @@ export const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
   }
 );
 SheetContent.displayName = "SheetContent";
+
+/* ===========================
+   Layout Helpers
+=========================== */
 
 export function SheetHeader({
   className = "",
@@ -262,7 +292,6 @@ export function SheetHeader({
     />
   );
 }
-SheetHeader.displayName = "SheetHeader";
 
 export function SheetFooter({
   className = "",
@@ -275,40 +304,39 @@ export function SheetFooter({
     />
   );
 }
-SheetFooter.displayName = "SheetFooter";
 
 export const SheetTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
->(({ className = "", ...props }, ref) => {
-  return (
-    <h2
-      ref={ref}
-      className={`text-lg font-semibold text-zinc-950 dark:text-zinc-50 ${className}`}
-      {...props}
-    />
-  );
-});
+>(({ className = "", ...props }, ref) => (
+  <h2
+    ref={ref}
+    className={`text-lg font-semibold text-zinc-950 dark:text-zinc-50 ${className}`}
+    {...props}
+  />
+));
 SheetTitle.displayName = "SheetTitle";
 
 export const SheetDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
->(({ className = "", ...props }, ref) => {
-  return (
-    <p
-      ref={ref}
-      className={`text-sm text-zinc-500 dark:text-zinc-400 ${className}`}
-      {...props}
-    />
-  );
-});
+>(({ className = "", ...props }, ref) => (
+  <p
+    ref={ref}
+    className={`text-sm text-zinc-500 dark:text-zinc-400 ${className}`}
+    {...props}
+  />
+));
 SheetDescription.displayName = "SheetDescription";
+
+/* ===========================
+   Sheet Close
+=========================== */
 
 interface SheetCloseProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
-  children: React.ReactElement<any>; // <-- REQUIRED
+  children: ClickableChild;
 }
 
 export function SheetClose({ children, asChild, ...props }: SheetCloseProps) {
@@ -319,11 +347,9 @@ export function SheetClose({ children, asChild, ...props }: SheetCloseProps) {
       ...props,
       onClick: (e: React.MouseEvent) => {
         onOpenChange(false);
-        if (children.props.onClick) {
-          children.props.onClick(e);
-        }
+        children.props.onClick?.(e);
       },
-    } as any);
+    });
   }
 
   return (
