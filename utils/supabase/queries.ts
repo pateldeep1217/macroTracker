@@ -345,6 +345,46 @@ export async function deleteRecipe(id: string) {
   if (error) throw error;
 }
 
+export async function updateRecipe(
+  recipeId: string,
+  recipeData: Partial<Inserts<"recipes">>,
+  ingredients: { food_id: string; quantity: number }[]
+) {
+  const supabase = createClient();
+
+  // Update recipe base fields
+  const { error: recipeError } = await supabase
+    .from("recipes")
+    .update(recipeData)
+    .eq("id", recipeId);
+
+  if (recipeError) throw recipeError;
+
+  // Delete old ingredients
+  await supabase.from("recipe_ingredients").delete().eq("recipe_id", recipeId);
+
+  // Insert new ingredients
+  if (ingredients.length > 0) {
+    const rows = ingredients.map((i) => ({
+      recipe_id: recipeId,
+      ...i,
+    }));
+
+    const { error: ingError } = await supabase
+      .from("recipe_ingredients")
+      .insert(rows);
+
+    if (ingError) throw ingError;
+  }
+
+  // Recalculate macros
+  await supabase.rpc("calculate_recipe_macros", {
+    recipe_uuid: recipeId,
+  });
+
+  return getRecipeWithIngredients(recipeId);
+}
+
 // ==========================================
 // USERS
 // ==========================================

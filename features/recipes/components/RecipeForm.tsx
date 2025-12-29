@@ -3,25 +3,25 @@
 import { useState, useEffect, useMemo } from "react";
 import {
   createRecipe,
+  updateRecipe,
   getRecipeWithIngredients,
   searchFoods,
 } from "@/utils/supabase/queries";
 
-import type {
-  Recipe,
-  RecipeWithIngredients,
-  FoodItem,
-} from "@/utils/supabase/queries";
+import type { Recipe, FoodItem } from "@/utils/supabase/queries";
 
 import { Subheading } from "@/app/components/heading";
 import { Text } from "@/app/components/text";
 import { Button } from "@/app/components/button";
 import { Field, Label } from "@/app/components/fieldset";
 import { Input } from "@/app/components/input";
+import { Divider } from "@/app/components/divider";
+import { getQuantityMacros } from "@/features/shared/utils/macors";
 
 interface RecipeFormProps {
   readonly onRecipeSaved: () => Promise<void>;
   readonly editingRecipe?: Recipe | null;
+  readonly userId: string;
 }
 
 interface IngredientRow {
@@ -29,12 +29,15 @@ interface IngredientRow {
   quantity: string;
 }
 
-export function RecipeForm({ onRecipeSaved, editingRecipe }: RecipeFormProps) {
+export function RecipeForm({
+  onRecipeSaved,
+  editingRecipe,
+  userId,
+}: RecipeFormProps) {
   const isEditMode = !!editingRecipe;
 
   const [name, setName] = useState("");
   const [totalServings, setTotalServings] = useState("1");
-
   const [ingredients, setIngredients] = useState<IngredientRow[]>([]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -43,7 +46,7 @@ export function RecipeForm({ onRecipeSaved, editingRecipe }: RecipeFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load recipe if editing
+  // Load recipe when editing
   useEffect(() => {
     if (!editingRecipe) return;
 
@@ -105,13 +108,9 @@ export function RecipeForm({ onRecipeSaved, editingRecipe }: RecipeFormProps) {
     let protein = 0;
     let carbs = 0;
     let fat = 0;
-    let weight = 0;
 
     for (const ing of ingredients) {
       const qty = parseFloat(ing.quantity) || 0;
-
-      weight += qty;
-
       calories += (ing.food.calories * qty) / 100;
       protein += ((ing.food.protein || 0) * qty) / 100;
       carbs += ((ing.food.carbs || 0) * qty) / 100;
@@ -121,7 +120,6 @@ export function RecipeForm({ onRecipeSaved, editingRecipe }: RecipeFormProps) {
     const servings = parseFloat(totalServings) || 1;
 
     return {
-      weight,
       calories,
       protein,
       carbs,
@@ -160,14 +158,26 @@ export function RecipeForm({ onRecipeSaved, editingRecipe }: RecipeFormProps) {
 
     setIsSaving(true);
     try {
-      await createRecipe(
-        {
-          name,
-          user_id: editingRecipe?.user_id || "",
-          total_servings: parseFloat(totalServings),
-        },
-        parsedIngredients
-      );
+      if (isEditMode) {
+        await updateRecipe(
+          editingRecipe!.id,
+          {
+            name,
+            user_id: userId,
+            total_servings: parseFloat(totalServings),
+          },
+          parsedIngredients
+        );
+      } else {
+        await createRecipe(
+          {
+            name,
+            user_id: userId,
+            total_servings: parseFloat(totalServings),
+          },
+          parsedIngredients
+        );
+      }
 
       await onRecipeSaved();
     } catch (err) {
@@ -179,139 +189,187 @@ export function RecipeForm({ onRecipeSaved, editingRecipe }: RecipeFormProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      {/* LEFT SIDE */}
-      <div className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-800 dark:ring-white/10">
+    <div className="mx-auto w-full max-w-3xl space-y-8">
+      {/* HEADER */}
+      <div>
         <Subheading>{isEditMode ? "Edit Recipe" : "Create Recipe"}</Subheading>
-
-        <div className="mt-6 space-y-4">
-          <Field>
-            <Label>Recipe Name *</Label>
-            <Input
-              type="text"
-              placeholder="e.g., Chickpea Rice Bowl"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Field>
-
-          <Field>
-            <Label>Total Servings *</Label>
-            <Input
-              type="number"
-              min="1"
-              step="0.1"
-              value={totalServings}
-              onChange={(e) => setTotalServings(e.target.value)}
-            />
-          </Field>
-
-          {/* INGREDIENT SEARCH */}
-          <Field>
-            <Label>Add Ingredients</Label>
-            <Input
-              type="text"
-              placeholder="Search foods..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Field>
-
-          {searchResults.length > 0 && (
-            <div className="mt-2 rounded-lg border bg-white dark:bg-zinc-900">
-              {searchResults.map((food) => (
-                <button
-                  key={food.id}
-                  className="block w-full px-3 py-2 text-left hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                  onClick={() => addIngredient(food)}
-                >
-                  {food.name}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* INGREDIENT LIST */}
-          <div className="mt-6 space-y-3">
-            {ingredients.map((ing) => (
-              <div
-                key={ing.food.id}
-                className="flex items-center justify-between rounded-lg bg-zinc-50 p-3 dark:bg-zinc-900"
-              >
-                <div>
-                  <Text className="font-medium">{ing.food.name}</Text>
-                  <Text className="text-xs text-zinc-500">
-                    per 100{ing.food.base_unit}: {ing.food.calories} cal
-                  </Text>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Input
-                    type="number"
-                    min="0"
-                    step="0.1"
-                    className="w-24"
-                    placeholder="Qty"
-                    value={ing.quantity}
-                    onChange={(e) =>
-                      updateQuantity(ing.food.id, e.target.value)
-                    }
-                  />
-                  <Text className="text-sm">{ing.food.base_unit}</Text>
-
-                  <Button
-                    plain
-                    className="text-red-600"
-                    onClick={() => removeIngredient(ing.food.id)}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {error && (
-            <div className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800 dark:bg-red-950/20 dark:text-red-200">
-              {error}
-            </div>
-          )}
-
-          <div className="mt-6">
-            <Button onClick={handleSubmit} disabled={isSaving}>
-              {isSaving
-                ? isEditMode
-                  ? "Updating..."
-                  : "Saving..."
-                : isEditMode
-                ? "Update Recipe"
-                : "+ Create Recipe"}
-            </Button>
-          </div>
-        </div>
+        <Text className="mt-1 text-sm text-zinc-500">
+          Use descriptive names like “Chicken Stir Fry - High Protein” or
+          “Oatmeal - Breakfast Batch” to easily identify recipes later.
+        </Text>
       </div>
+      <Divider />
+      {/* NAME + SERVINGS */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <Field>
+          <Label>Recipe Name *</Label>
+          <Input
+            type="text"
+            placeholder="e.g., Chickpea Rice Bowl"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </Field>
 
-      {/* RIGHT SIDE — REAL-TIME MACROS */}
-      <div className="rounded-2xl bg-zinc-50 p-6 dark:bg-zinc-900">
-        <Subheading>Nutrition Summary</Subheading>
-
-        <div className="mt-4 space-y-2 text-sm">
-          <Text>Total Weight: {totals.weight.toFixed(1)} g</Text>
-          <Text>Total Calories: {totals.calories.toFixed(0)} cal</Text>
-          <Text>Protein: {totals.protein.toFixed(1)} g</Text>
-          <Text>Carbs: {totals.carbs.toFixed(1)} g</Text>
-          <Text>Fat: {totals.fat.toFixed(1)} g</Text>
+        <Field>
+          <Label>Total Servings *</Label>
+          <Input
+            type="number"
+            min="1"
+            step="0.1"
+            value={totalServings}
+            onChange={(e) => setTotalServings(e.target.value)}
+          />
+        </Field>
+      </div>
+      {/* INGREDIENT SEARCH */}
+      <Field>
+        <Label>Add Ingredients</Label>
+        <Input
+          type="text"
+          placeholder="Search foods..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </Field>
+      {searchResults.length > 0 && (
+        <div className="rounded-lg border bg-white dark:bg-zinc-900">
+          {searchResults.map((food) => (
+            <button
+              key={food.id}
+              className="block w-full px-3 py-2 text-left hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              onClick={() => addIngredient(food)}
+            >
+              {food.name}
+            </button>
+          ))}
         </div>
+      )}
+      {/* INGREDIENT LIST */}
+      {/* INGREDIENT LIST */}
+      <div className="space-y-3">
+        {ingredients.map((ing) => {
+          const qty = parseFloat(ing.quantity) || 0;
+          const macros = getQuantityMacros(ing.food, qty);
 
-        <div className="mt-6 border-t pt-4">
-          <Subheading className="text-base">Per Serving</Subheading>
-          <div className="mt-2 space-y-2 text-sm">
-            <Text>Calories: {totals.perServing.calories.toFixed(0)} cal</Text>
-            <Text>Protein: {totals.perServing.protein.toFixed(1)} g</Text>
-            <Text>Carbs: {totals.perServing.carbs.toFixed(1)} g</Text>
-            <Text>Fat: {totals.perServing.fat.toFixed(1)} g</Text>
-          </div>
+          return (
+            <div
+              key={ing.food.id}
+              className="flex items-center justify-between rounded-lg bg-zinc-50 p-3 dark:bg-zinc-900"
+            >
+              <div>
+                {/* NAME */}
+                <Text className="font-medium">{ing.food.name}</Text>
+
+                {/* QUANTITY MACROS */}
+                {qty > 0 && (
+                  <Text className="text-xs text-zinc-700 dark:text-zinc-300">
+                    {qty}
+                    {ing.food.base_unit} → {macros.calories.toFixed(0)} cal • P:{" "}
+                    {macros.protein.toFixed(1)}g • C: {macros.carbs.toFixed(1)}g
+                    • F: {macros.fat.toFixed(1)}g
+                    {macros.fiber !== null &&
+                      ` • Fiber: ${macros.fiber.toFixed(1)}g`}
+                  </Text>
+                )}
+
+                {/* PER 100g/ml */}
+                <Text className="text-xs text-zinc-500">
+                  Per 100{ing.food.base_unit}: {ing.food.calories} cal
+                </Text>
+              </div>
+
+              {/* INPUT + REMOVE */}
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  className="w-24"
+                  placeholder="Qty"
+                  value={ing.quantity}
+                  onChange={(e) => updateQuantity(ing.food.id, e.target.value)}
+                />
+                <Text className="text-sm">{ing.food.base_unit}</Text>
+
+                <Button
+                  plain
+                  className="text-red-600"
+                  onClick={() => removeIngredient(ing.food.id)}
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {/* ERROR */}
+      {error && (
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-800 dark:bg-red-950/20 dark:text-red-200">
+          {error}
         </div>
+      )}
+      {/* ACTION BUTTON */}
+      <div className="pt-4">
+        <Button onClick={handleSubmit} disabled={isSaving} className="w-full">
+          {isSaving
+            ? isEditMode
+              ? "Updating..."
+              : "Saving..."
+            : isEditMode
+            ? "Update Recipe"
+            : "+ Create Recipe"}
+        </Button>
+      </div>
+      {/* MACRO PREVIEW */}
+      {/* NUTRITION SUMMARY */}{" "}
+      <div className="rounded-xl bg-zinc-50 p-6 dark:bg-zinc-900">
+        {" "}
+        {/* TOTAL SECTION */}{" "}
+        <div>
+          {" "}
+          <div className="flex items-center gap-2">
+            {" "}
+            <span className="text-lg">🍽️</span>{" "}
+            <Subheading className="text-base">
+              Nutrition Summary (Total)
+            </Subheading>{" "}
+          </div>{" "}
+          <div className="mt-4 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+            {" "}
+            <Text>Calories: {totals.calories.toFixed(0)} cal</Text>{" "}
+            <Text>Protein: {totals.protein.toFixed(1)} g</Text>{" "}
+            <Text>Carbs: {totals.carbs.toFixed(1)} g</Text>{" "}
+            <Text>Fat: {totals.fat.toFixed(1)} g</Text>{" "}
+          </div>{" "}
+        </div>{" "}
+        <Divider className="my-6" /> {/* PER SERVING SECTION */}{" "}
+        <div>
+          {" "}
+          <div className="flex items-center gap-2">
+            {" "}
+            <span className="text-lg">🥄</span>{" "}
+            <Subheading className="text-base">
+              {" "}
+              Nutrition per Serving ({totalServings} servings){" "}
+            </Subheading>{" "}
+          </div>{" "}
+          <div className="mt-4 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+            {" "}
+            <Text>
+              Calories: {totals.perServing.calories.toFixed(0)} cal
+            </Text>{" "}
+            <Text>Protein: {totals.perServing.protein.toFixed(1)} g</Text>{" "}
+            <Text>Carbs: {totals.perServing.carbs.toFixed(1)} g</Text>{" "}
+            <Text>Fat: {totals.perServing.fat.toFixed(1)} g</Text>{" "}
+          </div>{" "}
+        </div>{" "}
+        {/* OPTIONAL HINT */}{" "}
+        <Text className="mt-4 text-xs text-zinc-500">
+          {" "}
+          Calculated as: Total ÷ Servings{" "}
+        </Text>{" "}
       </div>
     </div>
   );

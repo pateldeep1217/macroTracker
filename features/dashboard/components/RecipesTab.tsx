@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Recipe } from "@/utils/supabase/queries";
+import type { Recipe, FoodItem } from "@/utils/supabase/queries";
 import { Button } from "@/app/components/button";
 import {
   Sheet,
@@ -17,9 +17,18 @@ import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 interface RecipesTabProps {
   readonly recipes: readonly Recipe[];
   readonly onRefreshRecipes: () => Promise<void>;
+  readonly userId: string;
+  readonly userName: string; // <-- added
+  readonly foods: FoodItem[]; // <-- added
 }
 
-export function RecipesTab({ recipes, onRefreshRecipes }: RecipesTabProps) {
+export function RecipesTab({
+  recipes,
+  onRefreshRecipes, // <-- correct name
+  userId,
+  userName,
+  foods,
+}: RecipesTabProps) {
   const [showSheet, setShowSheet] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
 
@@ -79,6 +88,7 @@ export function RecipesTab({ recipes, onRefreshRecipes }: RecipesTabProps) {
               <RecipeForm
                 onRecipeSaved={handleSaved}
                 editingRecipe={editingRecipe}
+                userId={userId}
               />
             </div>
 

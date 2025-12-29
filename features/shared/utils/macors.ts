@@ -1,5 +1,5 @@
 import type { MealEntryWithDetails } from "@/utils/supabase/queries";
-
+import type { FoodItem } from "@/utils/supabase/queries";
 export interface MacroTotals {
   readonly calories: number;
   readonly protein: number;
@@ -76,4 +76,26 @@ export function calculateMacroPercentage(
   if (totalCalories === 0) return 0;
 
   return Math.round((grams * caloriesPerGram * 100) / totalCalories);
+}
+
+export function getServingMacros(food: FoodItem) {
+  if (!food.serving_size) return null;
+  const factor = food.serving_size / 100;
+  return {
+    calories: food.calories * factor,
+    protein: (food.protein ?? 0) * factor,
+    carbs: (food.carbs ?? 0) * factor,
+    fat: (food.fat ?? 0) * factor,
+    fiber: food.fiber ? food.fiber * factor : null,
+  };
+}
+export function getQuantityMacros(food: FoodItem, quantity: number) {
+  const factor = quantity / 100;
+  return {
+    calories: food.calories * factor,
+    protein: (food.protein ?? 0) * factor,
+    carbs: (food.carbs ?? 0) * factor,
+    fat: (food.fat ?? 0) * factor,
+    fiber: food.fiber ? food.fiber * factor : null,
+  };
 }

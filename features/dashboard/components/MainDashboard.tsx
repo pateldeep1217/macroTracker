@@ -11,7 +11,9 @@ import {
   getAllFoods,
   getUserRecipes,
   getMealsByDate,
+  getRecipeWithIngredients,
 } from "@/utils/supabase/queries";
+
 import { Avatar } from "@/app/components/avatar";
 import {
   Dropdown,
@@ -37,11 +39,13 @@ import {
   SidebarSection,
 } from "@/app/components/sidebar";
 import { StackedLayout } from "@/app/components/stacked-layout";
+
 import { DailyLogTab } from "./DailyLogTab";
 import { FoodItemsTab } from "./FoodItemsTab";
 import { RecipesTab } from "./RecipesTab";
 import { SummaryTab } from "./SummaryTab";
 import { LoadingState } from "@/features/shared/components/LoadingState";
+
 import {
   ChartBarIcon,
   ClipboardDocumentListIcon,
@@ -70,30 +74,48 @@ export function MainDashboard({
   allUsers,
   onSwitchUser,
 }: MainDashboardProps) {
-  const [activeTab, setActiveTab] = useState<TabId>("log");
-  const [selectedUserId, setSelectedUserId] = useState(currentUser.id);
+  // Hydration-safe tab initialization
+  const [activeTab, setActiveTab] = useState<TabId>(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.replace("#", "");
+      if (hash && TABS.some((t) => t.id === hash)) {
+        return hash as TabId;
+      }
+    }
+    return "log";
+  });
+
+  const [selectedUserId] = useState(currentUser.id);
+
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [meals, setMeals] = useState<MealEntryWithDetails[]>([]);
-  const [selectedDate, setSelectedDate] = useState(() => {
-    return new Date().toISOString().split("T")[0];
-  });
+
+  // Hydration-safe date
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  useEffect(() => {
+    setSelectedDate(new Date().toISOString().split("T")[0]);
+  }, []);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const selectedUser =
     allUsers.find((u) => u.id === selectedUserId) ?? currentUser;
 
-  // Load initial data
+  // Load foods + recipes
   useEffect(() => {
     async function loadData() {
       setIsLoading(true);
       try {
-        const [foodsData, recipesData] = await Promise.all([
-          getAllFoods(),
-          getUserRecipes(selectedUserId),
-        ]);
+        const foodsData = await getAllFoods();
+        const baseRecipes = await getUserRecipes(selectedUserId);
+
+        const recipesWithIngredients = await Promise.all(
+          baseRecipes.map((r) => getRecipeWithIngredients(r.id))
+        );
+
         setFoods(foodsData);
-        setRecipes(recipesData);
+        setRecipes(recipesWithIngredients);
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -103,9 +125,12 @@ export function MainDashboard({
     loadData();
   }, [selectedUserId]);
 
-  // Load meals when date or user changes
+  // Load meals
   useEffect(() => {
+    if (!selectedDate) return;
+
     async function loadMeals() {
+      if (!selectedDate) return;
       try {
         const data = await getMealsByDate(selectedUserId, selectedDate);
         setMeals(data);
@@ -117,6 +142,7 @@ export function MainDashboard({
   }, [selectedUserId, selectedDate]);
 
   const refreshMeals = async () => {
+    if (!selectedDate) return;
     const data = await getMealsByDate(selectedUserId, selectedDate);
     setMeals(data);
   };
@@ -127,11 +153,14 @@ export function MainDashboard({
   };
 
   const refreshRecipes = async () => {
-    const data = await getUserRecipes(selectedUserId);
-    setRecipes(data);
+    const base = await getUserRecipes(selectedUserId);
+    const full = await Promise.all(
+      base.map((r) => getRecipeWithIngredients(r.id))
+    );
+    setRecipes(full);
   };
 
-  if (isLoading) {
+  if (isLoading || !selectedDate) {
     return <LoadingState message="Loading your dashboard..." />;
   }
 
@@ -169,7 +198,9 @@ export function MainDashboard({
               </div>
             </div>
           </NavbarSection>
+
           <NavbarDivider className="max-lg:hidden" />
+
           <NavbarSection className="max-lg:hidden">
             {TABS.map((tab) => {
               const Icon = tab.icon;
@@ -185,7 +216,9 @@ export function MainDashboard({
               );
             })}
           </NavbarSection>
+
           <NavbarSpacer />
+
           <NavbarSection>
             <Dropdown>
               <DropdownButton as={NavbarItem}>
@@ -213,6 +246,7 @@ export function MainDashboard({
               </div>
             </div>
           </SidebarHeader>
+
           <SidebarBody>
             <SidebarSection>
               {TABS.map((tab) => {
@@ -255,8 +289,8 @@ export function MainDashboard({
           <RecipesTab
             userId={selectedUserId}
             userName={selectedUser.name}
-            recipes={recipes}
             foods={foods}
+            recipes={recipes}
             onRefreshRecipes={refreshRecipes}
           />
         )}

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import type { Recipe } from "@/utils/supabase/queries";
 import { deleteRecipe } from "@/utils/supabase/queries";
 import { Text } from "@/app/components/text";
 import { Button } from "@/app/components/button";
+import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 
 interface RecipeListItemProps {
   readonly recipe: Recipe;
@@ -12,51 +12,61 @@ interface RecipeListItemProps {
   readonly onEdit?: (recipe: Recipe) => void;
 }
 
+function formatDate(date: string | null) {
+  if (!date) return "—";
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export function RecipeListItem({
   recipe,
   onDelete,
   onEdit,
 }: RecipeListItemProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
-
   const handleDelete = async () => {
     if (!confirm(`Delete recipe "${recipe.name}"?`)) return;
 
-    setIsDeleting(true);
     try {
       await deleteRecipe(recipe.id);
-      await onDelete(); // refresh parent list
+      await onDelete(); // refresh list
     } catch (err) {
-      console.error("Error deleting recipe:", err);
+      console.error("Failed to delete recipe:", err);
       alert("Failed to delete recipe");
-    } finally {
-      setIsDeleting(false);
     }
   };
 
   return (
-    <div className="flex items-start justify-between rounded-lg bg-zinc-50 p-4 dark:bg-zinc-900">
-      <div className="flex-1 min-w-0">
-        <Text className="font-medium">{recipe.name}</Text>
-        <Text className="mt-1 text-sm text-zinc-500">
-          {recipe.total_servings} servings
+    <div className="flex items-center justify-between rounded-xl border bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="flex flex-col">
+        <Text className="text-base font-semibold text-zinc-900 dark:text-white">
+          {recipe.name}
         </Text>
+
+        <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+          <span>{recipe.total_servings} servings</span>
+          <span>•</span>
+          <span>Created {formatDate(recipe.created_at)}</span>
+        </div>
       </div>
 
-      <div className="flex gap-2 shrink-0">
-        {onEdit && (
-          <Button plain className="text-sm" onClick={() => onEdit(recipe)}>
-            Edit
-          </Button>
-        )}
+      <div className="flex items-center gap-2">
+        <Button
+          plain
+          onClick={() => onEdit?.(recipe)}
+          className="text-blue-600 dark:text-blue-300"
+        >
+          <PencilIcon className="h-4 w-4" />
+        </Button>
 
         <Button
           plain
-          className="text-sm text-red-600"
           onClick={handleDelete}
-          disabled={isDeleting}
+          className="text-red-600 dark:text-red-300"
         >
-          {isDeleting ? "..." : "Delete"}
+          <TrashIcon className="h-4 w-4" />
         </Button>
       </div>
     </div>

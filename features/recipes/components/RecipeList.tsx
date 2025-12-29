@@ -44,7 +44,7 @@ export function RecipeList({
       <Divider className="my-4" />
 
       {filtered.length > 0 ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {filtered.map((recipe) => (
             <RecipeListItem
               key={recipe.id}
