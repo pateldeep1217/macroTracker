@@ -47,6 +47,7 @@ export function Sheet({
 interface SheetTriggerProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
+  children: React.ReactElement<any>; // <-- REQUIRED
 }
 
 export function SheetTrigger({
@@ -307,6 +308,7 @@ SheetDescription.displayName = "SheetDescription";
 interface SheetCloseProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
+  children: React.ReactElement<any>; // <-- REQUIRED
 }
 
 export function SheetClose({ children, asChild, ...props }: SheetCloseProps) {
