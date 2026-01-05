@@ -3,8 +3,6 @@
 import { useState } from "react";
 import type { FoodItem } from "@/utils/supabase/queries";
 import { Button } from "@/app/components/button";
-import { Input } from "@/app/components/input";
-import { Field } from "@/app/components/fieldset";
 import {
   Sheet,
   SheetClose,
@@ -25,7 +23,6 @@ interface FoodItemsTabProps {
 export function FoodItemsTab({ foods, onRefreshFoods }: FoodItemsTabProps) {
   const [showAddSheet, setShowAddSheet] = useState(false);
   const [editingFood, setEditingFood] = useState<FoodItem | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
 
   const handleFoodAdded = async () => {
     await onRefreshFoods();
@@ -38,14 +35,10 @@ export function FoodItemsTab({ foods, onRefreshFoods }: FoodItemsTabProps) {
     setShowAddSheet(true);
   };
 
-  const filteredFoods = foods.filter((food) =>
-    food.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className="space-y-4 pb-6">
       {/* Header */}
-      <div className="rounded-xl bg-zinc-900 p-3 dark:bg-zinc-800 sm:p-4">
+      <div className="rounded-xl bg-zinc-900 p-3 sm:p-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex-1">
             <div className="text-base font-semibold text-white sm:text-lg">
@@ -63,9 +56,9 @@ export function FoodItemsTab({ foods, onRefreshFoods }: FoodItemsTabProps) {
         </div>
       </div>
 
-      {/* Food List - PASS onFoodEdit HERE */}
+      {/* Food List */}
       <FoodList
-        foods={filteredFoods}
+        foods={foods}
         onFoodDeleted={onRefreshFoods}
         onFoodEdit={handleEdit}
       />

@@ -31,19 +31,34 @@ export function FoodListItem({ food, onDelete, onEdit }: FoodListItemProps) {
     }
   };
 
+  // Get macros for one serving
   const serving = getServingMacros(food);
+
+  // Format serving display
+  const getServingDisplay = () => {
+    if (!food.serving_size) {
+      return `Per 100${food.base_unit}`;
+    }
+
+    if (food.serving_label) {
+      // e.g., "1 scoop (30g)" or "1 cup (240ml)"
+      return `${food.serving_label} (${food.serving_size}${food.base_unit})`;
+    }
+
+    // Fallback: just show the size
+    return `${food.serving_size}${food.base_unit}`;
+  };
 
   return (
     <div className="rounded-lg bg-zinc-900 border border-zinc-800 p-3">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-semibold text-white">{food.name}</h3>
-          {food.serving_label && food.serving_size && (
-            <p className="text-sm text-zinc-400 mt-0.5">
-              Serving: {food.serving_label} ({food.serving_size}
-              {food.base_unit})
-            </p>
-          )}
+          <h3 className="text-base font-semibold text-white truncate">
+            {food.name}
+          </h3>
+          <p className="text-sm text-zinc-400 mt-0.5">
+            Per serving: {getServingDisplay()}
+          </p>
         </div>
 
         <div className="flex items-center gap-1 shrink-0">
@@ -107,6 +122,16 @@ export function FoodListItem({ food, onDelete, onEdit }: FoodListItemProps) {
           </div>
         </div>
       )}
+
+      {/* Show per-100g info as secondary info */}
+      <div className="mt-2 pt-2 border-t border-zinc-800/50">
+        <p className="text-xs text-zinc-500">
+          Per 100{food.base_unit}: {food.calories.toFixed(0)} cal,{" "}
+          {(food.protein ?? 0).toFixed(1)}g protein,{" "}
+          {(food.carbs ?? 0).toFixed(1)}g carbs, {(food.fat ?? 0).toFixed(1)}g
+          fat
+        </p>
+      </div>
     </div>
   );
 }

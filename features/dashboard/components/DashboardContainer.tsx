@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserSelection } from "@/features/user/hooks/useUserSelection";
+import { useState } from "react";
 import { UserSelectionScreen } from "@/features/user/components/UserSelectionScreen";
 import { MainDashboard } from "./MainDashboard";
 import type { AppUser } from "@/utils/supabase/queries";
@@ -10,7 +10,33 @@ interface DashboardContainerProps {
 }
 
 export function DashboardContainer({ users }: DashboardContainerProps) {
-  const { currentUser, selectUser, clearUser } = useUserSelection();
+  const [currentUser, setCurrentUser] = useState<AppUser | null>(() => {
+    // Lazy initialization - only runs once on mount
+    const savedUser = localStorage.getItem("selectedUser");
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser) as AppUser;
+        // Verify user still exists
+        if (users.some((u) => u.id === parsedUser.id)) {
+          return parsedUser;
+        }
+      } catch (error) {
+        console.error("Failed to parse saved user:", error);
+        localStorage.removeItem("selectedUser");
+      }
+    }
+    return null;
+  });
+
+  const selectUser = (user: AppUser) => {
+    setCurrentUser(user);
+    localStorage.setItem("selectedUser", JSON.stringify(user));
+  };
+
+  const clearUser = () => {
+    setCurrentUser(null);
+    localStorage.removeItem("selectedUser");
+  };
 
   if (!currentUser) {
     return <UserSelectionScreen users={users} onSelectUser={selectUser} />;

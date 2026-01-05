@@ -18,16 +18,14 @@ interface RecipesTabProps {
   readonly recipes: readonly Recipe[];
   readonly onRefreshRecipes: () => Promise<void>;
   readonly userId: string;
-  readonly userName: string; // <-- added
-  readonly foods: FoodItem[]; // <-- added
+  readonly userName: string;
+  readonly foods: FoodItem[];
 }
 
 export function RecipesTab({
   recipes,
-  onRefreshRecipes, // <-- correct name
+  onRefreshRecipes,
   userId,
-  userName,
-  foods,
 }: RecipesTabProps) {
   const [showSheet, setShowSheet] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
@@ -45,7 +43,8 @@ export function RecipesTab({
 
   return (
     <div className="space-y-4 pb-6">
-      <div className="rounded-xl bg-zinc-900 p-3 dark:bg-zinc-800 sm:p-4">
+      {/* Header */}
+      <div className="rounded-xl bg-zinc-900 p-3 sm:p-4">
         <div className="flex items-center justify-between gap-3">
           <div className="flex-1">
             <div className="text-base font-semibold text-white sm:text-lg">
@@ -63,12 +62,14 @@ export function RecipesTab({
         </div>
       </div>
 
+      {/* Recipe List */}
       <RecipeList
         recipes={recipes}
         onRecipeDeleted={onRefreshRecipes}
         onRecipeEdit={handleEdit}
       />
 
+      {/* Add/Edit Sheet */}
       <Sheet
         open={showSheet}
         onOpenChange={(open) => {

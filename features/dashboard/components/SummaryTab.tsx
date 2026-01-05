@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { MealEntryWithDetails } from "@/utils/supabase/queries";
-import { Heading } from "@/app/components/heading";
 import { Text } from "@/app/components/text";
 import { Button } from "@/app/components/button";
 import { sumMacros, calculateMealMacros } from "@/features/shared/utils/macors";
@@ -17,12 +16,7 @@ interface SummaryTabProps {
   readonly meals: readonly MealEntryWithDetails[];
 }
 
-export function SummaryTab({
-  userId,
-  userName,
-  selectedDate,
-  meals,
-}: SummaryTabProps) {
+export function SummaryTab({ userName, selectedDate, meals }: SummaryTabProps) {
   const [copied, setCopied] = useState(false);
 
   const todayTotals = sumMacros(meals as MealEntryWithDetails[]);
@@ -89,55 +83,50 @@ Tracked with Food Macro Tracker`;
   return (
     <div className="space-y-4 pb-6">
       {/* Header */}
-      <div className="rounded-xl bg-zinc-900 p-4 dark:bg-zinc-800">
-        <div className="flex items-center justify-between gap-2">
-          <Heading
-            level={2}
-            className="text-base font-semibold text-white sm:text-lg"
-          >
-            Today's Summary
-          </Heading>
+      <div className="rounded-xl bg-zinc-900 p-3 sm:p-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex-1">
+            <div className="text-base font-semibold text-white sm:text-lg">
+              Today&apos;s Summary
+            </div>
+          </div>
+
           <Button
             onClick={handleCopySummary}
-            className="whitespace-nowrap text-sm"
+            className="whitespace-nowrap text-sm h-9 flex items-center gap-2"
           >
-            {copied ? (
-              "✓ Copied"
-            ) : (
-              <>
-                <ClipboardDocumentIcon className="w-4 h-4" /> Copy
-              </>
-            )}
+            <ClipboardDocumentIcon className="w-4 h-4" />
+            {copied ? "✓ Copied" : "Copy"}
           </Button>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-xl bg-zinc-900 p-4">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Calories
           </Text>
-          <div className="mt-2 font-mono text-2xl font-bold text-zinc-900 dark:text-white">
+          <div className="mt-2 font-mono text-2xl font-bold text-white">
             {Math.round(todayTotals.calories).toLocaleString()}
           </div>
           {meals.length > 0 && (
-            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+            <Text className="mt-1.5 text-xs text-zinc-500">
               {meals.length} {meals.length === 1 ? "entry" : "entries"}
             </Text>
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-xl bg-zinc-900 p-4">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Protein
           </Text>
-          <div className="mt-2 font-mono text-2xl font-bold text-zinc-900 dark:text-white">
+          <div className="mt-2 font-mono text-2xl font-bold text-white">
             {Math.round(todayTotals.protein * 10) / 10}
             <span className="text-base font-normal text-zinc-500">g</span>
           </div>
           {todayTotals.calories > 0 && (
-            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+            <Text className="mt-1.5 text-xs text-zinc-500">
               {Math.round(
                 ((todayTotals.protein * 4) / todayTotals.calories) * 100
               )}
@@ -146,16 +135,16 @@ Tracked with Food Macro Tracker`;
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-xl bg-zinc-900 p-4">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Carbs
           </Text>
-          <div className="mt-2 font-mono text-2xl font-bold text-zinc-900 dark:text-white">
+          <div className="mt-2 font-mono text-2xl font-bold text-white">
             {Math.round(todayTotals.carbs * 10) / 10}
             <span className="text-base font-normal text-zinc-500">g</span>
           </div>
           {todayTotals.calories > 0 && (
-            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+            <Text className="mt-1.5 text-xs text-zinc-500">
               {Math.round(
                 ((todayTotals.carbs * 4) / todayTotals.calories) * 100
               )}
@@ -164,16 +153,16 @@ Tracked with Food Macro Tracker`;
           )}
         </div>
 
-        <div className="rounded-xl bg-white p-4 dark:bg-zinc-900">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-xl bg-zinc-900 p-4">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Fat
           </Text>
-          <div className="mt-2 font-mono text-2xl font-bold text-zinc-900 dark:text-white">
+          <div className="mt-2 font-mono text-2xl font-bold text-white">
             {Math.round(todayTotals.fat * 10) / 10}
             <span className="text-base font-normal text-zinc-500">g</span>
           </div>
           {todayTotals.calories > 0 && (
-            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+            <Text className="mt-1.5 text-xs text-zinc-500">
               {Math.round(((todayTotals.fat * 9) / todayTotals.calories) * 100)}
               %
             </Text>
@@ -181,22 +170,22 @@ Tracked with Food Macro Tracker`;
         </div>
       </div>
 
-      {/* Meal Breakdown - Read Only */}
+      {/* Meal Breakdown or Empty State */}
       {meals.length > 0 ? (
         <div className="space-y-3">
-          <Text className="px-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+          <Text className="px-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Meals
           </Text>
           <MealBreakdown meals={meals} readOnly />
         </div>
       ) : (
-        <div className="rounded-xl bg-white p-8 text-center dark:bg-zinc-900 sm:p-12">
+        <div className="rounded-xl bg-zinc-900 p-8 text-center sm:p-12">
           <div className="mx-auto max-w-sm">
             <div className="mb-2 text-3xl sm:text-4xl">🍽️</div>
-            <Text className="text-sm font-semibold text-zinc-900 dark:text-white sm:text-base">
+            <Text className="text-sm font-semibold text-white sm:text-base">
               No meals logged today
             </Text>
-            <Text className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400 sm:text-sm">
+            <Text className="mt-1.5 text-xs text-zinc-400 sm:text-sm">
               Go to Daily Log to start tracking
             </Text>
           </div>
