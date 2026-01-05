@@ -11,6 +11,11 @@ interface DashboardContainerProps {
 
 export function DashboardContainer({ users }: DashboardContainerProps) {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(() => {
+    // Check if we're in the browser before accessing localStorage
+    if (typeof window === "undefined") {
+      return null;
+    }
+
     // Lazy initialization - only runs once on mount
     const savedUser = localStorage.getItem("selectedUser");
     if (savedUser) {
