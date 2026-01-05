@@ -3,8 +3,7 @@
 import { useState } from "react";
 import type { FoodItem } from "@/utils/supabase/queries";
 import { deleteFood } from "@/utils/supabase/queries";
-import { Text } from "@/app/components/text";
-import { Button } from "@/app/components/button";
+import { Pencil, Trash2 } from "lucide-react";
 import { getServingMacros } from "@/features/shared/utils/macors";
 
 interface FoodListItemProps {
@@ -32,67 +31,82 @@ export function FoodListItem({ food, onDelete, onEdit }: FoodListItemProps) {
     }
   };
 
-  // Per‑100g/ml macros (same as before)
-  const per100 = {
-    calories: Math.round(food.calories),
-    protein: Math.round((food.protein ?? 0) * 10) / 10,
-    carbs: Math.round((food.carbs ?? 0) * 10) / 10,
-    fat: Math.round((food.fat ?? 0) * 10) / 10,
-    fiber: food.fiber ? Math.round(food.fiber * 10) / 10 : null,
-  };
-
-  // NEW: Serving macros
   const serving = getServingMacros(food);
 
   return (
-    <div className="flex items-start justify-between rounded-lg bg-zinc-50 p-4 dark:bg-zinc-900">
-      <div className="flex-1 min-w-0">
-        {/* NAME + SERVING LABEL */}
-        <div className="flex items-baseline gap-2">
-          <Text className="font-medium">{food.name}</Text>
-
+    <div className="rounded-lg bg-zinc-900 border border-zinc-800 p-3">
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-base font-semibold text-white">{food.name}</h3>
           {food.serving_label && food.serving_size && (
-            <Text className="text-xs text-zinc-500">
-              {food.serving_label} ({food.serving_size}
+            <p className="text-sm text-zinc-400 mt-0.5">
+              Serving: {food.serving_label} ({food.serving_size}
               {food.base_unit})
-            </Text>
+            </p>
           )}
         </div>
 
-        {/* SERVING MACROS */}
-        {serving && (
-          <Text className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
-            {food.serving_label || "Serving"} — {serving.calories.toFixed(0)}{" "}
-            cal • P: {serving.protein.toFixed(1)}g • C:{" "}
-            {serving.carbs.toFixed(1)}g • F: {serving.fat.toFixed(1)}g
-            {serving.fiber !== null && ` • Fiber: ${serving.fiber.toFixed(1)}g`}
-          </Text>
-        )}
-
-        {/* PER 100g/ml */}
-        <Text className="mt-1 text-xs text-zinc-500">
-          Per 100{food.base_unit}: {per100.calories} cal • P: {per100.protein}g
-          • C: {per100.carbs}g • F: {per100.fat}g
-          {per100.fiber && ` • Fiber: ${per100.fiber}g`}
-        </Text>
+        <div className="flex items-center gap-1 shrink-0">
+          {onEdit && (
+            <button
+              onClick={() => onEdit(food)}
+              className="p-1.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
+              aria-label="Edit food"
+            >
+              <Pencil className="h-4 w-4" />
+            </button>
+          )}
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="p-1.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-red-400 transition-colors disabled:opacity-50"
+            aria-label="Delete food"
+          >
+            {isDeleting ? (
+              <div className="h-4 w-4 border-2 border-zinc-600 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Trash2 className="h-4 w-4" />
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* ACTIONS */}
-      <div className="flex gap-2 shrink-0">
-        {onEdit && (
-          <Button plain className="text-sm" onClick={() => onEdit(food)}>
-            Edit
-          </Button>
-        )}
-        <Button
-          plain
-          className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-          onClick={handleDelete}
-          disabled={isDeleting}
-        >
-          {isDeleting ? "..." : "Delete"}
-        </Button>
-      </div>
+      {serving && (
+        <div className="grid grid-cols-4 gap-2 text-center">
+          <div className="bg-zinc-800/50 rounded p-2">
+            <div className="text-lg font-bold text-white">
+              {serving.calories.toFixed(0)}
+            </div>
+            <div className="text-[10px] text-zinc-500 uppercase tracking-wide">
+              Cal
+            </div>
+          </div>
+          <div className="bg-zinc-800/50 rounded p-2">
+            <div className="text-lg font-bold text-blue-400">
+              {serving.protein.toFixed(1)}g
+            </div>
+            <div className="text-[10px] text-zinc-500 uppercase tracking-wide">
+              Protein
+            </div>
+          </div>
+          <div className="bg-zinc-800/50 rounded p-2">
+            <div className="text-lg font-bold text-orange-400">
+              {serving.carbs.toFixed(1)}g
+            </div>
+            <div className="text-[10px] text-zinc-500 uppercase tracking-wide">
+              Carbs
+            </div>
+          </div>
+          <div className="bg-zinc-800/50 rounded p-2">
+            <div className="text-lg font-bold text-yellow-400">
+              {serving.fat.toFixed(1)}g
+            </div>
+            <div className="text-[10px] text-zinc-500 uppercase tracking-wide">
+              Fat
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
