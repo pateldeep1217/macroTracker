@@ -26,6 +26,7 @@ import {
 } from "@/app/components/sheet";
 import { AddMealForm } from "@/features/meals/components/AddMealForm";
 import { MealBreakdown } from "@/features/meals/components/MealBreakdown";
+import { MacroStatsGrid } from "@/features/shared/components/MacroStatsGrid";
 import type { MealType } from "@/features/shared/utils/constatns";
 import { sumMacros } from "@/features/shared/utils/macors";
 
@@ -211,75 +212,13 @@ export function DailyLogTab({
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div className="rounded-xl bg-zinc-900 p-4">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-            Calories
-          </Text>
-          <div className="mt-2 font-mono text-2xl font-bold text-white">
-            {meals.length > 0
-              ? Math.round(dailyTotals.calories).toLocaleString()
-              : "0"}
-          </div>
-          {meals.length > 0 && (
-            <Text className="mt-1.5 text-xs text-zinc-500">
-              {meals.length} {meals.length === 1 ? "entry" : "entries"}
-            </Text>
-          )}
-        </div>
-
-        <div className="rounded-xl bg-zinc-900 p-4">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-            Protein
-          </Text>
-          <div className="mt-2 font-mono text-2xl font-bold text-white">
-            {meals.length > 0 ? Math.round(dailyTotals.protein * 10) / 10 : "0"}
-            <span className="text-base font-normal text-zinc-500">g</span>
-          </div>
-          {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1.5 text-xs text-zinc-500">
-              {Math.round(
-                ((dailyTotals.protein * 4) / dailyTotals.calories) * 100
-              )}
-              %
-            </Text>
-          )}
-        </div>
-
-        <div className="rounded-xl bg-zinc-900 p-4">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-            Carbs
-          </Text>
-          <div className="mt-2 font-mono text-2xl font-bold text-white">
-            {meals.length > 0 ? Math.round(dailyTotals.carbs * 10) / 10 : "0"}
-            <span className="text-base font-normal text-zinc-500">g</span>
-          </div>
-          {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1.5 text-xs text-zinc-500">
-              {Math.round(
-                ((dailyTotals.carbs * 4) / dailyTotals.calories) * 100
-              )}
-              %
-            </Text>
-          )}
-        </div>
-
-        <div className="rounded-xl bg-zinc-900 p-4">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-            Fat
-          </Text>
-          <div className="mt-2 font-mono text-2xl font-bold text-white">
-            {meals.length > 0 ? Math.round(dailyTotals.fat * 10) / 10 : "0"}
-            <span className="text-base font-normal text-zinc-500">g</span>
-          </div>
-          {meals.length > 0 && dailyTotals.calories > 0 && (
-            <Text className="mt-1.5 text-xs text-zinc-500">
-              {Math.round(((dailyTotals.fat * 9) / dailyTotals.calories) * 100)}
-              %
-            </Text>
-          )}
-        </div>
-      </div>
+      <MacroStatsGrid
+        calories={dailyTotals.calories}
+        protein={dailyTotals.protein}
+        carbs={dailyTotals.carbs}
+        fat={dailyTotals.fat}
+        entryCount={meals.length}
+      />
 
       {/* Meal Breakdown or Empty State */}
       {meals.length > 0 ? (
