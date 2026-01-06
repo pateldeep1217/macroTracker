@@ -137,6 +137,201 @@ export async function updateFood(id: string, input: CreateFoodFromLabelInput) {
 // ==========================================
 // RECIPES
 // ==========================================
+// ==========================================
+// ADD THESE TO YOUR queries.ts FILE
+// Replace existing recipe functions
+// ==========================================
+
+// Get all base recipes (templates that can be used to create batches)
+export async function getBaseRecipes() {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("recipes")
+    .select("*")
+    .eq("is_base_recipe", true)
+    .order("base_recipe_name")
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data as Recipe[];
+}
+
+// Get all recipes (both base recipes and batches)
+export async function getAllRecipes() {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("recipes")
+    .select("*")
+    .order("base_recipe_name")
+    .order("is_base_recipe", { ascending: false })
+    .order("batch_date", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data as Recipe[];
+}
+
+// Get batches for a specific base recipe
+export async function getRecipeBatches(baseRecipeId: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("recipes")
+    .select("*")
+    .eq("parent_recipe_id", baseRecipeId)
+    .order("batch_date", { ascending: false });
+
+  if (error) throw error;
+  return data as Recipe[];
+}
+
+// Create a new base recipe (first time making it)
+export async function createBaseRecipe(
+  recipe: {
+    name: string;
+    user_id: string;
+    created_by_name: string;
+    total_servings: number;
+  },
+  ingredients: { food_id: string; quantity: number }[]
+) {
+  const supabase = createClient();
+
+  const { data: newRecipe, error: recipeError } = await supabase
+    .from("recipes")
+    .insert({
+      ...recipe,
+      base_recipe_name: recipe.name,
+      is_base_recipe: true,
+      batch_date: null,
+      parent_recipe_id: null,
+    })
+    .select()
+    .single();
+
+  if (recipeError) throw recipeError;
+
+  if (ingredients.length > 0) {
+    const ingredientsToInsert = ingredients.map((ing) => ({
+      recipe_id: newRecipe.id,
+      ...ing,
+    }));
+
+    const { error: ingredientsError } = await supabase
+      .from("recipe_ingredients")
+      .insert(ingredientsToInsert);
+
+    if (ingredientsError) throw ingredientsError;
+
+    await supabase.rpc("calculate_recipe_macros", {
+      recipe_uuid: newRecipe.id,
+    });
+  }
+
+  return getRecipeWithIngredients(newRecipe.id);
+}
+
+// Create a new batch from a base recipe
+export async function createRecipeBatch(
+  baseRecipeId: string,
+  userId: string,
+  userName: string,
+  batchDate: string, // Format: "2026-01-05"
+  newServings: number,
+  newIngredients: { food_id: string; quantity: number }[]
+) {
+  const supabase = createClient();
+
+  // Get the base recipe to copy its name
+  const { data: baseRecipe, error: fetchError } = await supabase
+    .from("recipes")
+    .select("base_recipe_name")
+    .eq("id", baseRecipeId)
+    .single();
+
+  if (fetchError) throw fetchError;
+
+  // Format the batch name
+  const batchName = `${baseRecipe.base_recipe_name} (${new Date(
+    batchDate
+  ).toLocaleDateString("en-US", { month: "short", day: "numeric" })})`;
+
+  const { data: newBatch, error: batchError } = await supabase
+    .from("recipes")
+    .insert({
+      name: batchName,
+      base_recipe_name: baseRecipe.base_recipe_name,
+      user_id: userId,
+      created_by_name: userName,
+      total_servings: newServings,
+      is_base_recipe: false,
+      batch_date: batchDate,
+      parent_recipe_id: baseRecipeId,
+    })
+    .select()
+    .single();
+
+  if (batchError) throw batchError;
+
+  if (newIngredients.length > 0) {
+    const ingredientsToInsert = newIngredients.map((ing) => ({
+      recipe_id: newBatch.id,
+      ...ing,
+    }));
+
+    const { error: ingredientsError } = await supabase
+      .from("recipe_ingredients")
+      .insert(ingredientsToInsert);
+
+    if (ingredientsError) throw ingredientsError;
+
+    await supabase.rpc("calculate_recipe_macros", {
+      recipe_uuid: newBatch.id,
+    });
+  }
+
+  return getRecipeWithIngredients(newBatch.id);
+}
+
+// Update an existing recipe (works for both base and batches)
+export async function updateRecipe(
+  recipeId: string,
+  recipeData: Partial<Inserts<"recipes">>,
+  ingredients: { food_id: string; quantity: number }[]
+) {
+  const supabase = createClient();
+
+  // Update recipe base fields
+  const { error: recipeError } = await supabase
+    .from("recipes")
+    .update(recipeData)
+    .eq("id", recipeId);
+
+  if (recipeError) throw recipeError;
+
+  // Delete old ingredients
+  await supabase.from("recipe_ingredients").delete().eq("recipe_id", recipeId);
+
+  // Insert new ingredients
+  if (ingredients.length > 0) {
+    const rows = ingredients.map((i) => ({
+      recipe_id: recipeId,
+      ...i,
+    }));
+
+    const { error: ingError } = await supabase
+      .from("recipe_ingredients")
+      .insert(rows);
+
+    if (ingError) throw ingError;
+  }
+
+  // Recalculate macros
+  await supabase.rpc("calculate_recipe_macros", {
+    recipe_uuid: recipeId,
+  });
+
+  return getRecipeWithIngredients(recipeId);
+}
 
 export async function getUserRecipes(userId: string) {
   const supabase = createClient();
@@ -343,46 +538,6 @@ export async function deleteRecipe(id: string) {
   const { error } = await supabase.from("recipes").delete().eq("id", id);
 
   if (error) throw error;
-}
-
-export async function updateRecipe(
-  recipeId: string,
-  recipeData: Partial<Inserts<"recipes">>,
-  ingredients: { food_id: string; quantity: number }[]
-) {
-  const supabase = createClient();
-
-  // Update recipe base fields
-  const { error: recipeError } = await supabase
-    .from("recipes")
-    .update(recipeData)
-    .eq("id", recipeId);
-
-  if (recipeError) throw recipeError;
-
-  // Delete old ingredients
-  await supabase.from("recipe_ingredients").delete().eq("recipe_id", recipeId);
-
-  // Insert new ingredients
-  if (ingredients.length > 0) {
-    const rows = ingredients.map((i) => ({
-      recipe_id: recipeId,
-      ...i,
-    }));
-
-    const { error: ingError } = await supabase
-      .from("recipe_ingredients")
-      .insert(rows);
-
-    if (ingError) throw ingError;
-  }
-
-  // Recalculate macros
-  await supabase.rpc("calculate_recipe_macros", {
-    recipe_uuid: recipeId,
-  });
-
-  return getRecipeWithIngredients(recipeId);
 }
 
 // ==========================================

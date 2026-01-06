@@ -26,18 +26,37 @@ export function RecipesTab({
   recipes,
   onRefreshRecipes,
   userId,
+  userName,
+  foods,
 }: RecipesTabProps) {
   const [showSheet, setShowSheet] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
+  const [baseRecipeForBatch, setBaseRecipeForBatch] = useState<Recipe | null>(
+    null
+  );
 
   const handleSaved = async () => {
     await onRefreshRecipes();
     setShowSheet(false);
     setEditingRecipe(null);
+    setBaseRecipeForBatch(null);
   };
 
   const handleEdit = (recipe: Recipe) => {
     setEditingRecipe(recipe);
+    setBaseRecipeForBatch(null);
+    setShowSheet(true);
+  };
+
+  const handleCreateBatch = (recipe: Recipe) => {
+    setBaseRecipeForBatch(recipe);
+    setEditingRecipe(null);
+    setShowSheet(true);
+  };
+
+  const handleCreateNew = () => {
+    setEditingRecipe(null);
+    setBaseRecipeForBatch(null);
     setShowSheet(true);
   };
 
@@ -53,10 +72,7 @@ export function RecipesTab({
             <div className="text-xs text-zinc-400">{recipes.length} items</div>
           </div>
 
-          <Button
-            onClick={() => setShowSheet(true)}
-            className="h-9 whitespace-nowrap"
-          >
+          <Button onClick={handleCreateNew} className="h-9 whitespace-nowrap">
             + Add Recipe
           </Button>
         </div>
@@ -67,6 +83,7 @@ export function RecipesTab({
         recipes={recipes}
         onRecipeDeleted={onRefreshRecipes}
         onRecipeEdit={handleEdit}
+        onCreateBatch={handleCreateBatch}
       />
 
       {/* Add/Edit Sheet */}
@@ -74,14 +91,21 @@ export function RecipesTab({
         open={showSheet}
         onOpenChange={(open) => {
           setShowSheet(open);
-          if (!open) setEditingRecipe(null);
+          if (!open) {
+            setEditingRecipe(null);
+            setBaseRecipeForBatch(null);
+          }
         }}
       >
         <SheetContent side="bottom" className="h-[95vh] sm:rounded-l-xl">
           <div className="flex h-full flex-col">
             <SheetHeader>
               <SheetTitle>
-                {editingRecipe ? "Edit Recipe" : "Add New Recipe"}
+                {editingRecipe
+                  ? "Edit Recipe"
+                  : baseRecipeForBatch
+                  ? `New Batch of ${baseRecipeForBatch.name}`
+                  : "Add New Recipe"}
               </SheetTitle>
             </SheetHeader>
 
@@ -89,7 +113,9 @@ export function RecipesTab({
               <RecipeForm
                 onRecipeSaved={handleSaved}
                 editingRecipe={editingRecipe}
+                baseRecipeForBatch={baseRecipeForBatch}
                 userId={userId}
+                userName={userName}
               />
             </div>
 

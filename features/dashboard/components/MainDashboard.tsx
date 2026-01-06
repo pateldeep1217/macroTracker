@@ -12,6 +12,7 @@ import {
   getUserRecipes,
   getMealsByDate,
   getRecipeWithIngredients,
+  getAllRecipes,
 } from "@/utils/supabase/queries";
 
 import { DailyLogTab } from "./DailyLogTab";
@@ -84,7 +85,7 @@ export function MainDashboard({
       setIsLoading(true);
       try {
         const foodsData = await getAllFoods();
-        const baseRecipes = await getUserRecipes(selectedUserId);
+        const baseRecipes = await getAllRecipes();
 
         const recipesWithIngredients = await Promise.all(
           baseRecipes.map((r) => getRecipeWithIngredients(r.id))

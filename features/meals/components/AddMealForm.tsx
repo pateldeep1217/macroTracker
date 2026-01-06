@@ -45,8 +45,8 @@ export function AddMealForm({
 }: AddMealFormProps) {
   const isEditMode = !!editingMeal;
 
-  const [entryType, setEntryType] = useState<"food" | "recipe">(() =>
-    editingMeal?.food_id ? "food" : "recipe"
+  const [entryType, setEntryType] = useState<"food" | "recipe">(
+    () => (editingMeal?.recipe_id ? "recipe" : "food") // Default to "food"
   );
   const [selectedItemId, setSelectedItemId] = useState(
     () => editingMeal?.food_id || editingMeal?.recipe_id || ""

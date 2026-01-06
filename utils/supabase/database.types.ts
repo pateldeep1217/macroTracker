@@ -256,6 +256,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "meal_entries_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes_with_batches"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "meal_entries_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -298,15 +305,27 @@ export type Database = {
             referencedRelation: "recipes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "recipe_ingredients_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes_with_batches"
+            referencedColumns: ["id"]
+          },
         ]
       }
       recipes: {
         Row: {
+          base_recipe_name: string | null
+          batch_date: string | null
           created_at: string | null
+          created_by_name: string | null
           date_prepared: string | null
           id: string
+          is_base_recipe: boolean | null
           is_meal_prep: boolean | null
           name: string
+          parent_recipe_id: string | null
           total_calories: number | null
           total_carbs: number | null
           total_fat: number | null
@@ -315,15 +334,20 @@ export type Database = {
           total_servings: number
           total_weight: number | null
           updated_at: string | null
-          user_id: string
+          user_id: string | null
           weight_unit: string | null
         }
         Insert: {
+          base_recipe_name?: string | null
+          batch_date?: string | null
           created_at?: string | null
+          created_by_name?: string | null
           date_prepared?: string | null
           id?: string
+          is_base_recipe?: boolean | null
           is_meal_prep?: boolean | null
           name: string
+          parent_recipe_id?: string | null
           total_calories?: number | null
           total_carbs?: number | null
           total_fat?: number | null
@@ -332,15 +356,20 @@ export type Database = {
           total_servings?: number
           total_weight?: number | null
           updated_at?: string | null
-          user_id: string
+          user_id?: string | null
           weight_unit?: string | null
         }
         Update: {
+          base_recipe_name?: string | null
+          batch_date?: string | null
           created_at?: string | null
+          created_by_name?: string | null
           date_prepared?: string | null
           id?: string
+          is_base_recipe?: boolean | null
           is_meal_prep?: boolean | null
           name?: string
+          parent_recipe_id?: string | null
           total_calories?: number | null
           total_carbs?: number | null
           total_fat?: number | null
@@ -349,10 +378,24 @@ export type Database = {
           total_servings?: number
           total_weight?: number | null
           updated_at?: string | null
-          user_id?: string
+          user_id?: string | null
           weight_unit?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "recipes_parent_recipe_id_fkey"
+            columns: ["parent_recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipes_parent_recipe_id_fkey"
+            columns: ["parent_recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes_with_batches"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "recipes_user_id_fkey"
             columns: ["user_id"]
@@ -364,7 +407,103 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      recipes_with_batches: {
+        Row: {
+          base_recipe_name: string | null
+          batch_count: number | null
+          batch_date: string | null
+          created_at: string | null
+          created_by_name: string | null
+          date_prepared: string | null
+          id: string | null
+          is_base_recipe: boolean | null
+          is_meal_prep: boolean | null
+          name: string | null
+          parent_name: string | null
+          parent_recipe_id: string | null
+          total_calories: number | null
+          total_carbs: number | null
+          total_fat: number | null
+          total_fiber: number | null
+          total_protein: number | null
+          total_servings: number | null
+          total_weight: number | null
+          updated_at: string | null
+          user_id: string | null
+          weight_unit: string | null
+        }
+        Insert: {
+          base_recipe_name?: string | null
+          batch_count?: never
+          batch_date?: string | null
+          created_at?: string | null
+          created_by_name?: string | null
+          date_prepared?: string | null
+          id?: string | null
+          is_base_recipe?: boolean | null
+          is_meal_prep?: boolean | null
+          name?: string | null
+          parent_name?: never
+          parent_recipe_id?: string | null
+          total_calories?: number | null
+          total_carbs?: number | null
+          total_fat?: number | null
+          total_fiber?: number | null
+          total_protein?: number | null
+          total_servings?: number | null
+          total_weight?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          weight_unit?: string | null
+        }
+        Update: {
+          base_recipe_name?: string | null
+          batch_count?: never
+          batch_date?: string | null
+          created_at?: string | null
+          created_by_name?: string | null
+          date_prepared?: string | null
+          id?: string | null
+          is_base_recipe?: boolean | null
+          is_meal_prep?: boolean | null
+          name?: string | null
+          parent_name?: never
+          parent_recipe_id?: string | null
+          total_calories?: number | null
+          total_carbs?: number | null
+          total_fat?: number | null
+          total_fiber?: number | null
+          total_protein?: number | null
+          total_servings?: number | null
+          total_weight?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          weight_unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipes_parent_recipe_id_fkey"
+            columns: ["parent_recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipes_parent_recipe_id_fkey"
+            columns: ["parent_recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes_with_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "app_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       calculate_recipe_macros: {
