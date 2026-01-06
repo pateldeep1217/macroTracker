@@ -2,9 +2,9 @@ export const MEAL_TYPES = [
   "Breakfast",
   "Lunch",
   "Dinner",
-  "Snack",
-  "Pre-workout",
-  "Post-workout",
+  "Snacks", // ← add the 's'
+  "Pre Workout", // ← change hyphen to space
+  "Post Workout", // ← change hyphen to space
 ] as const;
 
 export type MealType = (typeof MEAL_TYPES)[number];
@@ -13,9 +13,9 @@ export const MEAL_TYPE_LABELS: Record<MealType, string> = {
   Breakfast: "Breakfast",
   Lunch: "Lunch",
   Dinner: "Dinner",
-  Snack: "Snack",
-  "Pre-workout": "Pre Workout",
-  "Post-workout": "Post Workout",
+  Snacks: "Snacks", // ← add the 's'
+  "Pre Workout": "Pre Workout", // ← change hyphen to space
+  "Post Workout": "Post Workout", // ← change hyphen to space
 } as const;
 
 // Type-safe helper
