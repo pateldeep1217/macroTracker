@@ -1,5 +1,5 @@
 // utils/supabase/queries.ts
-// Updated to preserve original serving information
+// Cleaned up CRUD with only functions that are actually used
 
 import { MealType } from "@/features/shared/utils/constatns";
 import { createClient } from "./client";
@@ -58,20 +58,19 @@ export async function searchFoods(searchTerm: string) {
 export type CreateFoodFromLabelInput = {
   name: string;
   brand?: string;
-  labelServingSize: number; // e.g., 30 (from label)
+  labelServingSize: number;
   labelServingUnit: "g" | "ml";
-  labelCalories: number; // e.g., 120 (from label)
+  labelCalories: number;
   labelProtein: number;
   labelCarbs: number;
   labelFat: number;
   labelFiber?: number;
-  servingLabel?: string; // NEW: "1 scoop", "1 cup", "1 medium", etc.
+  servingLabel?: string;
 };
 
 export async function createFoodFromLabel(input: CreateFoodFromLabelInput) {
   const supabase = createClient();
 
-  // Convert to per-100 for calculations
   const per100 = (value: number) =>
     Math.round((value / input.labelServingSize) * 100 * 100) / 100;
 
@@ -80,15 +79,11 @@ export async function createFoodFromLabel(input: CreateFoodFromLabelInput) {
     .insert({
       name: input.name,
       base_unit: input.labelServingUnit,
-
-      // Macros per 100g/100ml (for calculations)
       calories: per100(input.labelCalories),
       protein: per100(input.labelProtein),
       carbs: per100(input.labelCarbs),
       fat: per100(input.labelFat),
       fiber: input.labelFiber ? per100(input.labelFiber) : null,
-
-      // NEW: Keep original serving info (for display)
       serving_label: input.servingLabel || null,
       serving_size: input.labelServingSize,
     })
@@ -101,15 +96,45 @@ export async function createFoodFromLabel(input: CreateFoodFromLabelInput) {
 
 export async function deleteFood(id: string) {
   const supabase = createClient();
-  const { error } = await supabase.from("food_items").delete().eq("id", id);
 
+  // Check if used in recipes
+  const { data: recipeUses } = await supabase
+    .from("recipe_ingredients")
+    .select("recipes(name)")
+    .eq("food_id", id)
+    .limit(3);
+
+  if (recipeUses && recipeUses.length > 0) {
+    const names = recipeUses
+      .map((r: any) => r.recipes?.name)
+      .filter(Boolean)
+      .join(", ");
+    throw new Error(
+      `Cannot delete - used in recipes: ${names}. Edit the food item to fix data instead.`
+    );
+  }
+
+  // Check if used in meal entries
+  const { data: mealUses } = await supabase
+    .from("meal_entries")
+    .select("date")
+    .eq("food_id", id)
+    .limit(1);
+
+  if (mealUses && mealUses.length > 0) {
+    throw new Error(
+      "Cannot delete - this food has been logged in your meals. Edit the food item to fix data instead."
+    );
+  }
+
+  // Safe to delete
+  const { error } = await supabase.from("food_items").delete().eq("id", id);
   if (error) throw error;
 }
 
 export async function updateFood(id: string, input: CreateFoodFromLabelInput) {
   const supabase = createClient();
 
-  // Convert to per-100 for calculations
   const per100 = (value: number) =>
     Math.round((value / input.labelServingSize) * 100 * 100) / 100;
 
@@ -137,26 +162,8 @@ export async function updateFood(id: string, input: CreateFoodFromLabelInput) {
 // ==========================================
 // RECIPES
 // ==========================================
-// ==========================================
-// ADD THESE TO YOUR queries.ts FILE
-// Replace existing recipe functions
-// ==========================================
 
-// Get all base recipes (templates that can be used to create batches)
-export async function getBaseRecipes() {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("recipes")
-    .select("*")
-    .eq("is_base_recipe", true)
-    .order("base_recipe_name")
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data as Recipe[];
-}
-
-// Get all recipes (both base recipes and batches)
+// Get all recipes (shared between all users - bases + batches)
 export async function getAllRecipes() {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -171,17 +178,25 @@ export async function getAllRecipes() {
   return data as Recipe[];
 }
 
-// Get batches for a specific base recipe
-export async function getRecipeBatches(baseRecipeId: string) {
+// Get single recipe with all ingredients
+export async function getRecipeWithIngredients(recipeId: string) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("recipes")
-    .select("*")
-    .eq("parent_recipe_id", baseRecipeId)
-    .order("batch_date", { ascending: false });
+    .select(
+      `
+      *,
+      recipe_ingredients (
+        *,
+        food_items (*)
+      )
+    `
+    )
+    .eq("id", recipeId)
+    .single();
 
   if (error) throw error;
-  return data as Recipe[];
+  return data as RecipeWithIngredients;
 }
 
 // Create a new base recipe (first time making it)
@@ -235,13 +250,12 @@ export async function createRecipeBatch(
   baseRecipeId: string,
   userId: string,
   userName: string,
-  batchDate: string, // Format: "2026-01-05"
+  batchDate: string,
   newServings: number,
   newIngredients: { food_id: string; quantity: number }[]
 ) {
   const supabase = createClient();
 
-  // Get the base recipe to copy its name
   const { data: baseRecipe, error: fetchError } = await supabase
     .from("recipes")
     .select("base_recipe_name")
@@ -250,7 +264,6 @@ export async function createRecipeBatch(
 
   if (fetchError) throw fetchError;
 
-  // Format the batch name
   const batchName = `${baseRecipe.base_recipe_name} (${new Date(
     batchDate
   ).toLocaleDateString("en-US", { month: "short", day: "numeric" })})`;
@@ -293,14 +306,20 @@ export async function createRecipeBatch(
 }
 
 // Update an existing recipe (works for both base and batches)
+// Only allows updating safe fields
 export async function updateRecipe(
   recipeId: string,
-  recipeData: Partial<Inserts<"recipes">>,
+  recipeData: {
+    name?: string;
+    user_id?: string;
+    created_by_name?: string;
+    total_servings?: number;
+  },
   ingredients: { food_id: string; quantity: number }[]
 ) {
   const supabase = createClient();
 
-  // Update recipe base fields
+  // Update recipe base fields (only safe fields)
   const { error: recipeError } = await supabase
     .from("recipes")
     .update(recipeData)
@@ -333,73 +352,33 @@ export async function updateRecipe(
   return getRecipeWithIngredients(recipeId);
 }
 
-export async function getUserRecipes(userId: string) {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("recipes")
-    .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data as Recipe[];
-}
-
-export async function getRecipeWithIngredients(recipeId: string) {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("recipes")
-    .select(
-      `
-      *,
-      recipe_ingredients (
-        *,
-        food_items (*)
-      )
-    `
-    )
-    .eq("id", recipeId)
-    .single();
-
-  if (error) throw error;
-  return data as RecipeWithIngredients;
-}
-
-export async function createRecipe(
-  recipe: Inserts<"recipes">,
-  ingredients: { food_id: string; quantity: number }[]
-) {
+// Delete a recipe (with safety checks)
+export async function deleteRecipe(id: string) {
   const supabase = createClient();
 
-  // Create recipe
-  const { data: newRecipe, error: recipeError } = await supabase
+  // Check if this is a base recipe with batches
+  const { data: batches, error: batchCheckError } = await supabase
     .from("recipes")
-    .insert(recipe)
-    .select()
-    .single();
+    .select("id, name")
+    .eq("parent_recipe_id", id);
 
-  if (recipeError) throw recipeError;
+  if (batchCheckError) throw batchCheckError;
 
-  // Add ingredients
-  if (ingredients.length > 0) {
-    const ingredientsToInsert = ingredients.map((ing) => ({
-      recipe_id: newRecipe.id,
-      ...ing,
-    }));
-
-    const { error: ingredientsError } = await supabase
-      .from("recipe_ingredients")
-      .insert(ingredientsToInsert);
-
-    if (ingredientsError) throw ingredientsError;
-
-    // Calculate macros
-    await supabase.rpc("calculate_recipe_macros", {
-      recipe_uuid: newRecipe.id,
-    });
+  if (batches && batches.length > 0) {
+    throw new Error(
+      `Cannot delete base recipe. It has ${
+        batches.length
+      } batch(es). Delete batches first:\n${batches
+        .map((b) => `• ${b.name}`)
+        .join("\n")}`
+    );
   }
 
-  return getRecipeWithIngredients(newRecipe.id);
+  // Delete recipe (recipe_ingredients cascade automatically)
+  // meal_entries will have recipe_id set to NULL (from ON DELETE SET NULL)
+  const { error } = await supabase.from("recipes").delete().eq("id", id);
+
+  if (error) throw error;
 }
 
 // ==========================================
@@ -529,13 +508,6 @@ export async function updateMealEntry(input: {
 export async function deleteMealEntry(id: string) {
   const supabase = createClient();
   const { error } = await supabase.from("meal_entries").delete().eq("id", id);
-
-  if (error) throw error;
-}
-
-export async function deleteRecipe(id: string) {
-  const supabase = createClient();
-  const { error } = await supabase.from("recipes").delete().eq("id", id);
 
   if (error) throw error;
 }

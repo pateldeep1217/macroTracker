@@ -9,10 +9,9 @@ import type {
 } from "@/utils/supabase/queries";
 import {
   getAllFoods,
-  getUserRecipes,
+  getAllRecipes,
   getMealsByDate,
   getRecipeWithIngredients,
-  getAllRecipes,
 } from "@/utils/supabase/queries";
 
 import { DailyLogTab } from "./DailyLogTab";
@@ -51,6 +50,8 @@ export function MainDashboard({
 }: MainDashboardProps) {
   // Tab persistence with localStorage
   const [activeTab, setActiveTab] = useState<TabId>(() => {
+    if (typeof window === "undefined") return "log";
+
     const savedTab = localStorage.getItem("activeTab") as TabId | null;
     if (savedTab && TABS.some((t) => t.id === savedTab)) {
       return savedTab;
@@ -85,7 +86,7 @@ export function MainDashboard({
       setIsLoading(true);
       try {
         const foodsData = await getAllFoods();
-        const baseRecipes = await getAllRecipes();
+        const baseRecipes = await getAllRecipes(); // ✅ Use getAllRecipes for shared recipes
 
         const recipesWithIngredients = await Promise.all(
           baseRecipes.map((r) => getRecipeWithIngredients(r.id))
@@ -126,7 +127,8 @@ export function MainDashboard({
   };
 
   const refreshRecipes = async () => {
-    const base = await getUserRecipes(selectedUserId);
+    // ✅ FIXED: Use getAllRecipes() instead of getUserRecipes()
+    const base = await getAllRecipes();
     const full = await Promise.all(
       base.map((r) => getRecipeWithIngredients(r.id))
     );
