@@ -1,10 +1,12 @@
 import type { MealEntryWithDetails } from "@/utils/supabase/queries";
 import type { FoodItem } from "@/utils/supabase/queries";
+
 export interface MacroTotals {
   readonly calories: number;
   readonly protein: number;
   readonly carbs: number;
   readonly fat: number;
+  readonly fiber: number; // ← Add this
 }
 
 export function calculateMealMacros(meal: MealEntryWithDetails): MacroTotals {
@@ -16,6 +18,7 @@ export function calculateMealMacros(meal: MealEntryWithDetails): MacroTotals {
       protein: (food.protein ?? 0) * multiplier,
       carbs: (food.carbs ?? 0) * multiplier,
       fat: (food.fat ?? 0) * multiplier,
+      fiber: (food.fiber ?? 0) * multiplier, // ← Add this
     };
   }
 
@@ -29,10 +32,11 @@ export function calculateMealMacros(meal: MealEntryWithDetails): MacroTotals {
       protein: ((recipe.total_protein ?? 0) * servings) / totalServings,
       carbs: ((recipe.total_carbs ?? 0) * servings) / totalServings,
       fat: ((recipe.total_fat ?? 0) * servings) / totalServings,
+      fiber: ((recipe.total_fiber ?? 0) * servings) / totalServings, // ← Add this
     };
   }
 
-  return { calories: 0, protein: 0, carbs: 0, fat: 0 };
+  return { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 }; // ← Add fiber: 0
 }
 
 export function sumMacros(meals: MealEntryWithDetails[]): MacroTotals {
@@ -44,9 +48,10 @@ export function sumMacros(meals: MealEntryWithDetails[]): MacroTotals {
         protein: totals.protein + mealMacros.protein,
         carbs: totals.carbs + mealMacros.carbs,
         fat: totals.fat + mealMacros.fat,
+        fiber: totals.fiber + mealMacros.fiber, // ← Add this
       };
     },
-    { calories: 0, protein: 0, carbs: 0, fat: 0 }
+    { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 } // ← Add fiber: 0
   );
 }
 
@@ -55,6 +60,7 @@ export interface FormattedMacros {
   readonly protein: number;
   readonly carbs: number;
   readonly fat: number;
+  readonly fiber: number; // ← Add this
 }
 
 export function formatMacros(macros: MacroTotals): FormattedMacros {
@@ -63,6 +69,7 @@ export function formatMacros(macros: MacroTotals): FormattedMacros {
     protein: Number(macros.protein.toFixed(1)),
     carbs: Number(macros.carbs.toFixed(1)),
     fat: Number(macros.fat.toFixed(1)),
+    fiber: Number(macros.fiber.toFixed(1)), // ← Add this
   };
 }
 
@@ -89,6 +96,7 @@ export function getServingMacros(food: FoodItem) {
     fiber: food.fiber ? food.fiber * factor : null,
   };
 }
+
 export function getQuantityMacros(food: FoodItem, quantity: number) {
   const factor = quantity / 100;
   return {

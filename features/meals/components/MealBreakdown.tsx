@@ -83,57 +83,143 @@ export function MealBreakdown({
       {groupedMeals.map(({ type, label, meals: mealEntries, config }) => {
         if (mealEntries.length === 0) return null;
 
-        const mealTotals = sumMacros(mealEntries);
-
         return (
-          <div
+          <MealTypeSection
             key={type}
-            className="rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900"
-          >
-            {/* Meal Type Header */}
-            <div className={`${config.headerBg} px-5 py-4`}>
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{config.icon}</span>
-                  <Text className={`font-bold text-lg ${config.color}`}>
-                    {label}
-                  </Text>
-                </div>
-
-                <div className="flex gap-4 text-sm font-medium">
-                  <span className={`${config.color}`}>
-                    {Math.round(mealTotals.calories)} cal
-                  </span>
-                  <span className="text-zinc-400">
-                    P: {Math.round(mealTotals.protein)}g
-                  </span>
-                  <span className="text-zinc-400">
-                    C: {Math.round(mealTotals.carbs)}g
-                  </span>
-                  <span className="text-zinc-400">
-                    F: {Math.round(mealTotals.fat)}g
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Meal Items */}
-            <div className="p-3 space-y-2">
-              {mealEntries.map((meal) => (
-                <MealEntryRow
-                  key={meal.id}
-                  meal={meal}
-                  onDelete={
-                    readOnly || !onDelete ? undefined : () => onDelete(meal.id)
-                  }
-                  onEdit={readOnly || !onEdit ? undefined : () => onEdit(meal)}
-                  readOnly={readOnly}
-                />
-              ))}
-            </div>
-          </div>
+            type={type}
+            label={label}
+            mealEntries={mealEntries}
+            config={config}
+            onDelete={onDelete}
+            onEdit={onEdit}
+            readOnly={readOnly}
+          />
         );
       })}
+    </div>
+  );
+}
+
+// Meal Type Section Component
+function MealTypeSection({
+  type,
+  label,
+  mealEntries,
+  config,
+  onDelete,
+  onEdit,
+  readOnly,
+}: {
+  type: MealType;
+  label: string;
+  mealEntries: readonly MealEntryWithDetails[];
+  config: { icon: string; color: string; headerBg: string };
+  onDelete?: (mealId: string) => Promise<void>;
+  onEdit?: (meal: MealEntryWithDetails) => void;
+  readOnly: boolean;
+}) {
+  const [copied, setCopied] = useState(false);
+  const mealTotals = sumMacros(mealEntries as MealEntryWithDetails[]);
+
+  const handleCopyMeal = async () => {
+    const fiberText =
+      mealTotals.fiber > 0
+        ? ` | Fiber: ${Math.round(mealTotals.fiber * 10) / 10}g`
+        : "";
+    const headerText = `${label}: ${Math.round(
+      mealTotals.calories
+    )} cal | P: ${Math.round(mealTotals.protein)}g | C: ${Math.round(
+      mealTotals.carbs
+    )}g | F: ${Math.round(mealTotals.fat)}g${fiberText}`;
+
+    const itemsList = mealEntries
+      .map((meal) => {
+        const macros = calculateMealMacros(meal);
+        const name = meal.food_items?.name || meal.recipes?.name || "Unknown";
+        const fiberItem =
+          macros.fiber > 0
+            ? ` | Fiber: ${Math.round(macros.fiber * 10) / 10}g`
+            : "";
+        return `  • ${name}: ${Math.round(macros.calories)} cal | P: ${
+          Math.round(macros.protein * 10) / 10
+        }g | C: ${Math.round(macros.carbs * 10) / 10}g | F: ${
+          Math.round(macros.fat * 10) / 10
+        }g${fiberItem}`;
+      })
+      .join("\n");
+
+    const text = `${headerText}\n${itemsList}`;
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      console.error("Failed to copy:", error);
+    }
+  };
+
+  return (
+    <div className="rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900">
+      {/* Meal Type Header */}
+      <div className={`${config.headerBg} px-5 py-4`}>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{config.icon}</span>
+            <Text className={`font-bold text-lg ${config.color}`}>{label}</Text>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="flex gap-4 text-sm font-medium">
+              <span className={`${config.color}`}>
+                {Math.round(mealTotals.calories)} cal
+              </span>
+              <span className="text-zinc-400">
+                P: {Math.round(mealTotals.protein)}g
+              </span>
+              <span className="text-zinc-400">
+                C: {Math.round(mealTotals.carbs)}g
+              </span>
+              <span className="text-zinc-400">
+                F: {Math.round(mealTotals.fat)}g
+              </span>
+              {mealTotals.fiber > 0 && (
+                <span className="text-zinc-500">
+                  Fiber: {Math.round(mealTotals.fiber * 10) / 10}g
+                </span>
+              )}
+            </div>
+
+            <Button
+              plain
+              className="text-zinc-400 hover:text-blue-400 transition-colors p-2 rounded-lg hover:bg-zinc-700/50"
+              onClick={handleCopyMeal}
+              title="Copy meal"
+            >
+              {copied ? (
+                <span className="text-green-400 text-xs font-bold">✓</span>
+              ) : (
+                <ClipboardIcon className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Meal Items */}
+      <div className="p-3 space-y-2">
+        {mealEntries.map((meal) => (
+          <MealEntryRow
+            key={meal.id}
+            meal={meal}
+            onDelete={
+              readOnly || !onDelete ? undefined : () => onDelete(meal.id)
+            }
+            onEdit={readOnly || !onEdit ? undefined : () => onEdit(meal)}
+            readOnly={readOnly}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -170,7 +256,11 @@ function MealEntryRow({
   };
 
   const handleCopyMacros = async () => {
-    const text = `${formatted.calories} cal | P: ${formatted.protein}g | C: ${formatted.carbs}g | F: ${formatted.fat}g`;
+    const fiberText =
+      macros.fiber && macros.fiber > 0
+        ? ` | Fiber: ${Math.round(macros.fiber * 10) / 10}g`
+        : "";
+    const text = `${formatted.calories} cal | P: ${formatted.protein}g | C: ${formatted.carbs}g | F: ${formatted.fat}g${fiberText}`;
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -244,26 +334,18 @@ function MealEntryRow({
               <span className="text-zinc-300">
                 <span className="font-medium">F:</span> {formatted.fat}g
               </span>
+              {macros.fiber && macros.fiber > 0 && (
+                <span className="text-zinc-400">
+                  <span className="font-medium">Fiber:</span>{" "}
+                  {Math.round(macros.fiber * 10) / 10}g
+                </span>
+              )}
             </div>
           </div>
 
           {/* Action Buttons - Icons */}
-          {(onEdit || onDelete || !readOnly) && (
+          {(onEdit || onDelete) && (
             <div className="flex gap-1 shrink-0">
-              {!readOnly && (
-                <Button
-                  plain
-                  className="text-zinc-400 hover:text-blue-400 transition-colors p-2 rounded-lg hover:bg-zinc-700/50"
-                  onClick={handleCopyMacros}
-                  title="Copy macros"
-                >
-                  {copied ? (
-                    <span className="text-green-400 text-xs font-bold">✓</span>
-                  ) : (
-                    <ClipboardIcon className="w-4 h-4" />
-                  )}
-                </Button>
-              )}
               {onEdit && (
                 <Button
                   plain
