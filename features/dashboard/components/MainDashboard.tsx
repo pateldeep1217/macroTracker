@@ -71,9 +71,14 @@ export function MainDashboard({
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [meals, setMeals] = useState<MealEntryWithDetails[]>([]);
 
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
-  );
+  // ✅ FIXED: Use local timezone instead of UTC
+  const [selectedDate, setSelectedDate] = useState<string>(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  });
 
   const [isLoading, setIsLoading] = useState(true);
 
