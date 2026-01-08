@@ -45,8 +45,8 @@ export function AddMealForm({
 }: AddMealFormProps) {
   const isEditMode = !!editingMeal;
 
-  const [entryType, setEntryType] = useState<"food" | "recipe">(
-    () => (editingMeal?.recipe_id ? "recipe" : "food") // Default to "food"
+  const [entryType, setEntryType] = useState<"food" | "recipe">(() =>
+    editingMeal?.recipe_id ? "recipe" : "food"
   );
   const [selectedItemId, setSelectedItemId] = useState(
     () => editingMeal?.food_id || editingMeal?.recipe_id || ""
@@ -58,6 +58,7 @@ export function AddMealForm({
   const [quantity, setQuantity] = useState(
     () => editingMeal?.quantity?.toString() || ""
   );
+  const [servingsInput, setServingsInput] = useState("");
   const [mealType, setMealType] = useState<MealType>(
     () => (editingMeal?.meal_type as MealType) || "Breakfast"
   );
@@ -74,11 +75,9 @@ export function AddMealForm({
       ? recipes.find((r) => r.id === selectedItemId)
       : null;
 
-  // Check if selected food has serving info
   const hasServingInfo =
     selectedFood?.serving_label && selectedFood?.serving_size;
 
-  // Calculate preview macros
   const previewMacros = useMemo(() => {
     if (!quantity || !selectedItemId) return null;
 
@@ -86,7 +85,6 @@ export function AddMealForm({
     if (isNaN(qty) || qty <= 0) return null;
 
     if (entryType === "food" && selectedFood) {
-      // Validate that we have the required nutrition data
       if (
         typeof selectedFood.calories !== "number" ||
         typeof selectedFood.protein !== "number" ||
@@ -94,10 +92,9 @@ export function AddMealForm({
         typeof selectedFood.fat !== "number"
       ) {
         console.warn("Food item missing nutrition data:", selectedFood.name);
-        return null; // Don't show preview if data is incomplete
+        return null;
       }
 
-      // Food macros are per 100g/100ml
       const multiplier = qty / 100;
       return {
         calories: Math.round(selectedFood.calories * multiplier),
@@ -106,31 +103,29 @@ export function AddMealForm({
         fat: Math.round(selectedFood.fat * multiplier * 10) / 10,
       };
     } else if (entryType === "recipe" && selectedRecipe) {
-      // Validate recipe has required data
       const calories = selectedRecipe.total_calories;
       const protein = selectedRecipe.total_protein;
       const carbs = selectedRecipe.total_carbs;
       const fat = selectedRecipe.total_fat;
-      const servings = selectedRecipe.total_servings;
+      const servingsCount = selectedRecipe.total_servings;
 
       if (
         typeof calories !== "number" ||
         typeof protein !== "number" ||
         typeof carbs !== "number" ||
         typeof fat !== "number" ||
-        typeof servings !== "number" ||
-        servings <= 0
+        typeof servingsCount !== "number" ||
+        servingsCount <= 0
       ) {
         console.warn("Recipe missing nutrition data:", selectedRecipe.name);
         return null;
       }
 
-      // Recipe macros are total, divide by servings
       const perServing = {
-        calories: calories / servings,
-        protein: protein / servings,
-        carbs: carbs / servings,
-        fat: fat / servings,
+        calories: calories / servingsCount,
+        protein: protein / servingsCount,
+        carbs: carbs / servingsCount,
+        fat: fat / servingsCount,
       };
       return {
         calories: Math.round(perServing.calories * qty),
@@ -194,6 +189,7 @@ export function AddMealForm({
         setSelectedItemId("");
         setSearchQuery("");
         setQuantity("");
+        setServingsInput("");
       }
     } catch (err) {
       console.error("Add/Edit meal error:", err);
@@ -213,12 +209,6 @@ export function AddMealForm({
     setShowDropdown(false);
   };
 
-  const handleServingSizeClick = () => {
-    if (selectedFood?.serving_size) {
-      setQuantity(selectedFood.serving_size.toString());
-    }
-  };
-
   return (
     <div className="space-y-4">
       {/* Entry Type */}
@@ -231,6 +221,7 @@ export function AddMealForm({
             setSelectedItemId("");
             setSearchQuery("");
             setQuantity("");
+            setServingsInput("");
           }}
           disabled={isEditMode}
         >
@@ -282,53 +273,105 @@ export function AddMealForm({
         </div>
       </Field>
 
-      {/* Serving Size Quick Button (only for foods with serving info) */}
-      {hasServingInfo && !isEditMode && (
-        <div className="rounded-lg bg-zinc-50 dark:bg-zinc-800/50 p-3">
-          <Text className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-2">
-            Quick Add
-          </Text>
-          <Button
-            type="button"
-            plain
-            onClick={handleServingSizeClick}
-            className="text-sm"
-          >
-            {selectedFood.serving_label} ({selectedFood.serving_size}
-            {selectedFood.base_unit})
-          </Button>
-        </div>
-      )}
-
       {/* Quantity */}
       <Field>
         <Label>{entryType === "recipe" ? "Servings" : "Amount"}</Label>
-        <Input
-          type="number"
-          placeholder={
-            entryType === "recipe"
-              ? "Enter servings"
-              : selectedFood?.base_unit === "g"
-              ? "Enter grams"
-              : selectedFood?.base_unit === "ml"
-              ? "Enter milliliters"
-              : "Enter amount"
-          }
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          min="0"
-          step="0.1"
-        />
-        {hasServingInfo && quantity && (
-          <Text className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            {parseFloat(quantity) === selectedFood?.serving_size
-              ? `= ${selectedFood.serving_label}`
-              : parseFloat(quantity) > 0 &&
-                selectedFood?.serving_size &&
-                `≈ ${(parseFloat(quantity) / selectedFood.serving_size).toFixed(
-                  1
-                )} × ${selectedFood.serving_label}`}
-          </Text>
+
+        {hasServingInfo && entryType === "food" ? (
+          <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
+              {/* Servings Input */}
+              <div>
+                <Text className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">
+                  {selectedFood.serving_label}s
+                </Text>
+                <Input
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="0"
+                  value={servingsInput}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                      setServingsInput(value);
+
+                      if (value === "") {
+                        setQuantity("");
+                      } else {
+                        const servingsNum = parseFloat(value);
+                        if (!isNaN(servingsNum)) {
+                          const grams =
+                            servingsNum * selectedFood.serving_size!;
+                          setQuantity(grams.toString());
+                        }
+                      }
+                    }
+                  }}
+                />
+              </div>
+
+              {/* Grams Input */}
+              <div>
+                <Text className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">
+                  or {selectedFood.base_unit}
+                </Text>
+                <Input
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="0"
+                  value={quantity}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                      setQuantity(value);
+
+                      if (value === "") {
+                        setServingsInput("");
+                      } else {
+                        const grams = parseFloat(value);
+                        if (!isNaN(grams)) {
+                          const servings = grams / selectedFood.serving_size!;
+                          setServingsInput(servings.toFixed(2));
+                        }
+                      }
+                    }
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Conversion Display */}
+            {quantity && parseFloat(quantity) > 0 && (
+              <Text className="text-xs text-zinc-500 dark:text-zinc-400">
+                = {servingsInput ? parseFloat(servingsInput).toFixed(1) : "0"} ×{" "}
+                {selectedFood.serving_label} ({quantity}
+                {selectedFood.base_unit})
+              </Text>
+            )}
+          </div>
+        ) : (
+          <>
+            <Input
+              type="text"
+              inputMode="decimal"
+              placeholder={
+                entryType === "recipe"
+                  ? "Enter servings"
+                  : selectedFood?.base_unit === "g"
+                  ? "Enter grams"
+                  : selectedFood?.base_unit === "ml"
+                  ? "Enter milliliters"
+                  : "Enter amount"
+              }
+              value={quantity}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                  setQuantity(value);
+                }
+              }}
+            />
+          </>
         )}
       </Field>
 
@@ -341,7 +384,7 @@ export function AddMealForm({
           <div className="flex gap-4 text-sm">
             <div>
               <span className="font-semibold">{previewMacros.calories}</span>
-              <span className="text-zinc-500 ml-1">cal</span>
+              <span className="text-zinc-500 dark:text-zinc-400 ml-1">cal</span>
             </div>
             <div>
               <span className="font-semibold">P:</span>

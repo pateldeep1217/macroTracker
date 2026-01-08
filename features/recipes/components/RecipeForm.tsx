@@ -20,7 +20,7 @@ interface RecipeFormProps {
   readonly editingRecipe?: Recipe | null;
   readonly userId: string;
   readonly userName: string;
-  readonly baseRecipeForBatch?: Recipe | null; // If creating a batch from base
+  readonly baseRecipeForBatch?: Recipe | null;
 }
 
 interface IngredientRow {
@@ -45,6 +45,9 @@ export function RecipeForm({
     return today.toISOString().split("T")[0];
   });
   const [ingredients, setIngredients] = useState<IngredientRow[]>([]);
+  const [servingsInputs, setServingsInputs] = useState<Record<string, string>>(
+    {}
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<FoodItem[]>([]);
@@ -54,7 +57,6 @@ export function RecipeForm({
   const [error, setError] = useState<string | null>(null);
   const [showMacros, setShowMacros] = useState(false);
 
-  // Load recipe when editing
   useEffect(() => {
     if (editingRecipe) {
       (async () => {
@@ -74,7 +76,6 @@ export function RecipeForm({
     }
   }, [editingRecipe]);
 
-  // Load base recipe when creating a batch
   useEffect(() => {
     if (baseRecipeForBatch) {
       (async () => {
@@ -91,7 +92,6 @@ export function RecipeForm({
     }
   }, [baseRecipeForBatch]);
 
-  // Search foods with debounce
   useEffect(() => {
     if (searchTerm.length < 2) {
       setSearchResults([]);
@@ -123,6 +123,11 @@ export function RecipeForm({
 
   const removeIngredient = (id: string) => {
     setIngredients((prev) => prev.filter((i) => i.food.id !== id));
+    setServingsInputs((prev) => {
+      const newState = { ...prev };
+      delete newState[id];
+      return newState;
+    });
   };
 
   const updateQuantity = (id: string, value: string) => {
@@ -131,7 +136,6 @@ export function RecipeForm({
     );
   };
 
-  // Calculate totals
   const totals = useMemo(() => {
     let calories = 0;
     let protein = 0;
@@ -206,7 +210,6 @@ export function RecipeForm({
           parsedIngredients
         );
       } else if (isBatchMode) {
-        // Creating a new batch from base recipe
         await createRecipeBatch(
           baseRecipeForBatch!.id,
           userId,
@@ -216,7 +219,6 @@ export function RecipeForm({
           parsedIngredients
         );
       } else {
-        // Creating a new base recipe
         await createBaseRecipe(
           {
             name,
@@ -253,7 +255,7 @@ export function RecipeForm({
             placeholder="e.g., High Protein Pasta"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            disabled={isBatchMode} // Auto-named for batches
+            disabled={isBatchMode}
           />
           {isBatchMode && (
             <Text className="text-xs text-zinc-400 mt-1">
@@ -270,16 +272,20 @@ export function RecipeForm({
         <Field>
           <Label>Total Servings *</Label>
           <Input
-            type="number"
-            min="0.1"
-            step="0.1"
+            type="text"
+            inputMode="decimal"
             value={totalServings}
-            onChange={(e) => setTotalServings(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                setTotalServings(value);
+              }
+            }}
           />
         </Field>
       </div>
 
-      {/* Batch Date (only for batches) */}
+      {/* Batch Date */}
       {isBatchMode && (
         <Field>
           <Label>Batch Date *</Label>
@@ -319,6 +325,8 @@ export function RecipeForm({
               </Text>
               <Text className="text-xs text-zinc-400 mt-0.5">
                 {food.calories} cal per 100{food.base_unit}
+                {food.serving_label &&
+                  ` • ${food.serving_label}: ${food.serving_size}${food.base_unit}`}
               </Text>
             </button>
           ))}
@@ -337,12 +345,17 @@ export function RecipeForm({
             const ingCals = Math.round(ing.food.calories * multiplier);
             const ingProtein =
               Math.round((ing.food.protein || 0) * multiplier * 10) / 10;
+            const hasServingInfo =
+              ing.food.serving_label && ing.food.serving_size;
+
+            const servingsValue = servingsInputs[ing.food.id] || "";
 
             return (
               <div
                 key={ing.food.id}
-                className="rounded-lg bg-zinc-800 border border-zinc-700 p-3"
+                className="rounded-lg bg-zinc-800 border border-zinc-700 p-3 space-y-3"
               >
+                {/* Header */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <Text className="font-medium text-white">
@@ -355,29 +368,122 @@ export function RecipeForm({
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => removeIngredient(ing.food.id)}
+                    className="p-1 rounded hover:bg-zinc-700 text-zinc-400 hover:text-red-400 transition-colors shrink-0"
+                  >
+                    <XMarkIcon className="h-5 w-5" />
+                  </button>
+                </div>
+
+                {/* Dual Input */}
+                {hasServingInfo ? (
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      {/* Servings Input */}
+                      <div>
+                        <Text className="text-xs text-zinc-500 mb-1">
+                          {ing.food.serving_label}s
+                        </Text>
+                        <Input
+                          type="text"
+                          inputMode="decimal"
+                          className="text-sm"
+                          placeholder="0"
+                          value={servingsValue}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                              setServingsInputs((prev) => ({
+                                ...prev,
+                                [ing.food.id]: value,
+                              }));
+
+                              if (value === "") {
+                                updateQuantity(ing.food.id, "");
+                              } else {
+                                const servingsNum = parseFloat(value);
+                                if (!isNaN(servingsNum)) {
+                                  const grams =
+                                    servingsNum * ing.food.serving_size!;
+                                  updateQuantity(ing.food.id, grams.toString());
+                                }
+                              }
+                            }
+                          }}
+                        />
+                      </div>
+
+                      {/* Grams Input */}
+                      <div>
+                        <Text className="text-xs text-zinc-500 mb-1">
+                          or {ing.food.base_unit}
+                        </Text>
+                        <Input
+                          type="text"
+                          inputMode="decimal"
+                          className="text-sm"
+                          placeholder="0"
+                          value={ing.quantity}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                              updateQuantity(ing.food.id, value);
+
+                              if (value === "") {
+                                setServingsInputs((prev) => ({
+                                  ...prev,
+                                  [ing.food.id]: "",
+                                }));
+                              } else {
+                                const grams = parseFloat(value);
+                                if (!isNaN(grams)) {
+                                  const servings =
+                                    grams / ing.food.serving_size!;
+                                  setServingsInputs((prev) => ({
+                                    ...prev,
+                                    [ing.food.id]: servings.toFixed(2),
+                                  }));
+                                }
+                              }
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Conversion Display */}
+                    {qty > 0 && (
+                      <Text className="text-xs text-zinc-500">
+                        ={" "}
+                        {servingsValue
+                          ? parseFloat(servingsValue).toFixed(1)
+                          : "0"}{" "}
+                        × {ing.food.serving_label} ({qty}
+                        {ing.food.base_unit})
+                      </Text>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
                     <Input
-                      type="number"
-                      min="0"
-                      step="0.1"
-                      className="w-20 text-sm"
-                      placeholder="0"
+                      type="text"
+                      inputMode="decimal"
+                      className="flex-1 text-sm"
+                      placeholder="Enter amount"
                       value={ing.quantity}
-                      onChange={(e) =>
-                        updateQuantity(ing.food.id, e.target.value)
-                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === "" || /^\d*\.?\d*$/.test(value)) {
+                          updateQuantity(ing.food.id, value);
+                        }
+                      }}
                     />
-                    <Text className="text-sm text-zinc-400 w-6">
+                    <Text className="text-sm text-zinc-400 w-8">
                       {ing.food.base_unit}
                     </Text>
-                    <button
-                      onClick={() => removeIngredient(ing.food.id)}
-                      className="p-1 rounded hover:bg-zinc-700 text-zinc-400 hover:text-red-400 transition-colors"
-                    >
-                      <XMarkIcon className="h-5 w-5" />
-                    </button>
                   </div>
-                </div>
+                )}
               </div>
             );
           })}
@@ -444,7 +550,6 @@ export function RecipeForm({
               </div>
             </div>
 
-            {/* Divider */}
             <div className="border-t border-zinc-700" />
 
             {/* Per Serving */}
