@@ -24,7 +24,7 @@ export function FoodList({ foods, onFoodDeleted, onFoodEdit }: FoodListProps) {
   );
 
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-800 dark:ring-white/10">
+    <div className="rounded-2xl p-6 shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-800 dark:ring-white/10">
       <div className="flex items-center justify-between">
         <Subheading>Food Database ({foods.length} items)</Subheading>
         <Field className="w-64">
