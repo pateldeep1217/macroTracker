@@ -20,7 +20,7 @@ interface FormData {
   brand: string;
   servingSize: string;
   servingUnit: "g" | "ml";
-  servingLabel: string; // NEW: "1 scoop", "1 cup", etc.
+  servingLabel: string;
   calories: string;
   protein: string;
   carbs: string;
@@ -33,7 +33,7 @@ const INITIAL_FORM_DATA: FormData = {
   brand: "",
   servingSize: "",
   servingUnit: "g",
-  servingLabel: "", // NEW
+  servingLabel: "",
   calories: "",
   protein: "",
   carbs: "",
@@ -44,11 +44,8 @@ const INITIAL_FORM_DATA: FormData = {
 export function FoodForm({ onFoodAdded, editingFood }: FoodFormProps) {
   const isEditMode = !!editingFood;
 
-  // Initialize form with editing food data if in edit mode
   const [formData, setFormData] = useState<FormData>(() => {
     if (editingFood) {
-      // Convert from per-100 back to label values
-      // We'll use serving_size if available, otherwise default to 100
       const servingSize = editingFood.serving_size || 100;
       const toLabel = (per100Value: number) =>
         Math.round(((per100Value * servingSize) / 100) * 100) / 100;
@@ -119,7 +116,6 @@ export function FoodForm({ onFoodAdded, editingFood }: FoodFormProps) {
         });
       }
 
-      // Reset form
       setFormData(INITIAL_FORM_DATA);
       await onFoodAdded();
     } catch (err) {
@@ -131,9 +127,9 @@ export function FoodForm({ onFoodAdded, editingFood }: FoodFormProps) {
   };
 
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-800 dark:ring-white/10">
+    <div className="rounded-2xl bg-zinc-900 p-6 shadow-sm ring-1 ring-zinc-700">
       <Subheading>Add New Food Item</Subheading>
-      <Text className="mt-1 text-sm text-zinc-500">
+      <Text className="mt-1 text-sm text-zinc-400">
         Enter nutrition facts from the food label
       </Text>
 
@@ -183,7 +179,6 @@ export function FoodForm({ onFoodAdded, editingFood }: FoodFormProps) {
           </Select>
         </Field>
 
-        {/* NEW FIELD: Serving Label */}
         <Field className="sm:col-span-2">
           <Label>Serving Label (optional)</Label>
           <Input
@@ -260,7 +255,7 @@ export function FoodForm({ onFoodAdded, editingFood }: FoodFormProps) {
       </div>
 
       {error && (
-        <div className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800 dark:bg-red-950/20 dark:text-red-200">
+        <div className="mt-4 rounded-lg bg-red-950/50 border border-red-800 p-3 text-sm text-red-200">
           {error}
         </div>
       )}

@@ -251,14 +251,14 @@ export function AddMealForm({
           />
 
           {showDropdown && !isEditMode && (
-            <div className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-zinc-950/10 bg-white shadow-lg dark:border-white/10 dark:bg-zinc-900">
+            <div className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-zinc-700 bg-zinc-900 shadow-lg">
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => handleItemSelect(item)}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                    className="w-full px-4 py-2 text-left text-sm text-zinc-100 hover:bg-zinc-800"
                   >
                     {item.name}
                   </button>
@@ -282,7 +282,7 @@ export function AddMealForm({
             <div className="grid grid-cols-2 gap-2">
               {/* Servings Input */}
               <div>
-                <Text className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">
+                <Text className="text-xs text-zinc-400 mb-1">
                   {selectedFood.serving_label}s
                 </Text>
                 <Input
@@ -312,7 +312,7 @@ export function AddMealForm({
 
               {/* Grams Input */}
               <div>
-                <Text className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">
+                <Text className="text-xs text-zinc-400 mb-1">
                   or {selectedFood.base_unit}
                 </Text>
                 <Input
@@ -342,7 +342,7 @@ export function AddMealForm({
 
             {/* Conversion Display */}
             {quantity && parseFloat(quantity) > 0 && (
-              <Text className="text-xs text-zinc-500 dark:text-zinc-400">
+              <Text className="text-xs text-zinc-400">
                 = {servingsInput ? parseFloat(servingsInput).toFixed(1) : "0"} ×{" "}
                 {selectedFood.serving_label} ({quantity}
                 {selectedFood.base_unit})
@@ -377,14 +377,14 @@ export function AddMealForm({
 
       {/* Macro Preview */}
       {previewMacros && (
-        <div className="rounded-lg bg-zinc-50 dark:bg-zinc-800/50 p-3">
-          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
+        <div className="rounded-lg bg-zinc-800/50 p-3">
+          <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">
             Nutrition Preview
           </Text>
-          <div className="flex gap-4 text-sm">
+          <div className="flex gap-4 text-sm text-zinc-100">
             <div>
               <span className="font-semibold">{previewMacros.calories}</span>
-              <span className="text-zinc-500 dark:text-zinc-400 ml-1">cal</span>
+              <span className="text-zinc-400 ml-1">cal</span>
             </div>
             <div>
               <span className="font-semibold">P:</span>
@@ -418,7 +418,7 @@ export function AddMealForm({
       </Field>
 
       {error && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-800 dark:bg-red-950/20 dark:text-red-200">
+        <div className="rounded-lg bg-red-950/20 border border-red-800 p-3 text-sm text-red-200">
           {error}
         </div>
       )}
