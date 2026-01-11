@@ -24,9 +24,11 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/app/components/sheet";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { AddMealForm } from "@/features/meals/components/AddMealForm";
 import { MealBreakdown } from "@/features/meals/components/MealBreakdown";
 import { MacroStatsGrid } from "@/features/shared/components/MacroStatsGrid";
+import { CopyMealsDialog } from "@/features/meals/components/CopyMealsDialog";
 import type { MealType } from "@/features/shared/utils/constatns";
 import { sumMacros } from "@/features/shared/utils/macors";
 
@@ -53,6 +55,7 @@ export function DailyLogTab({
 }: DailyLogTabProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [showAddSheet, setShowAddSheet] = useState(false);
+  const [showCopyDialog, setShowCopyDialog] = useState(false);
   const [editingMeal, setEditingMeal] = useState<MealEntryWithDetails | null>(
     null
   );
@@ -201,13 +204,24 @@ export function DailyLogTab({
             </div>
           </div>
 
-          {/* Add Button */}
-          <Button
-            onClick={() => setShowAddSheet(true)}
-            className="whitespace-nowrap h-9"
-          >
-            + Add
-          </Button>
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Button
+              plain
+              onClick={() => setShowCopyDialog(true)}
+              className="whitespace-nowrap h-9 flex items-center gap-2"
+              title="Copy from previous day"
+            >
+              <DocumentDuplicateIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">Copy</span>
+            </Button>
+            <Button
+              onClick={() => setShowAddSheet(true)}
+              className="whitespace-nowrap h-9"
+            >
+              + Add
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -285,6 +299,15 @@ export function DailyLogTab({
           </SheetFooter>
         </SheetContent>
       </Sheet>
+
+      {/* Copy Meals Dialog */}
+      <CopyMealsDialog
+        open={showCopyDialog}
+        onClose={() => setShowCopyDialog(false)}
+        userId={userId}
+        targetDate={selectedDate}
+        onCopyComplete={onRefreshMeals}
+      />
     </div>
   );
 }

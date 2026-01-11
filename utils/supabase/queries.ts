@@ -1,23 +1,28 @@
 // utils/supabase/queries.ts
-// Cleaned up CRUD with only functions that are actually used
+// Organized CRUD operations for easy navigation
 
 import { MealType } from "@/features/shared/utils/constatns";
 import { createClient } from "./client";
 import type { Database } from "./database.types";
 
-// Helper types
+// ==========================================
+// TYPE DEFINITIONS
+// ==========================================
+
 type Tables<T extends keyof Database["public"]["Tables"]> =
   Database["public"]["Tables"][T]["Row"];
 
 type Inserts<T extends keyof Database["public"]["Tables"]> =
   Database["public"]["Tables"][T]["Insert"];
 
+// Base types
 export type FoodItem = Tables<"food_items">;
 export type Recipe = Tables<"recipes">;
 export type RecipeIngredient = Tables<"recipe_ingredients">;
 export type MealEntry = Tables<"meal_entries">;
 export type AppUser = Tables<"app_users">;
 
+// Extended types
 export type RecipeWithIngredients = Recipe & {
   recipe_ingredients: (RecipeIngredient & { food_items: FoodItem })[];
 };
@@ -27,10 +32,25 @@ export type MealEntryWithDetails = MealEntry & {
   recipes?: Recipe | null;
 };
 
+// Input types
+export type CreateFoodFromLabelInput = {
+  name: string;
+  brand?: string;
+  labelServingSize: number;
+  labelServingUnit: "g" | "ml";
+  labelCalories: number;
+  labelProtein: number;
+  labelCarbs: number;
+  labelFat: number;
+  labelFiber?: number;
+  servingLabel?: string;
+};
+
 // ==========================================
 // FOOD ITEMS
 // ==========================================
 
+// READ
 export async function getAllFoods() {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -55,19 +75,7 @@ export async function searchFoods(searchTerm: string) {
   return data as FoodItem[];
 }
 
-export type CreateFoodFromLabelInput = {
-  name: string;
-  brand?: string;
-  labelServingSize: number;
-  labelServingUnit: "g" | "ml";
-  labelCalories: number;
-  labelProtein: number;
-  labelCarbs: number;
-  labelFat: number;
-  labelFiber?: number;
-  servingLabel?: string;
-};
-
+// CREATE
 export async function createFoodFromLabel(input: CreateFoodFromLabelInput) {
   const supabase = createClient();
 
@@ -94,6 +102,35 @@ export async function createFoodFromLabel(input: CreateFoodFromLabelInput) {
   return data as FoodItem;
 }
 
+// UPDATE
+export async function updateFood(id: string, input: CreateFoodFromLabelInput) {
+  const supabase = createClient();
+
+  const per100 = (value: number) =>
+    Math.round((value / input.labelServingSize) * 100 * 100) / 100;
+
+  const { data, error } = await supabase
+    .from("food_items")
+    .update({
+      name: input.name,
+      base_unit: input.labelServingUnit,
+      calories: per100(input.labelCalories),
+      protein: per100(input.labelProtein),
+      carbs: per100(input.labelCarbs),
+      fat: per100(input.labelFat),
+      fiber: input.labelFiber ? per100(input.labelFiber) : null,
+      serving_label: input.servingLabel || null,
+      serving_size: input.labelServingSize,
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as FoodItem;
+}
+
+// DELETE
 export async function deleteFood(id: string) {
   const supabase = createClient();
 
@@ -132,38 +169,11 @@ export async function deleteFood(id: string) {
   if (error) throw error;
 }
 
-export async function updateFood(id: string, input: CreateFoodFromLabelInput) {
-  const supabase = createClient();
-
-  const per100 = (value: number) =>
-    Math.round((value / input.labelServingSize) * 100 * 100) / 100;
-
-  const { data, error } = await supabase
-    .from("food_items")
-    .update({
-      name: input.name,
-      base_unit: input.labelServingUnit,
-      calories: per100(input.labelCalories),
-      protein: per100(input.labelProtein),
-      carbs: per100(input.labelCarbs),
-      fat: per100(input.labelFat),
-      fiber: input.labelFiber ? per100(input.labelFiber) : null,
-      serving_label: input.servingLabel || null,
-      serving_size: input.labelServingSize,
-    })
-    .eq("id", id)
-    .select()
-    .single();
-
-  if (error) throw error;
-  return data as FoodItem;
-}
-
 // ==========================================
 // RECIPES
 // ==========================================
 
-// Get all recipes (shared between all users - bases + batches)
+// READ
 export async function getAllRecipes() {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -178,7 +188,6 @@ export async function getAllRecipes() {
   return data as Recipe[];
 }
 
-// Get single recipe with all ingredients
 export async function getRecipeWithIngredients(recipeId: string) {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -199,7 +208,7 @@ export async function getRecipeWithIngredients(recipeId: string) {
   return data as RecipeWithIngredients;
 }
 
-// Create a new base recipe (first time making it)
+// CREATE
 export async function createBaseRecipe(
   recipe: {
     name: string;
@@ -245,7 +254,6 @@ export async function createBaseRecipe(
   return getRecipeWithIngredients(newRecipe.id);
 }
 
-// Create a new batch from a base recipe
 export async function createRecipeBatch(
   baseRecipeId: string,
   userId: string,
@@ -305,8 +313,7 @@ export async function createRecipeBatch(
   return getRecipeWithIngredients(newBatch.id);
 }
 
-// Update an existing recipe (works for both base and batches)
-// Only allows updating safe fields
+// UPDATE
 export async function updateRecipe(
   recipeId: string,
   recipeData: {
@@ -352,7 +359,7 @@ export async function updateRecipe(
   return getRecipeWithIngredients(recipeId);
 }
 
-// Delete a recipe (with safety checks)
+// DELETE
 export async function deleteRecipe(id: string) {
   const supabase = createClient();
 
@@ -385,6 +392,7 @@ export async function deleteRecipe(id: string) {
 // MEAL ENTRIES
 // ==========================================
 
+// READ
 export async function getMealsByDate(userId: string, date: string) {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -404,6 +412,97 @@ export async function getMealsByDate(userId: string, date: string) {
   return data as MealEntryWithDetails[];
 }
 
+export async function getRecentDaysWithMeals(
+  userId: string,
+  limit: number = 10
+) {
+  const supabase = createClient();
+
+  // Get distinct dates from the last 30 days that have meals
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split("T")[0];
+
+  const { data, error } = await supabase
+    .from("meal_entries")
+    .select(
+      `
+      date,
+      meal_type,
+      *,
+      food_items (*),
+      recipes (*)
+    `
+    )
+    .eq("user_id", userId)
+    .gte("date", thirtyDaysAgoStr)
+    .order("date", { ascending: false })
+    .order("created_at");
+
+  if (error) throw error;
+
+  // Group by date
+  const mealsByDate = new Map<string, MealEntryWithDetails[]>();
+
+  (data as MealEntryWithDetails[]).forEach((meal) => {
+    if (!mealsByDate.has(meal.date)) {
+      mealsByDate.set(meal.date, []);
+    }
+    mealsByDate.get(meal.date)!.push(meal);
+  });
+
+  // Convert to array and limit
+  const recentDays = Array.from(mealsByDate.entries())
+    .slice(0, limit)
+    .map(([date, meals]) => ({ date, meals }));
+
+  return recentDays;
+}
+
+export async function copyMealsToDate(
+  userId: string,
+  fromDate: string,
+  toDate: string,
+  mealTypes: MealType[]
+) {
+  const supabase = createClient();
+
+  // Get meals from source date
+  const { data: sourceMeals, error: fetchError } = await supabase
+    .from("meal_entries")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("date", fromDate)
+    .in("meal_type", mealTypes);
+
+  if (fetchError) throw fetchError;
+  if (!sourceMeals || sourceMeals.length === 0) return [];
+
+  // Create new entries for target date
+  const newEntries = sourceMeals.map((meal) => ({
+    user_id: userId,
+    date: toDate,
+    meal_type: meal.meal_type,
+    food_id: meal.food_id,
+    recipe_id: meal.recipe_id,
+    quantity: meal.quantity,
+    quantity_type: meal.quantity_type,
+    notes: meal.notes,
+    prepared_meal_id: meal.prepared_meal_id,
+  }));
+
+  const { data, error } = await supabase.from("meal_entries").insert(newEntries)
+    .select(`
+      *,
+      food_items (*),
+      recipes (*)
+    `);
+
+  if (error) throw error;
+  return data as MealEntryWithDetails[];
+}
+
+// CREATE
 export async function logFood(input: {
   userId: string;
   date: string;
@@ -473,6 +572,7 @@ export async function logRecipe(input: {
   return data as MealEntryWithDetails;
 }
 
+// UPDATE
 export async function updateMealEntry(input: {
   id: string;
   quantity: number;
@@ -505,6 +605,7 @@ export async function updateMealEntry(input: {
   return data as MealEntryWithDetails;
 }
 
+// DELETE
 export async function deleteMealEntry(id: string) {
   const supabase = createClient();
   const { error } = await supabase.from("meal_entries").delete().eq("id", id);
@@ -516,6 +617,7 @@ export async function deleteMealEntry(id: string) {
 // USERS
 // ==========================================
 
+// READ
 export async function getAllUsers() {
   const supabase = createClient();
   const { data, error } = await supabase
