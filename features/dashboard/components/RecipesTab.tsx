@@ -27,7 +27,6 @@ export function RecipesTab({
   onRefreshRecipes,
   userId,
   userName,
-  foods,
 }: RecipesTabProps) {
   const [showSheet, setShowSheet] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);

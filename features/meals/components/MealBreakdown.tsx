@@ -102,7 +102,6 @@ export function MealBreakdown({
 
 // Meal Type Section Component
 function MealTypeSection({
-  type,
   label,
   mealEntries,
   config,

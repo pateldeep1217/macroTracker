@@ -217,6 +217,7 @@ export function DailyLogTab({
         protein={dailyTotals.protein}
         carbs={dailyTotals.carbs}
         fat={dailyTotals.fat}
+        fiber={dailyTotals.fiber}
         entryCount={meals.length}
       />
 

@@ -5,6 +5,7 @@ interface MacroStatsGridProps {
   protein: number;
   carbs: number;
   fat: number;
+  fiber?: number;
   entryCount?: number;
 }
 
@@ -13,10 +14,11 @@ export function MacroStatsGrid({
   protein,
   carbs,
   fat,
+  fiber,
   entryCount,
 }: MacroStatsGridProps) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
       <div className="rounded-xl bg-zinc-900 p-4">
         <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
           Calories
@@ -57,6 +59,16 @@ export function MacroStatsGrid({
         </Text>
         <div className="mt-2 font-mono text-2xl font-bold text-white">
           {Math.round(fat * 10) / 10}
+          <span className="text-base font-normal text-zinc-500">g</span>
+        </div>
+      </div>
+
+      <div className="rounded-xl bg-zinc-900 p-4">
+        <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+          Fiber
+        </Text>
+        <div className="mt-2 font-mono text-2xl font-bold text-white">
+          {Math.round((fiber || 0) * 10) / 10}
           <span className="text-base font-normal text-zinc-500">g</span>
         </div>
       </div>

@@ -108,6 +108,7 @@ Tracked with Food Macro Tracker`;
         protein={todayTotals.protein}
         carbs={todayTotals.carbs}
         fat={todayTotals.fat}
+        fiber={todayTotals.fiber}
         entryCount={meals.length}
       />
 
