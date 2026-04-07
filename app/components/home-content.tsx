@@ -17,13 +17,18 @@ export function HomeContent({ users }: HomeContentProps) {
     const savedUserId = localStorage.getItem("selectedUserId");
     const savedUserName = localStorage.getItem("selectedUserName");
 
-    if (savedUserId && savedUserName) {
-      return {
-        id: savedUserId,
-        name: savedUserName,
-        created_at: null,
-      };
-    }
+   if (savedUserId && savedUserName) {
+  return {
+    id: savedUserId,
+    name: savedUserName,
+    created_at: null,
+    target_calories: null,
+    target_carbs: null,
+    target_fat: null,
+    target_fiber: null,
+    target_protein: null,
+  };
+}
     return null;
   });
 
