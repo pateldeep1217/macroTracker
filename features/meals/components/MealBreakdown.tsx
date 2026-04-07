@@ -238,7 +238,7 @@ function MealEntryRow({
 
           {/* Actions — visible on hover */}
           {(onEdit || onDelete) && (
-            <div className="flex gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+              <div className="flex gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
               {onEdit && (
                 <button
                   onClick={onEdit}
