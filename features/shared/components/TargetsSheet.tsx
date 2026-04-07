@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { AppUser } from "@/utils/supabase/queries";
 import { updateUserTargets } from "@/utils/supabase/queries";
 import { Button } from "@/app/components/button";
@@ -23,50 +23,135 @@ interface TargetsSheetProps {
   onSaved: (user: AppUser) => void;
 }
 
-const ACTIVITY_LEVELS = [
-  { label: "Sedentary",   value: 1.2,   desc: "Desk job, little movement" },
-  { label: "Light",       value: 1.375, desc: "1–3 workouts/week" },
-  { label: "Moderate",    value: 1.55,  desc: "3–5 workouts/week" },
-  { label: "Very Active", value: 1.725, desc: "6–7 workouts/week" },
-  { label: "Athlete",     value: 1.9,   desc: "2× daily training" },
+const JOB_TYPES = [
+  { label: "Desk / Seated",  neat: 0,    desc: "Office, driving, WFH" },
+  { label: "Light Standing", neat: 0.1,  desc: "Retail, cashier, teacher" },
+  { label: "On Your Feet",   neat: 0.2,  desc: "Server, store clerk, nurse" },
+  { label: "Physical Labor", neat: 0.3,  desc: "Construction, warehouse, farming" },
 ] as const;
 
-// Evidence-based protein targets per kg bodyweight
-// Sources: ISSN Position Stand (1.4–2.0g/kg for exercising adults),
-//          Morton meta-analysis breakpoint ~1.6g/kg,
-//          Newer research (Nunes 2022) suggests 2.0g/kg for trained lifters.
-//          2g/kg confirmed safe long-term (PubMed 26797090).
+const EXERCISE_LEVELS = [
+  { label: "None",       bonus: 0,     desc: "No structured workouts" },
+  { label: "1–2×/week", bonus: 0.075, desc: "Occasional gym sessions" },
+  { label: "3–4×/week", bonus: 0.15,  desc: "Regular training" },
+  { label: "5–6×/week", bonus: 0.225, desc: "High frequency" },
+  { label: "2× Daily",  bonus: 0.3,   desc: "Athlete / twice a day" },
+] as const;
+
+const GOALS = [
+  { label: "Cut",       adj: -0.20, desc: "−20% · ~1 lb/week fat loss" },
+  { label: "Mild Cut",  adj: -0.10, desc: "−10% · slow, muscle-sparing" },
+  { label: "Maintain",  adj:  0,    desc: "Eat at TDEE" },
+  { label: "Lean Bulk", adj: +0.10, desc: "+10% · minimize fat gain" },
+] as const;
+
 const PROTEIN_TARGETS = [
   { label: "Minimum",    value: 0.8,  desc: "0.8g/kg · RDA, sedentary" },
   { label: "Moderate",   value: 1.6,  desc: "1.6g/kg · Active / fitness" },
-  { label: "High",       value: 2.0,  desc: "2.0g/kg · Athletes / muscle gain" },
+  { label: "High",       value: 2.0,  desc: "2.0g/kg · Athletes / muscle" },
   { label: "Aggressive", value: 2.2,  desc: "2.2g/kg · Bodybuilding / cut" },
 ] as const;
 
-export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsSheetProps) {
-  // ── Manual targets ──────────────────────────────────────────────────
-  const [calories, setCalories] = useState(String(currentUser.target_calories ?? ""));
-  const [protein, setProtein]   = useState(String(currentUser.target_protein ?? ""));
-  const [carbs, setCarbs]       = useState(String(currentUser.target_carbs ?? ""));
-  const [fat, setFat]           = useState(String(currentUser.target_fat ?? ""));
-  const [fiber, setFiber]       = useState(String(currentUser.target_fiber ?? ""));
+// ── localStorage helpers ──────────────────────────────────────────────────
+const STORAGE_KEY = (userId: string) => `calc_inputs_${userId}`;
 
-  // ── Calculator inputs ───────────────────────────────────────────────
-  const [useImperial, setUseImperial] = useState(false);
-  const [sex, setSex]                 = useState<"male" | "female">("female");
-  const [age, setAge]                 = useState("");
-  const [weightKg, setWeightKg]       = useState("");
-  const [weightLbs, setWeightLbs]     = useState("");
-  const [heightCm, setHeightCm]       = useState("");
-  const [heightFt, setHeightFt]       = useState("");
-  const [heightIn, setHeightIn]       = useState("");
-const [activityLevel, setActivityLevel] = useState<typeof ACTIVITY_LEVELS[number]>(ACTIVITY_LEVELS[2]);
-const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number]>(PROTEIN_TARGETS[2]);
+interface StoredCalcInputs {
+  useImperial: boolean;
+  sex: "male" | "female";
+  age: string;
+  weightKg: string;
+  weightLbs: string;
+  heightCm: string;
+  heightFt: string;
+  heightIn: string;
+  jobTypeLabel: string;
+  exerciseLabel: string;
+  goalLabel: string;
+  proteinTargetValue: number;
+}
+
+function loadCalcInputs(userId: string): Partial<StoredCalcInputs> {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY(userId));
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveCalcInputs(userId: string, data: StoredCalcInputs) {
+  try {
+    localStorage.setItem(STORAGE_KEY(userId), JSON.stringify(data));
+  } catch {}
+}
+
+export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsSheetProps) {
+
+  // ── Manual targets — pre-filled from saved user data ───────────────
+  const [calories, setCalories] = useState(String(currentUser.target_calories ?? ""));
+  const [protein, setProtein]   = useState(String(currentUser.target_protein  ?? ""));
+  const [carbs, setCarbs]       = useState(String(currentUser.target_carbs    ?? ""));
+  const [fat, setFat]           = useState(String(currentUser.target_fat      ?? ""));
+  const [fiber, setFiber]       = useState(String(currentUser.target_fiber    ?? ""));
+
+  // Re-sync manual fields when sheet opens or user changes
+  useEffect(() => {
+    if (open) {
+      setCalories(String(currentUser.target_calories ?? ""));
+      setProtein(String(currentUser.target_protein  ?? ""));
+      setCarbs(String(currentUser.target_carbs      ?? ""));
+      setFat(String(currentUser.target_fat          ?? ""));
+      setFiber(String(currentUser.target_fiber      ?? ""));
+    }
+  }, [open, currentUser]);
+
+  // ── Calculator inputs — restored from localStorage ─────────────────
+  const saved = loadCalcInputs(currentUser.id);
+
+  const [useImperial, setUseImperial] = useState(saved.useImperial ?? false);
+  const [sex, setSex]                 = useState<"male" | "female">(saved.sex ?? "female");
+  const [age, setAge]                 = useState(saved.age ?? "");
+  const [weightKg, setWeightKg]       = useState(saved.weightKg ?? "");
+  const [weightLbs, setWeightLbs]     = useState(saved.weightLbs ?? "");
+  const [heightCm, setHeightCm]       = useState(saved.heightCm ?? "");
+  const [heightFt, setHeightFt]       = useState(saved.heightFt ?? "");
+  const [heightIn, setHeightIn]       = useState(saved.heightIn ?? "");
+
+  const [jobType, setJobType] = useState<typeof JOB_TYPES[number]>(
+    JOB_TYPES.find(j => j.label === saved.jobTypeLabel) ?? JOB_TYPES[0]
+  );
+  const [exerciseLevel, setExerciseLevel] = useState<typeof EXERCISE_LEVELS[number]>(
+    EXERCISE_LEVELS.find(e => e.label === saved.exerciseLabel) ?? EXERCISE_LEVELS[2]
+  );
+  const [goal, setGoal] = useState<typeof GOALS[number]>(
+    GOALS.find(g => g.label === saved.goalLabel) ?? GOALS[2]
+  );
+  const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number]>(
+    PROTEIN_TARGETS.find(p => p.value === saved.proteinTargetValue) ?? PROTEIN_TARGETS[2]
+  );
+
+  // Persist to localStorage whenever any calc input changes
+  useEffect(() => {
+    saveCalcInputs(currentUser.id, {
+      useImperial, sex, age, weightKg, weightLbs,
+      heightCm, heightFt, heightIn,
+      jobTypeLabel: jobType.label,
+      exerciseLabel: exerciseLevel.label,
+      goalLabel: goal.label,
+      proteinTargetValue: proteinTarget.value,
+    });
+  }, [
+    useImperial, sex, age, weightKg, weightLbs,
+    heightCm, heightFt, heightIn,
+    jobType, exerciseLevel, goal, proteinTarget,
+    currentUser.id,
+  ]);
+
   // ── UI state ─────────────────────────────────────────────────────────
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError]       = useState<string | null>(null);
 
-  // ── Helpers ──────────────────────────────────────────────────────────
+  // ── Derived weight in kg ──────────────────────────────────────────────
   const getWeightKg = (): number | null => {
     if (useImperial) {
       const lbs = parseFloat(weightLbs);
@@ -76,7 +161,7 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
     return isNaN(kg) || kg <= 0 ? null : kg;
   };
 
-  // Mifflin-St Jeor: men +5, women −161
+  // ── Mifflin-St Jeor BMR → TDEE ───────────────────────────────────────
   const computeTDEE = (): number | null => {
     const w = getWeightKg();
     const a = parseFloat(age);
@@ -89,29 +174,21 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
     }
     if (isNaN(h) || h <= 0) return null;
     const bmr = 10 * w + 6.25 * h - 5 * a + (sex === "male" ? 5 : -161);
-    return Math.round(bmr * activityLevel.value);
+    return Math.round(bmr * (1.2 + jobType.neat + exerciseLevel.bonus));
   };
 
-  const computeProtein = (): number | null => {
-    const w = getWeightKg();
-    return w ? Math.round(w * proteinTarget.value) : null;
-  };
-
-  const suggestedCalories = computeTDEE();
-  const suggestedProtein  = computeProtein();
-  // Fat: 0.9g/kg — evidence-based minimum for hormonal health
-  const suggestedFat = (() => {
-    const w = getWeightKg();
-    return w ? Math.round(w * 0.9) : null;
-  })();
-  // Carbs fill remaining calories after protein + fat
-  const suggestedCarbs = (() => {
+  const tdee              = computeTDEE();
+  const suggestedCalories = tdee ? Math.round(tdee * (1 + goal.adj)) : null;
+  const suggestedProtein  = (() => { const w = getWeightKg(); return w ? Math.round(w * proteinTarget.value) : null; })();
+  const suggestedFat      = (() => { const w = getWeightKg(); return w ? Math.round(w * 0.9) : null; })();
+  const suggestedCarbs    = (() => {
     if (!suggestedCalories || !suggestedProtein || !suggestedFat) return null;
     const g = Math.round((suggestedCalories - suggestedProtein * 4 - suggestedFat * 9) / 4);
     return g > 0 ? g : null;
   })();
 
-  const isCalcReady = !!(suggestedCalories && suggestedProtein && suggestedFat && suggestedCarbs);
+  const isCalcReady        = !!(suggestedCalories && suggestedProtein && suggestedFat && suggestedCarbs);
+  const activityMultiplier = (1.2 + jobType.neat + exerciseLevel.bonus).toFixed(2);
 
   const applyAll = () => {
     if (suggestedCalories) setCalories(String(suggestedCalories));
@@ -169,21 +246,27 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
     }
   };
 
+  const hasExistingTargets = !!(currentUser.target_calories);
+
   return (
     <Sheet open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
-<SheetContent side="right" className="sm:rounded-l-xl overflow-y-auto ">
+      <SheetContent side="right" className="sm:rounded-l-xl overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>Daily Targets</SheetTitle>
-          <SheetDescription>Set daily macro goals for {currentUser.name}.</SheetDescription>
+          <SheetTitle>{hasExistingTargets ? "Edit Daily Goals" : "Set Daily Goals"}</SheetTitle>
+          <SheetDescription>
+            {hasExistingTargets
+              ? `Update macro goals for ${currentUser.name}.`
+              : `Set daily macro goals for ${currentUser.name}.`}
+          </SheetDescription>
         </SheetHeader>
 
         <div className="py-6 space-y-8">
 
-          {/* ── SECTION 1: Calculator ───────────────────────────────── */}
-          <section className="space-y-4">
-            <SectionDivider label="Calculator" />
+          {/* ── SECTION 1: Calculator ─────────────────────────────── */}
+          <section className="space-y-5">
+            <SectionDivider label="Calculate my goals" />
 
-            {/* Metric / Imperial */}
+            {/* Unit toggle */}
             <div className="flex rounded-lg overflow-hidden border border-zinc-800 w-fit text-xs">
               {(["Metric", "Imperial"] as const).map((u) => (
                 <button
@@ -222,7 +305,6 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
               <Field label="Age (years)">
                 <Input type="number" value={age} onChange={(e) => setAge(e.target.value)} placeholder="e.g. 28" />
               </Field>
-
               {useImperial ? (
                 <>
                   <Field label="Weight (lbs)">
@@ -238,42 +320,90 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
               ) : (
                 <>
                   <Field label="Weight (kg)">
-                    <Input type="number" value={weightKg} onChange={(e) => setWeightKg(e.target.value)} placeholder="e.g. 52" />
+                    <Input type="number" value={weightKg} onChange={(e) => setWeightKg(e.target.value)} placeholder="e.g. 68" />
                   </Field>
                   <Field label="Height (cm)" className="col-span-2">
-                    <Input type="number" value={heightCm} onChange={(e) => setHeightCm(e.target.value)} placeholder="e.g. 165" />
+                    <Input type="number" value={heightCm} onChange={(e) => setHeightCm(e.target.value)} placeholder="e.g. 170" />
                   </Field>
                 </>
               )}
             </div>
 
-            {/* Activity level */}
+            {/* Job type */}
             <div>
-              <FieldLabel>Activity Level</FieldLabel>
-              <div className="mt-2 space-y-1.5">
-                {ACTIVITY_LEVELS.map((level) => (
+              <FieldLabel>Job / Daily Movement</FieldLabel>
+              <p className="text-[10px] text-zinc-600 mt-0.5 mb-2">How active is your job outside the gym?</p>
+              <div className="grid grid-cols-2 gap-2">
+                {JOB_TYPES.map((j) => (
                   <button
-                    key={level.label}
-                    onClick={() => setActivityLevel(level)}
-                    className={`w-full flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors ${
-                      activityLevel.value === level.value
+                    key={j.label}
+                    onClick={() => setJobType(j)}
+                    className={`rounded-lg px-3 py-2.5 text-left transition-colors ${
+                      jobType.label === j.label
                         ? "bg-zinc-700 text-white"
                         : "bg-zinc-900 text-zinc-400 hover:text-zinc-200"
                     }`}
                   >
-                    <span className="font-medium">{level.label}</span>
-                    <span className={`text-xs ${activityLevel.value === level.value ? "text-zinc-300" : "text-zinc-600"}`}>
-                      {level.desc}
+                    <div className="text-sm font-medium">{j.label}</div>
+                    <div className={`text-[10px] mt-0.5 ${jobType.label === j.label ? "text-zinc-300" : "text-zinc-600"}`}>
+                      {j.desc}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Exercise frequency */}
+            <div>
+              <FieldLabel>Gym / Exercise</FieldLabel>
+              <p className="text-[10px] text-zinc-600 mt-0.5 mb-2">Structured workouts only — not your job.</p>
+              <div className="space-y-1.5">
+                {EXERCISE_LEVELS.map((e) => (
+                  <button
+                    key={e.label}
+                    onClick={() => setExerciseLevel(e)}
+                    className={`w-full flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                      exerciseLevel.label === e.label
+                        ? "bg-zinc-700 text-white"
+                        : "bg-zinc-900 text-zinc-400 hover:text-zinc-200"
+                    }`}
+                  >
+                    <span className="font-medium">{e.label}</span>
+                    <span className={`text-xs ${exerciseLevel.label === e.label ? "text-zinc-300" : "text-zinc-600"}`}>
+                      {e.desc}
                     </span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Protein target per kg */}
+            {/* Goal */}
+            <div>
+              <FieldLabel>Goal</FieldLabel>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {GOALS.map((g) => (
+                  <button
+                    key={g.label}
+                    onClick={() => setGoal(g)}
+                    className={`rounded-lg px-3 py-2.5 text-left transition-colors ${
+                      goal.label === g.label
+                        ? "bg-zinc-700 text-white"
+                        : "bg-zinc-900 text-zinc-400 hover:text-zinc-200"
+                    }`}
+                  >
+                    <div className="text-sm font-medium">{g.label}</div>
+                    <div className={`text-[10px] mt-0.5 leading-snug ${goal.label === g.label ? "text-zinc-300" : "text-zinc-600"}`}>
+                      {g.desc}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Protein per kg */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <FieldLabel>Protein Target</FieldLabel>
+                <FieldLabel>Protein per kg</FieldLabel>
                 {suggestedProtein && (
                   <span className="text-[10px] text-zinc-500">
                     → {suggestedProtein}g for {Math.round((getWeightKg() ?? 0) * 10) / 10}kg
@@ -292,9 +422,7 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
                     }`}
                   >
                     <div className="text-sm font-medium">{pt.label}</div>
-                    <div className={`text-[10px] mt-0.5 leading-snug ${
-                      proteinTarget.value === pt.value ? "text-zinc-300" : "text-zinc-600"
-                    }`}>
+                    <div className={`text-[10px] mt-0.5 leading-snug ${proteinTarget.value === pt.value ? "text-zinc-300" : "text-zinc-600"}`}>
                       {pt.desc}
                     </div>
                   </button>
@@ -305,7 +433,14 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
             {/* Result card */}
             {isCalcReady ? (
               <div className="rounded-xl bg-zinc-800/50 border border-zinc-700 p-4 space-y-3">
-                <FieldLabel>Suggested Targets</FieldLabel>
+                <div className="flex items-center justify-between">
+                  <FieldLabel>Suggested Goals</FieldLabel>
+                  {tdee && (
+                    <span className="text-[10px] text-zinc-600">
+                      TDEE {tdee.toLocaleString()} kcal · ×{activityMultiplier}
+                    </span>
+                  )}
+                </div>
                 <div className="grid grid-cols-4 gap-2 text-center">
                   {[
                     { label: "Calories", value: suggestedCalories, unit: "kcal", color: "text-white" },
@@ -314,19 +449,20 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
                     { label: "Fat",      value: suggestedFat,      unit: "g",    color: "text-amber-400" },
                   ].map(({ label, value, unit, color }) => (
                     <div key={label}>
-                      <div className={`text-lg font-bold tabular-nums ${color}`}>{value}</div>
-                      <div className="text-[10px] text-zinc-500">{unit} · {label}</div>
+                      <div className={`text-lg font-bold tabular-nums ${color}`}>{value?.toLocaleString()}</div>
+                      <div className="text-[10px] text-zinc-500">{unit}</div>
+                      <div className="text-[10px] text-zinc-600">{label}</div>
                     </div>
                   ))}
                 </div>
                 <p className="text-[10px] text-zinc-600 leading-relaxed">
-                  Calories via Mifflin-St Jeor ({activityLevel.label}) · Protein {proteinTarget.value}g/kg · Fat 0.9g/kg · Carbs fill remainder
+                  Mifflin-St Jeor · job ({jobType.label}) + gym ({exerciseLevel.label}) · goal: {goal.label} · protein {proteinTarget.value}g/kg · fat 0.9g/kg
                 </p>
                 <button
                   onClick={applyAll}
                   className="w-full rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white text-sm font-semibold py-2.5 transition-colors"
                 >
-                  Apply these targets ↓
+                  Apply these goals ↓
                 </button>
               </div>
             ) : (
@@ -336,9 +472,9 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
             )}
           </section>
 
-          {/* ── SECTION 2: Manual targets ────────────────────────────── */}
+          {/* ── SECTION 2: Manual goals ─────────────────────────────── */}
           <section className="space-y-4">
-            <SectionDivider label="Your Targets" />
+            <SectionDivider label={hasExistingTargets ? "Your current goals" : "Set manually"} />
 
             <div className="grid grid-cols-2 gap-3">
               {[
@@ -359,7 +495,7 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
               ))}
             </div>
 
-            {/* Macro bar */}
+            {/* Live macro breakdown bar */}
             {hasCalories && totalMacroKcal > 0 && (
               <div className="space-y-1.5">
                 <div className="flex gap-0.5 h-1.5 rounded-full overflow-hidden">
@@ -392,22 +528,20 @@ const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number
         </div>
 
         <SheetFooter className="flex-col gap-2 sm:flex-row">
-          {currentUser.target_calories && (
-            <Button plain onClick={handleClear} disabled={isSaving}>Clear targets</Button>
+          {hasExistingTargets && (
+            <Button plain onClick={handleClear} disabled={isSaving}>Clear goals</Button>
           )}
           <SheetClose asChild>
             <Button plain disabled={isSaving}>Cancel</Button>
           </SheetClose>
           <Button onClick={handleSave} disabled={isSaving}>
-            {isSaving ? "Saving..." : "Save Targets"}
+            {isSaving ? "Saving..." : hasExistingTargets ? "Update Goals" : "Save Goals"}
           </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
   );
 }
-
-// ── Small helper components ───────────────────────────────────────────────────
 
 function SectionDivider({ label }: { label: string }) {
   return (
@@ -420,20 +554,10 @@ function SectionDivider({ label }: { label: string }) {
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{children}</p>
-  );
+  return <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{children}</p>;
 }
 
-function Field({
-  label,
-  children,
-  className = "",
-}: {
-  label: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
+function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return (
     <div className={className}>
       <FieldLabel>{label}</FieldLabel>

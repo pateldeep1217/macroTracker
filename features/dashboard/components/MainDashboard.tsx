@@ -145,6 +145,9 @@ export function MainDashboard({
     return <LoadingState message="Loading your dashboard..." />;
   }
 
+  function onUserUpdated(user: { created_at: string | null; id: string; name: string; target_calories: number | null; target_carbs: number | null; target_fat: number | null; target_fiber: number | null; target_protein: number | null; }): void {
+    setActiveUser(user);
+  }
   return (
     <div className="min-h-screen bg-zinc-950">
       {/* Simple Top Navigation */}
@@ -237,6 +240,8 @@ export function MainDashboard({
             userName={selectedUser.name}
             selectedDate={selectedDate}
             meals={meals}
+              currentUser={currentUser}       // ← add this
+        onUserUpdated={onUserUpdated}  
           />
         )}
       </div>
