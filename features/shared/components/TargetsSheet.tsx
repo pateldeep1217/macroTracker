@@ -60,9 +60,8 @@ export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsShe
   const [heightCm, setHeightCm]       = useState("");
   const [heightFt, setHeightFt]       = useState("");
   const [heightIn, setHeightIn]       = useState("");
-  const [activityLevel, setActivityLevel]   = useState(ACTIVITY_LEVELS[2]);
-  const [proteinTarget, setProteinTarget]   = useState(PROTEIN_TARGETS[2]); // 2.0g/kg
-
+const [activityLevel, setActivityLevel] = useState<typeof ACTIVITY_LEVELS[number]>(ACTIVITY_LEVELS[2]);
+const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number]>(PROTEIN_TARGETS[2]);
   // ── UI state ─────────────────────────────────────────────────────────
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError]       = useState<string | null>(null);
