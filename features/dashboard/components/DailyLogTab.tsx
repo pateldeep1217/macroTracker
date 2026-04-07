@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type {
   FoodItem,
   Recipe,
@@ -12,6 +12,8 @@ import {
   deleteMealEntry,
   updateMealEntry,
 } from "@/utils/supabase/queries";
+import type { AppUser } from "@/utils/supabase/queries";
+
 import { Text } from "@/app/components/text";
 import { Input } from "@/app/components/input";
 import { Button } from "@/app/components/button";
@@ -28,6 +30,7 @@ import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { AddMealForm } from "@/features/meals/components/AddMealForm";
 import { MealBreakdown } from "@/features/meals/components/MealBreakdown";
 import { MacroStatsGrid } from "@/features/shared/components/MacroStatsGrid";
+import { TargetsSheet } from "@/features/shared/components/TargetsSheet";
 import { CopyMealsDialog } from "@/features/meals/components/CopyMealsDialog";
 import type { MealType } from "@/features/shared/utils/constatns";
 import { sumMacros } from "@/features/shared/utils/macors";
@@ -41,6 +44,8 @@ interface DailyLogTabProps {
   readonly recipes: readonly Recipe[];
   readonly meals: readonly MealEntryWithDetails[];
   readonly onRefreshMeals: () => Promise<void>;
+  readonly currentUser: AppUser;
+  readonly onUserUpdated: (user: AppUser) => void;
 }
 
 export function DailyLogTab({
@@ -52,13 +57,16 @@ export function DailyLogTab({
   recipes,
   meals,
   onRefreshMeals,
+  currentUser,
+  onUserUpdated,
 }: DailyLogTabProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [showAddSheet, setShowAddSheet] = useState(false);
   const [showCopyDialog, setShowCopyDialog] = useState(false);
-  const [editingMeal, setEditingMeal] = useState<MealEntryWithDetails | null>(
-    null
-  );
+  const [showTargetsSheet, setShowTargetsSheet] = useState(false);
+  const [editingMeal, setEditingMeal] = useState<MealEntryWithDetails | null>(null);
+
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddEntry = async (data: {
     entryType: "food" | "recipe";
@@ -71,7 +79,6 @@ export function DailyLogTab({
       if (data.entryType === "food") {
         const food = foods.find((f) => f.id === data.itemId);
         if (!food) throw new Error("Food not found");
-
         await logFood({
           userId,
           date: selectedDate,
@@ -89,7 +96,6 @@ export function DailyLogTab({
           servings: data.quantity,
         });
       }
-
       await onRefreshMeals();
       setShowAddSheet(false);
       setEditingMeal(null);
@@ -113,7 +119,6 @@ export function DailyLogTab({
         quantity: data.quantity,
         mealType: data.mealType,
       });
-
       await onRefreshMeals();
       setShowAddSheet(false);
       setEditingMeal(null);
@@ -156,7 +161,6 @@ export function DailyLogTab({
       {/* Header with Date Navigation */}
       <div className="rounded-xl bg-zinc-900 p-3 sm:p-4">
         <div className="flex items-center justify-between gap-3">
-          {/* Date Navigation */}
           <div className="flex items-center gap-1">
             <button
               onClick={() => {
@@ -190,21 +194,26 @@ export function DailyLogTab({
             </button>
 
             <div className="relative ml-1">
+              <button
+                onClick={() => dateInputRef.current?.showPicker()}
+                className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-800 text-zinc-400 hover:bg-zinc-700 transition-colors"
+                aria-label="Select date"
+              >
+                📅
+              </button>
               <Input
+                ref={dateInputRef}
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="h-9 w-9 shrink-0 cursor-pointer opacity-0 absolute inset-0"
-                style={{ colorScheme: "dark" }}
+                className="sr-only"
+                style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}
                 aria-label="Select date"
+                tabIndex={-1}
               />
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-800 text-zinc-400 hover:bg-zinc-700 transition-colors pointer-events-none">
-                📅
-              </div>
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex gap-2">
             <Button
               plain
@@ -233,6 +242,14 @@ export function DailyLogTab({
         fat={dailyTotals.fat}
         fiber={dailyTotals.fiber}
         entryCount={meals.length}
+        targets={{
+          calories: currentUser.target_calories ?? undefined,
+          protein: currentUser.target_protein ?? undefined,
+          carbs: currentUser.target_carbs ?? undefined,
+          fat: currentUser.target_fat ?? undefined,
+          fiber: currentUser.target_fiber ?? undefined,
+        }}
+        onEditTargets={() => setShowTargetsSheet(true)}
       />
 
       {/* Meal Breakdown or Empty State */}
@@ -277,9 +294,7 @@ export function DailyLogTab({
             <SheetDescription>
               {editingMeal
                 ? "Update the quantity or meal type for this entry."
-                : `Select a food item or recipe to add to your daily log for ${formatDateShort(
-                    selectedDate
-                  )}.`}
+                : `Select a food item or recipe to add to your daily log for ${formatDateShort(selectedDate)}.`}
             </SheetDescription>
           </SheetHeader>
           <div className="py-6">
@@ -307,6 +322,14 @@ export function DailyLogTab({
         userId={userId}
         targetDate={selectedDate}
         onCopyComplete={onRefreshMeals}
+      />
+
+      {/* Targets Sheet */}
+      <TargetsSheet
+        open={showTargetsSheet}
+        onClose={() => setShowTargetsSheet(false)}
+        currentUser={currentUser}
+        onSaved={onUserUpdated}
       />
     </div>
   );

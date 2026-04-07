@@ -1,0 +1,2537 @@
+--
+-- PostgreSQL database dump
+--
+
+\restrict UTR7RVF3IHp3JTSzhacjzCq0Pjyik7xeLTuzPA14M148Hsrodq7SBe2Vb8VQidS
+
+-- Dumped from database version 17.4
+-- Dumped by pg_dump version 17.9 (Ubuntu 17.9-1.pgdg24.04+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Data for Name: audit_log_entries; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.audit_log_entries (instance_id, id, payload, created_at, ip_address) FROM stdin;
+\.
+
+
+--
+-- Data for Name: custom_oauth_providers; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.custom_oauth_providers (id, provider_type, identifier, name, client_id, client_secret, acceptable_client_ids, scopes, pkce_enabled, attribute_mapping, authorization_params, enabled, email_optional, issuer, discovery_url, skip_nonce_check, cached_discovery, discovery_cached_at, authorization_url, token_url, userinfo_url, jwks_uri, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: flow_state; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.flow_state (id, user_id, auth_code, code_challenge_method, code_challenge, provider_type, provider_access_token, provider_refresh_token, created_at, updated_at, authentication_method, auth_code_issued_at, invite_token, referrer, oauth_client_state_id, linking_target_id, email_optional) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at, is_sso_user, deleted_at, is_anonymous) FROM stdin;
+\.
+
+
+--
+-- Data for Name: identities; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.identities (provider_id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: instances; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.instances (id, uuid, raw_base_config, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: oauth_clients; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.oauth_clients (id, client_secret_hash, registration_type, redirect_uris, grant_types, client_name, client_uri, logo_uri, created_at, updated_at, deleted_at, client_type, token_endpoint_auth_method) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sessions; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.sessions (id, user_id, created_at, updated_at, factor_id, aal, not_after, refreshed_at, user_agent, ip, tag, oauth_client_id, refresh_token_hmac_key, refresh_token_counter, scopes) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mfa_amr_claims; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.mfa_amr_claims (session_id, created_at, updated_at, authentication_method, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mfa_factors; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.mfa_factors (id, user_id, friendly_name, factor_type, status, created_at, updated_at, secret, phone, last_challenged_at, web_authn_credential, web_authn_aaguid, last_webauthn_challenge_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: mfa_challenges; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.mfa_challenges (id, factor_id, created_at, verified_at, ip_address, otp_code, web_authn_session_data) FROM stdin;
+\.
+
+
+--
+-- Data for Name: oauth_authorizations; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.oauth_authorizations (id, authorization_id, client_id, user_id, redirect_uri, scope, state, resource, code_challenge, code_challenge_method, response_type, status, authorization_code, created_at, expires_at, approved_at, nonce) FROM stdin;
+\.
+
+
+--
+-- Data for Name: oauth_client_states; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.oauth_client_states (id, provider_type, code_verifier, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: oauth_consents; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.oauth_consents (id, user_id, client_id, scopes, granted_at, revoked_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: one_time_tokens; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.one_time_tokens (id, user_id, token_type, token_hash, relates_to, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: refresh_tokens; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.refresh_tokens (instance_id, id, token, user_id, revoked, created_at, updated_at, parent, session_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: sso_providers; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.sso_providers (id, resource_id, created_at, updated_at, disabled) FROM stdin;
+\.
+
+
+--
+-- Data for Name: saml_providers; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.saml_providers (id, sso_provider_id, entity_id, metadata_xml, metadata_url, attribute_mapping, created_at, updated_at, name_id_format) FROM stdin;
+\.
+
+
+--
+-- Data for Name: saml_relay_states; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.saml_relay_states (id, sso_provider_id, request_id, for_email, redirect_to, created_at, updated_at, flow_state_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.schema_migrations (version) FROM stdin;
+20171026211738
+20171026211808
+20171026211834
+20180103212743
+20180108183307
+20180119214651
+20180125194653
+00
+20210710035447
+20210722035447
+20210730183235
+20210909172000
+20210927181326
+20211122151130
+20211124214934
+20211202183645
+20220114185221
+20220114185340
+20220224000811
+20220323170000
+20220429102000
+20220531120530
+20220614074223
+20220811173540
+20221003041349
+20221003041400
+20221011041400
+20221020193600
+20221021073300
+20221021082433
+20221027105023
+20221114143122
+20221114143410
+20221125140132
+20221208132122
+20221215195500
+20221215195800
+20221215195900
+20230116124310
+20230116124412
+20230131181311
+20230322519590
+20230402418590
+20230411005111
+20230508135423
+20230523124323
+20230818113222
+20230914180801
+20231027141322
+20231114161723
+20231117164230
+20240115144230
+20240214120130
+20240306115329
+20240314092811
+20240427152123
+20240612123726
+20240729123726
+20240802193726
+20240806073726
+20241009103726
+20250717082212
+20250731150234
+20250804100000
+20250901200500
+20250903112500
+20250904133000
+20250925093508
+20251007112900
+20251104100000
+20251111201300
+20251201000000
+20260115000000
+20260121000000
+20260219120000
+20260302000000
+\.
+
+
+--
+-- Data for Name: sso_domains; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.sso_domains (id, sso_provider_id, domain, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: webauthn_challenges; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.webauthn_challenges (id, user_id, challenge_type, session_data, created_at, expires_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: webauthn_credentials; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
+--
+
+COPY auth.webauthn_credentials (id, user_id, credential_id, public_key, attestation_type, aaguid, sign_count, transports, backup_eligible, backed_up, friendly_name, created_at, updated_at, last_used_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: app_users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.app_users (id, name, created_at) FROM stdin;
+f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	2025-07-20 00:42:25.548339+00
+8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	2025-07-20 00:42:25.548339+00
+\.
+
+
+--
+-- Data for Name: backup_food_items; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.backup_food_items (id, name, serving_size, serving_unit, calories, protein, carbs, fat, fiber, created_at, updated_at) FROM stdin;
+ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	Oats	40	g	150	5	27	2.5	4	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+80204400-751d-43c9-a302-e9d3a5ee9af3	Honey	10	g	30	0	8	0	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+c5d4e07d-313c-4862-b121-212339ec393a	Raisins	15	g	45	0.3	9.8	0.2	0.6	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+a213e8b9-36c9-4ab9-a4d8-1904aa600b82	1% Low-Fat Milk	240	ml	100	8	12	2.5	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+a5bd3fde-7bcd-4d61-afc6-ae130bd65bff	Cooked Rajma	130	g	100	5	18	1	5	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+29fb3244-b363-42f2-9f2e-9520a9536de9	Onions	100	g	40	1.1	9.3	0.1	1.7	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+ea34966b-0042-4b3e-9b87-9f67f0f3601f	Tomatoes	100	g	18	0.9	3.9	0.2	1.2	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+79f3f737-2a88-4702-8317-6a41ddaefeea	Canola Oil	1	g	9	0	0	1	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+4d72b3ac-3088-4f46-868a-3f9d560ac001	Orange (Medium)	1	piece	62	1	15	0.1	3.1	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+c90cf0b9-f38d-4de1-98cc-e02fdca60570	Banana (Medium)	1	piece	105	1.3	27	0.3	3.1	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+46ba7549-3979-418b-a0ab-41e6255c50dc	Olive Oil	1	g	9	0	0	1	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+97825dde-80d6-4a82-ac76-5cd79e400b11	Cooked chicken	595	g	1190	172	40	30	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+fa84cfe9-d9b5-4998-a596-da9091929264	Chipotle Yogurt sauce	193	g	263	12.4	8	20.3	1.5	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+2d67f6bf-90a1-4443-93af-ba14e8b8694f	Chobani 20g Yogurt	1	cup	140	20	8	3	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+76e0444b-e7e6-40e2-8bfd-cb2c778acb0b	Large Banana	1	piece	121	1.5	31	0.5	3.5	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+149faffd-d3d6-4a9a-8d73-cff9807d18a3	Avocado	88	g	64.2	1.8	1.8	6.2	4.6	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+b5a047b1-d4e1-4e2e-bd59-c1c3e88065c5	Yellow Cooked Rice	157	g	214	3.9	43.6	2.8	0.6	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+cbeaf31b-00c0-41e6-9579-de281ad0f877	NonFat Greek Yogurt	170	g	100	18	7	0	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+4841b3b3-a83b-4ffc-982c-3f9ef8c979d2	Walnut	1	g	7	0.15	0.13	0.65	0.07	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+113756a0-cb6f-4943-bff6-2dac49afd27f	Almond	1	g	7	0.21	0.24	0.61	0.12	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+2989970e-4de3-417b-a078-37cbedf7869c	Bhusu	30	g	160	3	15	11	1	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+ade3b8ac-6ac1-4acb-9c72-aabd1d2e7cec	Chipotle Chilli Adobo Sauce	30	g	20	1	4	0	0	2025-07-20 00:51:44.983563+00	2025-07-20 00:51:44.983563+00
+1c129e61-2a9d-4b70-a81c-68a6453da485	Raw Rice	100	g	358	6.5	79	0.5	0	2025-07-20 01:22:17.318308+00	2025-07-20 01:22:17.318308+00
+77c1da40-be0e-4df0-ae53-4eaebbbf3e55	Chobani Drink	1	piece	170	20	14	3	0	2025-07-20 01:31:20.516396+00	2025-07-20 01:31:20.516396+00
+4f66b5e4-67ae-4efd-bde7-0d87dd383cfc	Besan Flour	46	g	178	10.5	26.5	3.1	5	2025-07-20 01:34:27.379953+00	2025-07-20 01:34:27.379953+00
+7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	Paneer	28	g	90	7	1	7	0	2025-07-20 01:35:51.782166+00	2025-07-20 01:35:51.782166+00
+4d0f7182-8402-4db7-b9a2-93bf5b0f7542	Raw Moong	35	g	120	9	21	2	5	2025-07-20 16:59:49.850115+00	2025-07-20 16:59:49.850115+00
+d1a02a83-316a-4070-9b80-62dfea57a7b8	Avacado	50	g	80	1	4	8	3	2025-08-13 23:05:35.086468+00	2025-08-13 23:05:35.086468+00
+8ce3b664-aedc-4805-83c2-f13519f19350	Egg Whites	46	g	25	5	0	0	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+85a06565-36fb-4da3-8329-609cb5569ea6	Chia seeds	26	g	130	6	10	7	10	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+a9c4f584-21ca-4023-a654-2a00038c5ab4	Bhakhri	2	piece	200	6	35	7	0	2025-07-23 21:43:37.923751+00	2025-07-23 21:43:37.923751+00
+2dadd2fc-1187-477f-9d1c-6b9e4fec4754	Tortilla	1	piece	110	8	33	6	0	2025-07-23 22:53:38.96837+00	2025-07-23 22:53:38.96837+00
+4025bd8f-9525-49d6-b79c-22abdab12baf	Cube Amul Cheese	25	g	80	5	0	7	0	2025-07-23 22:59:45.136331+00	2025-07-23 22:59:45.136331+00
+013fa4a0-3342-4f03-a3a4-dfa350cc061c	Tuver 	205	g	160	8.8	24	2.3	6	2025-07-23 21:42:45.502389+00	2025-07-23 21:42:45.502389+00
+bba3553c-ff0c-43df-a4c5-df564d492e1c	Xtreme Wellness Zero net Carbs Tortias	1	piece	60	4	13	1.5	12	2025-07-23 23:29:26.89043+00	2025-07-23 23:29:26.89043+00
+51a2a27e-8eb9-4447-afde-56539f5d96c9	Pancharatna Dal	100	g	362	10	62	8.3	12	2025-07-26 00:37:36.449484+00	2025-07-26 00:37:36.449484+00
+98a18638-1e53-4a81-85df-1253cff877fc	Dragon food 	140	g	90	2	16	0	5	2025-07-28 13:41:51.782232+00	2025-07-28 13:41:51.782232+00
+ebb756a2-ba0f-44b4-a92b-c7442bb24341	2% Reduced Milk	240	ml	120	8	12	5	0	2025-07-29 16:31:48.751865+00	2025-07-29 16:31:48.751865+00
+097ac32b-2445-420d-a237-254fe3da445e	Peanut Butter	36	g	190	7	15	12	3	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	Protein Powder	1	scoop	120	24	1	2	0.5	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+5576889a-2e87-491f-b3d5-5bbc719d9aee	BBQ Sauce	34	g	60	0	15	0	0	2025-07-31 20:06:23.974535+00	2025-07-31 20:06:23.974535+00
+40c5c35c-9409-4681-9b47-ffd49d1c6cd7	Toor dal	102	g	360	22	64	2	16	2025-08-03 02:13:56.570417+00	2025-08-03 02:13:56.570417+00
+30fe39d7-51d3-4b99-9268-f8c0478ce5b0	Sprouts 	66	g	15.2	2.6	1.4	0.5	1.3	2025-08-03 22:36:14.067458+00	2025-08-03 22:36:14.067458+00
+a0406417-9f86-4f7b-bb5f-7f10d31602aa	Protein Penne	56	g	190	10	38	1	5	2025-08-14 12:56:04.533886+00	2025-08-14 12:56:04.533886+00
+2a60d221-a394-4df3-bdbf-eb9c6019507d	Dry pinto beans 	193	g	670	41	122	2.5	30	2025-08-14 22:03:31.919729+00	2025-08-14 22:03:31.919729+00
+6f07e010-96c5-4069-8ee9-7d88af8a0b56	Mexican cheese 	28	g	110	6	1	9	0	2025-08-14 22:05:49.065733+00	2025-08-14 22:05:49.065733+00
+244ce9fc-d94a-4fe5-9d6a-ee9bfbbd9ecf	Green beans 	125	g	44	2.4	9.9	0.4	4	2025-08-04 22:39:08.732797+00	2025-08-04 22:39:08.732797+00
+e769a270-0967-4b6f-a25c-e888a3b5d5da	Pasta	56	g	200	7	42	1	3	2025-08-05 21:45:25.640641+00	2025-08-05 21:45:25.640641+00
+dda38e85-2316-48c8-b5ae-bd3dfd719541	Raw Chicken	112	g	124	25	0	4	0	2025-07-20 00:47:04.205853+00	2025-07-20 00:47:04.205853+00
+3546eafa-710b-41c3-a1d9-16ae43e4e41e	Light Butter	14	g	60	0	0	6	0	2025-09-08 17:10:13.782806+00	2025-09-08 17:10:13.782806+00
+b80593c4-ffbb-4e6d-9c70-2b9131be8a97	mozzarella	28	g	80	7	1	6	0	2025-09-08 17:10:53.870184+00	2025-09-08 17:10:53.870184+00
+907ee436-29b0-42ba-a45f-55bc2d3faba2	Light Cream Cheese	28	g	70	2	2	6	0	2025-09-08 17:13:50.694073+00	2025-09-08 17:13:50.694073+00
+2f0a5e57-451d-459c-af13-c9481ca40bba	Cooked Plain Rice	100	g	125	2.3	27.7	0.2	0.3	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+fe8141c3-3fca-4c2b-b094-1a0a090f3154	Sourdough 	57	g	140	6	27	0	1	2025-08-11 23:50:41.773873+00	2025-08-11 23:50:41.773873+00
+c9e6b0b0-81e3-44f3-b69b-6b9d0f11aeb7	Chipotle mayo dressing 	15	g	35	0	1	3.5	0	2025-08-12 22:51:58.563378+00	2025-08-12 22:51:58.563378+00
+cb8b3a02-7a86-4bda-a4dc-95d6bc330f29	Jam	17	g	10	0	5	0	0	2025-10-07 00:12:09.278337+00	2025-10-07 00:12:09.278337+00
+935408a3-830f-43e0-997b-004741f18c71	Ghee	1	g	9	0	0	1	0	2025-10-10 00:24:45.708271+00	2025-10-10 00:24:45.708271+00
+6d75f27d-350f-48e5-a8d1-db187befceb2	Small banana 	101	g	90	1.1	23	0.3	2.6	2025-10-11 01:18:24.769093+00	2025-10-11 01:18:24.769093+00
+fff09453-127d-45af-8878-72c20fe1d5cc	Jaggery	8	g	30	0	8	0	0	2025-10-11 01:23:23.599112+00	2025-10-11 01:23:23.599112+00
+0144d773-920b-4611-ad8e-b2f185764612	Chickpeas 	130	g	90	5	16	0.5	5	2025-08-13 23:08:35.56893+00	2025-08-13 23:08:35.56893+00
+fd822b01-8f99-4b23-8162-69970e68453e	Crunch protein bar	40		220	13	11	13	0	2025-10-15 21:28:00.624505+00	2025-10-15 21:28:00.624505+00
+4acc5707-82a6-4cd5-8489-9016f1b5c01f	Egg	1	piece	70	6	0	5	0	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+388b01c9-4149-493a-a69a-ba317b2071f6	Low fat paneer desi natural 	28	g	75	6	0	6	0	2025-10-23 22:58:37.267916+00	2025-10-23 22:58:37.267916+00
+8b12697e-2210-4009-a4f8-1b6b59e15814	PB2	13	g	60	6	5	1.5	0	2025-10-24 23:11:22.165662+00	2025-10-24 23:11:22.165662+00
+6db77deb-8ce8-4d6e-9024-f89e213dc3bc	White Bread	57	g	140	5	29	1.5	3	2025-07-20 00:42:25.548339+00	2025-07-20 00:42:25.548339+00
+04495e15-14a2-465e-9b57-b70dd8865a2f	Cooked kala chana	93	.	150	8.5	25	2	7	2025-10-27 19:40:21.667338+00	2025-10-27 19:40:21.667338+00
+b993fc4a-02df-4b0f-973a-8370f8f752cf	Meggi	70	.	310	6	43	2	0	2025-10-28 00:15:12.749908+00	2025-10-28 00:15:12.749908+00
+51d92638-ab79-4a7c-a5b3-8825132826b8	paratha	1	Piece	140	4.5	30.5	0.4	3	2025-09-08 17:15:15.730091+00	2025-09-08 17:15:15.730091+00
+\.
+
+
+--
+-- Data for Name: backup_meal_entries; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.backup_meal_entries (id, user_id, food_id, recipe_id, prepared_meal_id, quantity, meal_type, date, notes, created_at) FROM stdin;
+5aff482f-db35-48aa-8d3e-1ccc2019d4a0	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-07-25	\N	2025-07-25 22:03:55.790383+00
+eed4c56f-2345-42b8-a633-dd892431673d	f64a8552-0cb5-4097-bb65-c86dd06d352e	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	200	Breakfast	2025-07-19	\N	2025-07-20 01:24:27.317548+00
+6ccc4164-406e-4b15-81d1-ff8bc3324e66	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-07-19	\N	2025-07-20 01:24:35.141648+00
+dac44725-29c2-4ff0-b103-4d4dbfea16e7	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-07-19	\N	2025-07-20 01:24:40.326703+00
+31a3ced8-4be4-4cd3-a02a-3edf62b82a17	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-07-19	\N	2025-07-20 01:24:45.005306+00
+9a008f57-0a9c-47b5-84c2-30eaa646451b	f64a8552-0cb5-4097-bb65-c86dd06d352e	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	200	Breakfast	2025-07-25	\N	2025-07-25 22:03:56.029616+00
+2e5ef31a-24b0-492c-ba43-76c73758c067	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-07-25	\N	2025-07-25 22:03:56.280385+00
+af248b54-ed5f-4eaf-b4ad-9e2828048113	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Breakfast	2025-07-25	\N	2025-07-25 22:03:56.457956+00
+48f317ad-1bee-4f56-8bf5-b2dcb0c3b2dd	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Post Workout	2025-07-19	\N	2025-07-20 01:25:38.252923+00
+efb72e33-908e-4dbd-a8dd-03bafd2212fb	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Post Workout	2025-07-19	\N	2025-07-20 01:26:22.551006+00
+18b3c4e5-d7d5-4f6f-a4ff-ce00bac629ce	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	137	Breakfast	2025-07-19	\N	2025-07-20 01:27:06.074535+00
+124b8c1e-033f-4180-a138-297e40e9f03c	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	30	Breakfast	2025-07-19	\N	2025-07-20 01:27:24.785988+00
+8c5fb5d5-306a-4750-a615-08ddb57e43db	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-07-19	\N	2025-07-20 01:27:32.931071+00
+069eda46-8ae6-468b-877b-506c5f73dc5d	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-07-19	\N	2025-07-20 01:27:36.29561+00
+521c1113-89f7-42fc-a1b1-a5b5657dbf2d	8d3b5e03-a6ca-44bd-a275-fc406a775527	80204400-751d-43c9-a302-e9d3a5ee9af3	\N	\N	10	Breakfast	2025-07-19	\N	2025-07-20 01:27:44.76892+00
+fbac822d-4dce-4c17-be35-af0ae8a623d9	8d3b5e03-a6ca-44bd-a275-fc406a775527	c5d4e07d-313c-4862-b121-212339ec393a	\N	\N	13	Breakfast	2025-07-19	\N	2025-07-20 01:28:03.46865+00
+a2a84d2d-85d6-4598-8d95-736326fc9a34	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-07-19	\N	2025-07-20 01:28:37.260798+00
+3c9c40ad-d722-4365-9b7d-ae5cb8089910	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	110	Lunch	2025-07-19	\N	2025-07-20 01:28:55.289307+00
+dc6a05ee-9ba3-48a9-a690-91a246c85537	8d3b5e03-a6ca-44bd-a275-fc406a775527	a5bd3fde-7bcd-4d61-afc6-ae130bd65bff	\N	\N	220	Lunch	2025-07-19	\N	2025-07-20 01:29:11.483245+00
+d2d6ebb8-6000-47ae-b47e-9c3a017ea26a	8d3b5e03-a6ca-44bd-a275-fc406a775527	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	36	Post Workout	2025-07-19	\N	2025-07-20 01:29:26.431851+00
+9625b6e5-4307-4d10-b6e0-edc19634cbb0	8d3b5e03-a6ca-44bd-a275-fc406a775527	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Post Workout	2025-07-19	\N	2025-07-20 01:29:32.144804+00
+7276058d-d774-44a3-93cf-096aee48f09d	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-07-19	\N	2025-07-20 01:29:41.634839+00
+e48dd910-a3cc-4633-8dfd-290c8bb79ed2	8d3b5e03-a6ca-44bd-a275-fc406a775527	77c1da40-be0e-4df0-ae53-4eaebbbf3e55	\N	\N	1	Dinner	2025-07-19	\N	2025-07-20 01:31:54.600043+00
+8c30eb41-a738-4f38-8b54-4031b4aa9ba6	f64a8552-0cb5-4097-bb65-c86dd06d352e	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	210	Breakfast	2025-07-20	\N	2025-07-20 17:01:31.152554+00
+4c8ec13d-243d-49b6-9238-78fa327bec88	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-07-20	\N	2025-07-20 17:01:31.357907+00
+90e73fbe-0ccb-4a70-b34e-0b458c2bfaec	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	82a4675d-ea89-44e4-95f8-df859eaaea22	\N	1	Lunch	2025-07-19	\N	2025-07-20 03:07:18.401009+00
+53f4dbbd-75b9-4009-94fe-6c6c7adf6d3d	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	175	Breakfast	2025-07-20	\N	2025-07-20 17:01:03.099578+00
+48cfa48a-fc23-4ee4-8c6f-074a5bc530ea	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-07-20	\N	2025-07-20 17:01:15.469982+00
+d5e6b5fd-2571-464d-aa67-3efea149472b	f64a8552-0cb5-4097-bb65-c86dd06d352e	46ba7549-3979-418b-a0ab-41e6255c50dc	\N	\N	3	Breakfast	2025-07-20	\N	2025-07-20 17:01:20.743695+00
+57ec1db1-b63d-4ac9-8e55-e21864c3777e	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-07-20	\N	2025-07-20 17:01:31.211088+00
+cdb6c80c-5532-4b7d-aa84-3d39db33606e	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-07-20	\N	2025-07-20 17:01:31.300216+00
+1f05ebe5-9cc3-4db8-9b20-499946e2e132	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-07-20	\N	2025-07-20 19:15:14.745339+00
+f45df7eb-c16f-40d3-a4c1-a6f87da0865b	f64a8552-0cb5-4097-bb65-c86dd06d352e	76e0444b-e7e6-40e2-8bfd-cb2c778acb0b	\N	\N	1	Lunch	2025-07-20	\N	2025-07-20 19:15:22.992236+00
+47755869-8011-4cf7-abb0-875960213417	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	200	Breakfast	2025-07-22	\N	2025-07-22 14:20:59.894456+00
+1c7e8107-5816-4bf6-ba88-15c9db1b1de7	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-07-22	\N	2025-07-22 14:24:26.79875+00
+104f26e2-eb54-431d-a484-670ab1fd6a34	f64a8552-0cb5-4097-bb65-c86dd06d352e	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	200	Breakfast	2025-07-22	\N	2025-07-22 14:24:31.795786+00
+82882046-26a2-4293-8658-e69513757277	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-07-22	\N	2025-07-22 14:24:45.028408+00
+4970d97c-16c7-49df-a3d8-2e0845e67679	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-07-22	\N	2025-07-22 14:24:54.602711+00
+d12e6540-58e1-4fb9-a45d-769d1c01973d	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-07-22	\N	2025-07-22 14:27:40.328282+00
+45cf6f68-2c84-4d15-a9c4-84d77f58edac	f64a8552-0cb5-4097-bb65-c86dd06d352e	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	150	Lunch	2025-07-22	\N	2025-07-22 16:31:43.794712+00
+75165c72-f952-4ffe-8d8e-fb51d7cd280a	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	82a4675d-ea89-44e4-95f8-df859eaaea22	\N	1	Dinner	2025-07-22	\N	2025-07-22 17:09:03.73074+00
+1b4be479-2b50-4d9f-920a-ad45c8112aef	f64a8552-0cb5-4097-bb65-c86dd06d352e	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Snacks	2025-07-22	\N	2025-07-22 18:39:55.956312+00
+ca2692ef-e2d1-41b8-8b02-366d4f850d47	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	155	Lunch	2025-07-22	\N	2025-07-22 19:05:10.941315+00
+e5d5c321-fef1-4376-ac24-99823a75c5d2	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	120	Breakfast	2025-07-22	\N	2025-07-22 19:02:06.454542+00
+96981eb3-6587-41cf-b8de-fd068c0a3f1b	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-07-22	\N	2025-07-22 19:02:42.679267+00
+c37271f1-1917-4217-bbde-61e96098cca2	8d3b5e03-a6ca-44bd-a275-fc406a775527	80204400-751d-43c9-a302-e9d3a5ee9af3	\N	\N	8	Breakfast	2025-07-22	\N	2025-07-22 19:03:12.254179+00
+12958392-9152-4d64-a05e-c305354b540f	8d3b5e03-a6ca-44bd-a275-fc406a775527	c5d4e07d-313c-4862-b121-212339ec393a	\N	\N	13	Breakfast	2025-07-22	\N	2025-07-22 19:03:20.997444+00
+bb69d4f6-9143-4c94-b3f1-ee9fb2698b2b	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	35	Breakfast	2025-07-22	\N	2025-07-22 19:03:29.02682+00
+9355d377-bc2b-4896-a98e-2dbc6538bbf1	8d3b5e03-a6ca-44bd-a275-fc406a775527	4d0f7182-8402-4db7-b9a2-93bf5b0f7542	\N	\N	1	Lunch	2025-07-22	\N	2025-07-22 19:04:48.153581+00
+a578e6da-c0ae-44a0-b61e-4e90986cef74	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-07-22	\N	2025-07-22 19:05:39.223613+00
+08c28972-8aae-49a7-a195-16acc739e025	8d3b5e03-a6ca-44bd-a275-fc406a775527	77c1da40-be0e-4df0-ae53-4eaebbbf3e55	\N	\N	1	Snacks	2025-07-22	\N	2025-07-22 19:05:53.564516+00
+9018f947-f8f6-4454-8a8f-920045a35b75	8d3b5e03-a6ca-44bd-a275-fc406a775527	113756a0-cb6f-4943-bff6-2dac49afd27f	\N	\N	10	Breakfast	2025-07-22	\N	2025-07-22 19:06:16.563666+00
+636139e8-bb40-412e-a9f4-3010e10e177c	8d3b5e03-a6ca-44bd-a275-fc406a775527	4841b3b3-a83b-4ffc-982c-3f9ef8c979d2	\N	\N	10	Snacks	2025-07-22	\N	2025-07-22 19:06:32.587434+00
+fed236df-14d3-402a-ae35-064ff55ff2ed	f64a8552-0cb5-4097-bb65-c86dd06d352e	4841b3b3-a83b-4ffc-982c-3f9ef8c979d2	\N	\N	11	Snacks	2025-07-22	\N	2025-07-22 19:39:05.980536+00
+35fe8f3a-306e-461c-a388-8db4aa74419e	f64a8552-0cb5-4097-bb65-c86dd06d352e	113756a0-cb6f-4943-bff6-2dac49afd27f	\N	\N	16	Snacks	2025-07-22	\N	2025-07-22 19:41:42.468435+00
+48fab8ae-725d-4dc3-b387-67abcb9797d7	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	10	Pre Workout	2025-07-22	\N	2025-07-22 19:42:08.232887+00
+8342343a-987b-4562-be07-3ed5ea459666	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Pre Workout	2025-07-22	\N	2025-07-22 19:42:56.533044+00
+989ae5e7-9d03-4316-aa1f-76447204e046	f64a8552-0cb5-4097-bb65-c86dd06d352e	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	120	Breakfast	2025-07-23	\N	2025-07-23 21:35:25.9796+00
+5a8d8024-7d2f-46c0-82fd-27532131d498	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-07-23	\N	2025-07-23 21:35:34.951241+00
+6d681f12-fd7b-4533-8dd5-b7016061f9b9	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	12	Breakfast	2025-07-23	\N	2025-07-23 21:35:46.54779+00
+72b5e1b8-6425-4f9b-92f0-aebdcad871d7	f64a8552-0cb5-4097-bb65-c86dd06d352e	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	30	Breakfast	2025-07-23	\N	2025-07-23 21:35:57.770758+00
+572de6bd-a89f-4687-b885-fe917487fddf	f64a8552-0cb5-4097-bb65-c86dd06d352e	80204400-751d-43c9-a302-e9d3a5ee9af3	\N	\N	12	Breakfast	2025-07-23	\N	2025-07-23 21:36:20.764692+00
+f8d87aa6-b06f-488e-b322-6e595f785e1b	f64a8552-0cb5-4097-bb65-c86dd06d352e	c5d4e07d-313c-4862-b121-212339ec393a	\N	\N	15	Breakfast	2025-07-23	\N	2025-07-23 21:36:37.824542+00
+c41b157a-7415-42c0-915d-095e3b2d1ab6	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-07-23	\N	2025-07-23 21:36:59.793543+00
+f7f0c825-d6e6-4191-a78d-122bf85a45b4	f64a8552-0cb5-4097-bb65-c86dd06d352e	76e0444b-e7e6-40e2-8bfd-cb2c778acb0b	\N	\N	1	Pre Workout	2025-07-23	\N	2025-07-23 21:37:16.034918+00
+582966cf-490e-4c41-b4f3-fba7395d26eb	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	200	Post Workout	2025-07-19	\N	2025-07-20 01:25:46.920388+00
+698bb17d-0b0c-4881-99b4-daa817214513	f64a8552-0cb5-4097-bb65-c86dd06d352e	46ba7549-3979-418b-a0ab-41e6255c50dc	\N	\N	1	Post Workout	2025-07-19	\N	2025-07-20 01:26:12.564279+00
+d84edbac-72c0-4481-a006-08c69671c7d9	f64a8552-0cb5-4097-bb65-c86dd06d352e	a9c4f584-21ca-4023-a654-2a00038c5ab4	\N	\N	2	Lunch	2025-07-23	\N	2025-07-23 21:44:07.094525+00
+9a6e6318-bd8f-4a20-9aa0-c427008b1470	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-07-23	\N	2025-07-23 21:54:45.884015+00
+12b03338-4bbf-49cf-ae43-fe8f88ee685b	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	92	Post Workout	2025-07-23	\N	2025-07-23 22:15:02.672763+00
+5be82ae7-2778-4150-b8b3-788b580c1129	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Post Workout	2025-07-23	\N	2025-07-23 22:15:12.944501+00
+fe71ee73-e828-4837-907d-66da86de5fe0	f64a8552-0cb5-4097-bb65-c86dd06d352e	46ba7549-3979-418b-a0ab-41e6255c50dc	\N	\N	2	Breakfast	2025-07-25	\N	2025-07-25 22:03:55.91101+00
+2f01485f-9063-46ff-b14f-f41f37e50c6f	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-07-25	\N	2025-07-25 22:03:56.154615+00
+787e9db2-4204-4a6c-8f5a-421f116d663e	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-07-25	\N	2025-07-25 22:03:56.373925+00
+5a8ccd9f-d2e6-4835-9b90-fd1288bb2009	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	82a4675d-ea89-44e4-95f8-df859eaaea22	\N	1	Lunch	2025-07-25	\N	2025-07-25 22:04:03.521121+00
+d1353bb1-31a1-4a2d-9494-59c63bd65032	f64a8552-0cb5-4097-bb65-c86dd06d352e	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	\N	\N	30	Dinner	2025-07-23	\N	2025-07-23 22:52:44.579753+00
+14ef30b9-8f27-4d16-a60f-ad6b7d59cca9	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	200	Breakfast	2025-07-25	\N	2025-07-25 22:03:55.696842+00
+1cbd8943-0d3c-4635-a582-3cd54ed6c57b	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-07-23	\N	2025-07-23 22:56:41.096266+00
+d87a558c-1755-4f68-9cc2-969fa2826e9d	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-07-23	\N	2025-07-23 22:56:46.849366+00
+8af3459d-a662-45a5-8dba-1f1a8c3313aa	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	200	Breakfast	2025-07-23	\N	2025-07-23 22:56:57.7547+00
+3ae0d231-dcb7-4ff6-a76e-60f2a89ba4a3	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-07-23	\N	2025-07-23 22:57:03.273712+00
+25b85e70-3965-484b-92b9-52dfa0a21b4d	f64a8552-0cb5-4097-bb65-c86dd06d352e	4025bd8f-9525-49d6-b79c-22abdab12baf	\N	\N	25	Post Workout	2025-07-19	\N	2025-07-23 22:59:58.172406+00
+526fe987-6280-45d3-8e19-ededaa714b99	f64a8552-0cb5-4097-bb65-c86dd06d352e	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	\N	\N	28	Dinner	2025-07-19	\N	2025-07-23 23:00:53.475558+00
+2ba2397a-ebb8-4a45-80aa-e749fec7f1ca	f64a8552-0cb5-4097-bb65-c86dd06d352e	013fa4a0-3342-4f03-a3a4-dfa350cc061c	\N	\N	205	Lunch	2025-07-23	\N	2025-07-23 23:27:57.998028+00
+b54600ed-9a9b-4453-b954-b124419523d9	f64a8552-0cb5-4097-bb65-c86dd06d352e	bba3553c-ff0c-43df-a4c5-df564d492e1c	\N	\N	1	Dinner	2025-07-23	\N	2025-07-23 23:29:36.939573+00
+74031768-05d4-4e70-986c-1fe4bf23445a	f64a8552-0cb5-4097-bb65-c86dd06d352e	bba3553c-ff0c-43df-a4c5-df564d492e1c	\N	\N	1	Dinner	2025-07-19	\N	2025-07-23 23:30:45.140614+00
+e06815e8-9b04-44ae-9a21-9280015877fa	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Dinner	2025-07-19	\N	2025-07-23 23:30:57.95556+00
+b00b8a43-8a9d-4477-a376-233d9a353d85	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-07-24	\N	2025-07-24 20:55:54.142312+00
+6137f942-de8e-49b7-80ad-3e8a78e5149c	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	320	Breakfast	2025-07-24	\N	2025-07-24 20:56:10.888201+00
+5c611ed1-e022-4aa8-a0f3-474dba5786e8	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-07-24	\N	2025-07-24 20:56:22.071257+00
+42168ce5-778d-4035-965b-7e40ff016838	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	30	Breakfast	2025-07-24	\N	2025-07-24 20:56:32.850477+00
+8669c1bf-f795-4721-8fc1-9a0d49d41c49	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-07-24	\N	2025-07-24 20:56:45.393204+00
+537cfa4c-a54f-4ed2-8639-d5e9d2fcf0e6	8d3b5e03-a6ca-44bd-a275-fc406a775527	013fa4a0-3342-4f03-a3a4-dfa350cc061c	\N	\N	205	Lunch	2025-07-24	\N	2025-07-24 20:57:17.619916+00
+528535a9-0dd2-47bf-97f0-77669459bfc6	8d3b5e03-a6ca-44bd-a275-fc406a775527	a9c4f584-21ca-4023-a654-2a00038c5ab4	\N	\N	2	Lunch	2025-07-24	\N	2025-07-24 20:57:27.318832+00
+154ea137-26b8-4391-a0f5-c2f51c6d6f24	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-07-24	\N	2025-07-24 20:57:46.797935+00
+611a55fc-992a-48ed-ace5-a920ad109c90	8d3b5e03-a6ca-44bd-a275-fc406a775527	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	112	Post Workout	2025-07-24	\N	2025-07-24 22:00:23.665891+00
+fca71f8d-9b9b-477c-b2cf-5fa5d5381d46	8d3b5e03-a6ca-44bd-a275-fc406a775527	29fb3244-b363-42f2-9f2e-9520a9536de9	\N	\N	10	Post Workout	2025-07-24	\N	2025-07-24 22:00:33.316722+00
+e987b555-45a5-4e20-8835-d5a808601ee0	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-07-25	\N	2025-07-25 22:05:13.756618+00
+ba6a2663-d3ae-49e2-a514-f5d141192771	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-07-24	\N	2025-07-24 22:04:42.966499+00
+76eb06fb-5c42-4992-9054-9b7d9b6e16d0	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-07-24	\N	2025-07-24 22:04:43.239767+00
+34fc0c34-bdbb-4528-8eea-a45184c2fd9e	f64a8552-0cb5-4097-bb65-c86dd06d352e	2d67f6bf-90a1-4443-93af-ba14e8b8694f	\N	\N	1	Dinner	2025-07-25	\N	2025-07-26 00:32:16.776709+00
+95302756-b638-44d0-9b48-4a2f585137a2	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6bd4e45a-2ef0-4ce6-ba8f-ab0ff2bedc18	\N	1	Dinner	2025-07-25	\N	2025-07-26 00:39:36.591028+00
+1348c303-73d8-4ea8-9032-7377cf845197	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	150	Breakfast	2025-07-24	\N	2025-07-24 22:04:42.509149+00
+1d5c5e47-134f-4d72-81c4-d3e76d32d1c1	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-07-24	\N	2025-07-24 22:04:42.650677+00
+2d1ed2f8-51d2-4f0b-b788-85269cc1f350	f64a8552-0cb5-4097-bb65-c86dd06d352e	46ba7549-3979-418b-a0ab-41e6255c50dc	\N	\N	2	Breakfast	2025-07-24	\N	2025-07-24 22:04:42.767357+00
+edcbe752-f3ca-4959-b241-4d285b1d4c29	f64a8552-0cb5-4097-bb65-c86dd06d352e	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	200	Breakfast	2025-07-24	\N	2025-07-24 22:04:42.85711+00
+84423389-bd33-4169-b08c-d2b1f546653d	f64a8552-0cb5-4097-bb65-c86dd06d352e	98a18638-1e53-4a81-85df-1253cff877fc	\N	\N	50	Breakfast	2025-07-28	\N	2025-07-28 13:42:35.9461+00
+fe3bb40e-a78d-4e27-bd50-9b21b7d36a1d	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	82a4675d-ea89-44e4-95f8-df859eaaea22	\N	1	Lunch	2025-07-24	\N	2025-07-24 22:06:26.64989+00
+8259f518-05ed-4c96-b4da-6694e8798080	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-07-24	\N	2025-07-24 22:07:34.13405+00
+36522900-77dd-4e3b-b1f1-b3bcdfed6008	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Breakfast	2025-07-24	\N	2025-07-24 22:07:49.657707+00
+ed246fcf-b34e-4160-870c-74b28c113c0e	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-07-24	\N	2025-07-24 22:04:43.351397+00
+ef546ab4-c72b-4d32-a535-43feccb1a942	f64a8552-0cb5-4097-bb65-c86dd06d352e	76e0444b-e7e6-40e2-8bfd-cb2c778acb0b	\N	\N	1	Pre Workout	2025-07-24	\N	2025-07-24 22:09:17.741947+00
+e3628911-94b8-4546-a8a5-f666c070877f	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f66b5e4-67ae-4efd-bde7-0d87dd383cfc	\N	\N	40	Dinner	2025-07-24	\N	2025-07-24 22:25:58.511469+00
+fcdb70fa-c99a-46f5-9f3b-cddf6fbe2119	f64a8552-0cb5-4097-bb65-c86dd06d352e	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	\N	\N	28	Dinner	2025-07-24	\N	2025-07-24 22:26:15.951879+00
+f953fd53-a6d2-492c-90eb-e30b1724355c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	3b3e9594-084b-48be-9aba-3e3edcc02782	\N	1	Dinner	2025-07-24	\N	2025-07-25 00:10:08.946698+00
+657b35f2-bb52-44d0-b1f5-ed758c63230c	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	120	Dinner	2025-07-24	\N	2025-07-25 00:10:44.143103+00
+7b36b442-7749-4ef2-8b27-aaa1f4151a51	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-07-29	\N	2025-07-29 15:49:55.365396+00
+cf0fce23-5ee4-4aa0-a217-4e6d24869921	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	100	Breakfast	2025-07-29	\N	2025-07-29 15:50:07.166544+00
+46cfc8b4-a95e-4ade-9962-c2050d6dbd9c	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Breakfast	2025-07-29	\N	2025-07-29 15:50:45.687977+00
+0b6dd431-9475-47e9-bf3f-da9c13014d46	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-07-29	\N	2025-07-29 16:30:41.062843+00
+3f0781c8-2105-49b5-a25c-eb71be69e19f	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	200	Breakfast	2025-07-29	\N	2025-07-29 16:32:39.779901+00
+62a0072b-b476-4a45-aa7d-90f9dcf6e0fd	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	36	Breakfast	2025-07-29	\N	2025-07-29 16:32:46.250652+00
+ca1fe5d5-e479-4243-8771-fc68c6ac5de9	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-07-29	\N	2025-07-29 16:32:55.16266+00
+12f1273c-21aa-4c2e-8f97-054210a4d10b	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-07-29	\N	2025-07-29 16:33:57.007089+00
+5d360b8c-3e19-4cb4-9ffb-841354c75a22	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	2e72221c-10c9-4151-9f3d-e5b25dd1202e	\N	1	Breakfast	2025-07-31	\N	2025-07-31 20:07:05.677622+00
+0c0b14ca-d326-45a5-b9e8-66b50e4337b4	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	1	Breakfast	2025-07-31	\N	2025-07-31 20:07:49.317361+00
+25390374-0d92-4313-932b-d51bb4b1c852	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	17	Breakfast	2025-07-31	\N	2025-07-31 20:08:00.262021+00
+1c591456-793a-4685-b4f2-562853ddbbb7	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	120	Breakfast	2025-08-02	\N	2025-08-02 21:31:06.529792+00
+eff2c24c-d394-4ea7-ab71-fe1c745f6f52	8d3b5e03-a6ca-44bd-a275-fc406a775527	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	1	Breakfast	2025-08-02	\N	2025-08-02 21:31:18.146809+00
+f4a5a137-93c9-4931-8bc8-48f949569180	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	30	Breakfast	2025-08-02	\N	2025-08-02 21:31:37.190477+00
+c40fae78-c80e-4ce7-af17-ae3df26be70e	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-08-02	\N	2025-08-02 21:31:55.420625+00
+77c5bccf-4127-4cd9-9a05-94f3975deea3	8d3b5e03-a6ca-44bd-a275-fc406a775527	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Pre Workout	2025-08-02	\N	2025-08-02 21:32:03.828889+00
+3935b2ae-dbfb-4fd6-a294-4ede6aa91c41	8d3b5e03-a6ca-44bd-a275-fc406a775527	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	120	Lunch	2025-08-02	\N	2025-08-02 21:32:28.52906+00
+c2372191-2c1c-41a5-96ef-85c64992075f	8d3b5e03-a6ca-44bd-a275-fc406a775527	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	1	Lunch	2025-08-02	\N	2025-08-02 21:32:36.406528+00
+a17f6415-9024-4e36-b639-dbe257ff9ec5	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	200	Post Workout	2025-08-02	\N	2025-08-02 22:55:11.732397+00
+cbcd3c1e-59f5-4854-8225-414a0c012ca6	8d3b5e03-a6ca-44bd-a275-fc406a775527	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	25	Post Workout	2025-08-02	\N	2025-08-02 22:55:25.026557+00
+5dea981b-a38f-4082-b50f-443710831f5b	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Post Workout	2025-08-02	\N	2025-08-02 22:55:32.149786+00
+a6c1a2b1-5fde-47c5-88d5-b01a3c3c2b41	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Post Workout	2025-08-02	\N	2025-08-02 22:55:40.5439+00
+9698a181-0f3d-4997-9d5e-ce2178d20b13	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-08-02	\N	2025-08-02 22:55:51.365897+00
+5c9b2995-b063-4dce-971b-22c074d9148f	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	135	Breakfast	2025-08-03	\N	2025-08-03 18:06:04.915175+00
+8b1a767f-81e1-409a-b19a-7c97d3dc6929	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	4	Breakfast	2025-08-03	\N	2025-08-03 18:06:09.327305+00
+9e0bbd4f-ce54-4ae6-8837-c9b8c90f2e15	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-08-03	\N	2025-08-03 18:05:59.132087+00
+b7570899-d2e4-40f2-a9fc-27a4eeea6769	f64a8552-0cb5-4097-bb65-c86dd06d352e	29fb3244-b363-42f2-9f2e-9520a9536de9	\N	\N	44	Breakfast	2025-08-03	\N	2025-08-03 18:07:26.977777+00
+2164a419-89a8-43f2-8630-ce4c0e880b76	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	b6a3e809-6af4-4804-bd2c-a40bf0900a7f	\N	1	Lunch	2025-08-03	\N	2025-08-03 19:21:48.328265+00
+57bafc60-3d73-4a05-8a0c-60611227e01a	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	99	Lunch	2025-08-03	\N	2025-08-03 19:25:51.662592+00
+dc6a62fa-b701-4781-8f95-7fe5f8c0ed8c	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	320	Breakfast	2025-08-03	\N	2025-08-03 19:26:25.455761+00
+ada2734f-b554-4107-b621-990c7b3d4714	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-08-03	\N	2025-08-03 19:27:19.747688+00
+0e885689-8662-44ee-8b66-764339fb9f24	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-03	\N	2025-08-03 19:46:17.826925+00
+0f7c4f4a-6f1c-419b-bd19-ac7aaf72878c	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	37	Breakfast	2025-08-03	\N	2025-08-03 19:46:24.253208+00
+58c889b8-bc07-45dd-b675-8a41471ad0cb	8d3b5e03-a6ca-44bd-a275-fc406a775527	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	25	Breakfast	2025-08-03	\N	2025-08-03 19:46:40.478113+00
+7753a837-f405-43dd-a05d-047769acbd02	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	b6a3e809-6af4-4804-bd2c-a40bf0900a7f	\N	1	Lunch	2025-08-03	\N	2025-08-03 19:46:50.853478+00
+ae982c6c-1eee-4cfc-b66b-5a57a6d867d3	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	100	Lunch	2025-08-03	\N	2025-08-03 19:46:59.96887+00
+b6a0ecb2-a43d-4ce0-99df-14979fb27ff1	8d3b5e03-a6ca-44bd-a275-fc406a775527	76e0444b-e7e6-40e2-8bfd-cb2c778acb0b	\N	\N	1	Snacks	2025-08-03	\N	2025-08-03 19:49:05.38846+00
+1cdc9084-eaeb-4d19-846a-27e5fb0d8b0f	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-08-03	\N	2025-08-03 19:49:14.93056+00
+b5c822e0-5d49-4b63-828e-0b82208c5919	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Dinner	2025-08-03	\N	2025-08-04 01:42:07.785443+00
+6b5f4f19-24fc-416c-bb39-aa855ec66ce0	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-08-04	\N	2025-08-04 13:48:26.581735+00
+fff02746-a34c-4ac6-be85-90cbb10622ae	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	200	Breakfast	2025-08-04	\N	2025-08-04 13:48:39.927802+00
+ab936588-1922-44ae-828a-bd1362f86032	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	3	Breakfast	2025-08-04	\N	2025-08-04 13:48:49.320252+00
+e77cae2c-fb78-4c20-bb5f-7efbcacb762f	8d3b5e03-a6ca-44bd-a275-fc406a775527	bba3553c-ff0c-43df-a4c5-df564d492e1c	\N	\N	1	Dinner	2025-08-04	\N	2025-08-04 23:10:59.615218+00
+4e58ece2-b7ba-4504-a27c-4e277a363ca8	8d3b5e03-a6ca-44bd-a275-fc406a775527	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	\N	\N	40	Dinner	2025-08-04	\N	2025-08-04 23:11:08.55975+00
+43490300-e46c-4ec7-8f95-08da0cffa462	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Lunch	2025-08-04	\N	2025-08-04 15:42:58.435795+00
+f8203e87-1d62-48a0-af29-9f91180beb9d	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Lunch	2025-08-04	\N	2025-08-04 15:42:23.22947+00
+b64a1699-7d9a-4541-a66e-9c2cf57536ae	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	179	Lunch	2025-08-04	\N	2025-08-04 17:14:48.758111+00
+4e24cc42-2b42-4dae-a9ee-2451b7e4830e	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-08-04	\N	2025-08-04 17:14:53.353293+00
+ee08dc92-7704-4d98-b671-04c4d1ffb5aa	f64a8552-0cb5-4097-bb65-c86dd06d352e	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	100	Pre Workout	2025-08-04	\N	2025-08-04 17:16:13.626418+00
+be28835a-8920-41d3-b11a-8aa3545351d0	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	30	Dinner	2025-08-04	\N	2025-08-04 23:11:20.364145+00
+363da4dd-110e-43d4-8f6f-35821435a856	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	152	Dinner	2025-08-04	\N	2025-08-04 23:20:29.816388+00
+ced509e8-f350-40a4-b933-f4e651671b57	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-08-04	\N	2025-08-04 18:59:02.787912+00
+1dd3510b-1a75-4130-be6d-eeb07a769e8a	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-08-04	\N	2025-08-04 18:59:08.868745+00
+5310e4d9-71ee-490c-b982-153d1f33892a	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	320	Breakfast	2025-08-04	\N	2025-08-04 18:59:17.369893+00
+e2711b93-e904-458c-a66e-0e60c757655b	8d3b5e03-a6ca-44bd-a275-fc406a775527	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	25	Breakfast	2025-08-04	\N	2025-08-04 18:59:26.674435+00
+8426a7eb-7651-4fae-a9af-a7dd747f9c29	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-04	\N	2025-08-04 18:59:35.830171+00
+1f341360-3c17-4ebb-9d95-a96b85af1bcf	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	120	Lunch	2025-08-04	\N	2025-08-04 18:59:52.568904+00
+be3d247b-084c-4ed9-9dca-ec72e476faf2	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-08-04	\N	2025-08-04 19:00:14.977433+00
+e48298f5-9eb9-4122-a55d-1a5dbf8c1446	8d3b5e03-a6ca-44bd-a275-fc406a775527	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Pre Workout	2025-08-04	\N	2025-08-04 19:00:45.398435+00
+57a4d33f-351b-4011-aea1-9fb1d72cfdc4	8d3b5e03-a6ca-44bd-a275-fc406a775527	77c1da40-be0e-4df0-ae53-4eaebbbf3e55	\N	\N	1	Post Workout	2025-08-04	\N	2025-08-04 19:00:57.63652+00
+d2ba9a27-7a23-4257-a70e-11f261f99cae	8d3b5e03-a6ca-44bd-a275-fc406a775527	4d72b3ac-3088-4f46-868a-3f9d560ac001	\N	\N	1	Lunch	2025-08-04	\N	2025-08-04 19:01:37.459174+00
+b144de2a-5be2-4a93-a0a1-5b2c5ba8e8b0	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-08-04	\N	2025-08-04 21:45:07.114924+00
+15de8586-7aa6-4c57-ac58-cc4fd4621307	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	81c92c3b-5766-46b5-afe8-c5e3bb35c221	\N	1	Dinner	2025-08-04	\N	2025-08-04 22:36:36.455431+00
+5da45c8b-4c26-4860-b661-583acd7b51d7	f64a8552-0cb5-4097-bb65-c86dd06d352e	244ce9fc-d94a-4fe5-9d6a-ee9bfbbd9ecf	\N	\N	100	Dinner	2025-08-04	\N	2025-08-04 22:40:08.200725+00
+90313d10-4610-4dd8-bd4f-f74e7348101f	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Pre Workout	2025-08-05	\N	2025-08-05 18:11:27.764777+00
+84c9bc28-7ddf-4c5f-b0c4-0b07476423fe	f64a8552-0cb5-4097-bb65-c86dd06d352e	113756a0-cb6f-4943-bff6-2dac49afd27f	\N	\N	12	Breakfast	2025-08-04	\N	2025-08-04 23:46:55.81555+00
+9e23a19e-4a19-44c4-8705-e12fe54d12a3	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	81c92c3b-5766-46b5-afe8-c5e3bb35c221	\N	1	Breakfast	2025-08-05	\N	2025-08-05 17:50:57.247302+00
+3861696f-e2b1-4db1-80b9-c80c0a0d8536	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Lunch	2025-08-05	\N	2025-08-05 17:51:17.202554+00
+6c7cb7b7-7b0d-467d-b17b-f839b692f9bf	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	235	Lunch	2025-08-05	\N	2025-08-05 17:51:44.927849+00
+9edb301f-4e92-41b3-b7b4-43d0ac5c52e5	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Pre Workout	2025-08-05	\N	2025-08-05 17:52:27.635001+00
+1f51b7e6-4049-4cf6-9a64-b3ae418ef230	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	180	Pre Workout	2025-08-05	\N	2025-08-05 17:52:49.895001+00
+9d8c0631-77bc-42e9-9d21-1e81a7a246a1	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-08-05	\N	2025-08-05 17:52:55.329863+00
+dd1dc96b-6704-46f8-9b60-2e6bcedbd3fd	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	15	Pre Workout	2025-08-05	\N	2025-08-05 18:06:01.583142+00
+91acae6b-cbb7-4522-9dd0-0d7c8b09e186	f64a8552-0cb5-4097-bb65-c86dd06d352e	80204400-751d-43c9-a302-e9d3a5ee9af3	\N	\N	15	Snacks	2025-08-05	\N	2025-08-05 18:06:54.000136+00
+f25c2c50-f5c5-40d7-aaf0-16630b28f177	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Dinner	2025-08-05	\N	2025-08-05 18:11:36.517878+00
+20629fb2-1a7f-4939-bc37-e24b753b2c91	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	120	Snacks	2025-08-05	\N	2025-08-05 18:06:42.28829+00
+67b2e382-b0ed-4489-b471-f674efa732c1	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	38	Breakfast	2025-08-05	\N	2025-08-05 21:12:18.42218+00
+91efdbae-7418-4bab-80d4-18d8730bb7b9	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	4	Lunch	2025-08-05	\N	2025-08-05 18:24:28.954159+00
+ad01f124-544e-4968-a86b-7b9898c219f4	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	320	Breakfast	2025-08-05	\N	2025-08-05 21:12:10.952679+00
+f836157c-a97f-4185-b1bf-faff16d604c6	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-08-05	\N	2025-08-05 21:12:25.648515+00
+f9cdeecf-c7cc-47ea-97e4-32d93b563143	8d3b5e03-a6ca-44bd-a275-fc406a775527	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	25	Breakfast	2025-08-05	\N	2025-08-05 21:12:34.079702+00
+88887185-6187-4017-81e4-e8396f6f0b70	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-05	\N	2025-08-05 21:12:52.674494+00
+c5d95c45-4006-4c37-80c5-bdb120ecc9f2	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	120	Lunch	2025-08-05	\N	2025-08-05 21:13:52.799873+00
+73c43c3c-a784-4529-9c68-db23b0f025ca	8d3b5e03-a6ca-44bd-a275-fc406a775527	4d72b3ac-3088-4f46-868a-3f9d560ac001	\N	\N	1	Lunch	2025-08-05	\N	2025-08-05 21:13:59.690482+00
+59ae0f01-e3d4-4ec3-9e6e-593ea975ef4e	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-08-05	\N	2025-08-05 21:14:09.950311+00
+42504f22-de4f-46c0-8632-9050a11567a5	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	3318e167-95f0-422e-a8f9-db337bff937c	\N	1	Lunch	2025-08-05	\N	2025-08-05 21:41:43.62291+00
+686d0ff9-4e75-4d39-981f-a1797472ed0e	f64a8552-0cb5-4097-bb65-c86dd06d352e	244ce9fc-d94a-4fe5-9d6a-ee9bfbbd9ecf	\N	\N	100	Lunch	2025-08-05	\N	2025-08-05 17:51:57.537336+00
+69673557-78a8-446f-95dc-0ca29a0d3a92	f64a8552-0cb5-4097-bb65-c86dd06d352e	1c129e61-2a9d-4b70-a81c-68a6453da485	\N	\N	50	Dinner	2025-08-05	\N	2025-08-05 22:49:05.298921+00
+91a4831c-59db-42ef-a7e5-e4c0618d4032	f64a8552-0cb5-4097-bb65-c86dd06d352e	244ce9fc-d94a-4fe5-9d6a-ee9bfbbd9ecf	\N	\N	150	Dinner	2025-08-05	\N	2025-08-05 22:49:34.217368+00
+6338367b-a2a4-4681-9fdc-09e9c756f2b6	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-06	\N	2025-08-07 01:17:15.979183+00
+e6ad7aa1-39e8-4848-b0cd-fbd805a50010	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	81c92c3b-5766-46b5-afe8-c5e3bb35c221	\N	1	Breakfast	2025-08-06	\N	2025-08-07 01:17:37.489369+00
+01c7e911-22c9-4304-82be-32f860168827	f64a8552-0cb5-4097-bb65-c86dd06d352e	76e0444b-e7e6-40e2-8bfd-cb2c778acb0b	\N	\N	1	Breakfast	2025-08-06	\N	2025-08-07 01:18:19.460855+00
+2f4742a2-54f4-4260-a807-a46fc3b09e59	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	120	Breakfast	2025-08-06	\N	2025-08-07 01:18:34.541149+00
+417d0f8b-8eb9-4fe5-ba25-1d971d2c0c2f	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-08-06	\N	2025-08-07 01:18:57.066725+00
+d3c62f84-2743-4960-9de3-d727cbbc711c	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-06	\N	2025-08-07 01:19:10.023334+00
+41302d24-7ffb-40a2-a27c-709668cb4a3f	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	3	Breakfast	2025-08-07	\N	2025-08-07 21:21:46.07926+00
+cd6268fc-0d9e-43d6-af02-0c8e187412fb	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-08-07	\N	2025-08-07 21:21:55.016031+00
+f838c592-a3f1-45a2-928a-c0c63f1ab7f1	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	320	Breakfast	2025-08-07	\N	2025-08-07 21:21:57.143241+00
+97715d75-9df8-42d8-8853-efcf21c0b3f4	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-08-07	\N	2025-08-07 21:22:02.390828+00
+3bf7ffc8-8153-44fc-a89c-fc373528b717	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	202	Breakfast	2025-08-07	\N	2025-08-07 21:22:02.468426+00
+493f51b6-0aad-4616-8214-22853a454c5d	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-07	\N	2025-08-07 21:22:09.569735+00
+24691343-1251-47ea-98ac-463f39a31e68	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-07	\N	2025-08-07 21:22:12.595192+00
+11556eb6-be5f-4eb7-a8ca-c95a5db479f4	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-08-07	\N	2025-08-07 21:22:16.786117+00
+25104a5f-3e8c-4067-b88f-5f4135a578f5	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-08-07	\N	2025-08-07 21:22:17.237965+00
+da9db232-cc9a-4b96-baee-20e729f23a8f	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	120	Snacks	2025-08-07	\N	2025-08-07 21:22:33.582139+00
+45e89e9b-5ebe-4d3a-bdf1-e8a815c542d4	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	3318e167-95f0-422e-a8f9-db337bff937c	\N	1	Lunch	2025-08-07	\N	2025-08-07 21:22:39.274503+00
+bbe0bbab-724d-4869-ba49-2965e315c83f	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	120	Lunch	2025-08-07	\N	2025-08-07 21:23:02.793286+00
+58db163b-10fe-4a06-8358-63f665f707c8	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-08-07	\N	2025-08-07 21:23:16.623728+00
+d6aa2d5e-9839-4d26-b6c9-2936fab36b1c	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	3	Breakfast	2025-08-11	\N	2025-08-11 18:48:20.718201+00
+84f01c45-6d3c-4edd-a677-f8c4f8a1dad5	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	1	Breakfast	2025-08-11	\N	2025-08-11 18:48:28.16653+00
+a2133021-0125-4a57-9ad2-ffbf8c7fc940	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Lunch	2025-08-11	\N	2025-08-11 18:48:47.76969+00
+5bbece2d-d9ee-40b7-a13c-7a637896f55d	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	200	Lunch	2025-08-11	\N	2025-08-11 18:48:58.027251+00
+fee1ca9a-62a5-433b-859e-49aec90a7732	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Lunch	2025-08-11	\N	2025-08-11 18:49:09.7287+00
+4a5d8a9a-408c-443d-a787-71c0c80812ee	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-08-11	\N	2025-08-11 18:49:16.185211+00
+dcade09c-4364-433b-9e9b-b3f697c3cff2	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	0c83ef3d-f768-4ebb-bdfd-2abab9180f15	\N	1	Snacks	2025-08-11	\N	2025-08-11 20:20:11.462191+00
+f8124644-2240-4a8a-b6a6-46ceb3785d4e	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	55	Snacks	2025-08-11	\N	2025-08-11 23:44:33.874608+00
+202bba63-c46b-4e58-9d7d-56309557bf91	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	81c92c3b-5766-46b5-afe8-c5e3bb35c221	\N	1	Dinner	2025-08-11	\N	2025-08-11 23:48:37.7954+00
+c2d7ff71-084a-406b-af9b-2e3d9412ac98	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-08-11	\N	2025-08-11 23:49:05.411583+00
+45f79bff-ef67-4eca-98cb-1cb06a1127c5	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	57	Post Workout	2025-08-11	\N	2025-08-11 23:51:18.070357+00
+6fe4287f-7d56-4fed-ac97-b74feab7b365	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	36	Post Workout	2025-08-11	\N	2025-08-11 23:51:47.084125+00
+b552ded4-60c9-4b2c-af5e-7aa9ce5f00f7	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	10	Post Workout	2025-08-11	\N	2025-08-12 00:02:44.869681+00
+83d725f4-115c-4bab-a819-46aa7e5ba960	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	6	Snacks	2025-08-11	\N	2025-08-12 01:36:37.767849+00
+f004729b-9328-4e05-841a-2902a4cd6c94	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	37	Breakfast	2025-08-12	\N	2025-08-12 14:50:23.859861+00
+9bd792d7-d4fc-44ab-ad5c-f6457137f554	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	188	Breakfast	2025-08-12	\N	2025-08-12 14:50:29.920713+00
+9e8aeca4-5489-4d68-9059-39c594825a20	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	2	Breakfast	2025-08-12	\N	2025-08-12 14:50:37.513029+00
+7aafbaf6-df0f-4e9f-aa1f-7cdb11602106	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-08-12	\N	2025-08-12 14:50:44.109467+00
+cc7d07a1-6bcc-4efa-8190-d46caa3832fe	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Lunch	2025-08-12	\N	2025-08-12 19:39:05.093668+00
+fc153157-a2c0-422d-bdae-c26d2d4bc3e0	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	200	Lunch	2025-08-12	\N	2025-08-12 19:39:05.164181+00
+46137c37-4e10-4435-a823-6daec9362550	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Lunch	2025-08-12	\N	2025-08-12 19:39:05.268788+00
+ab3c7ca9-7487-4661-b47a-b498426ef5e4	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-08-12	\N	2025-08-12 19:39:05.395989+00
+5be154b0-5071-40e7-bbb1-09535af6dc86	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	16	Lunch	2025-08-12	\N	2025-08-12 19:39:27.897609+00
+247c3258-bc45-4974-8cdb-0b75bc5452ef	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	81c92c3b-5766-46b5-afe8-c5e3bb35c221	\N	1	Lunch	2025-08-12	\N	2025-08-12 19:40:18.478695+00
+2a56387f-5622-4cdf-a9ae-6d966f6c65af	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	47	Lunch	2025-08-12	\N	2025-08-12 19:40:46.344483+00
+1daf8d78-ee57-43da-9c21-1dbfb227fc44	f64a8552-0cb5-4097-bb65-c86dd06d352e	5576889a-2e87-491f-b3d5-5bbc719d9aee	\N	\N	12	Lunch	2025-08-12	\N	2025-08-12 19:40:56.240614+00
+99a6bee1-14fd-45a2-b681-9e6292d5b6d6	f64a8552-0cb5-4097-bb65-c86dd06d352e	bba3553c-ff0c-43df-a4c5-df564d492e1c	\N	\N	1	Dinner	2025-08-12	\N	2025-08-12 22:08:27.291666+00
+3b3886de-10ed-4c42-82b8-fbac49984cf3	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-08-12	\N	2025-08-12 20:19:12.089596+00
+24c80917-b986-43b9-9abb-32684024be2a	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	320	Breakfast	2025-08-12	\N	2025-08-12 20:19:22.47146+00
+2f0a1dca-00dd-4ae3-941a-055ce8ac5df1	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-08-12	\N	2025-08-12 20:19:32.361244+00
+d516775e-a7f7-4923-9cbc-91f2a6972ad3	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-12	\N	2025-08-12 20:19:40.527854+00
+1335667c-1a6e-438d-adc1-bad813091982	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	30	Breakfast	2025-08-12	\N	2025-08-12 20:19:46.880071+00
+5cceae01-0509-4bdd-9067-644518cd14da	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	116	Lunch	2025-08-12	\N	2025-08-12 20:20:19.045318+00
+f07ec543-76ed-4d3f-b554-3b1e1aa8a87c	8d3b5e03-a6ca-44bd-a275-fc406a775527	4d72b3ac-3088-4f46-868a-3f9d560ac001	\N	\N	1	Lunch	2025-08-12	\N	2025-08-12 20:20:27.027159+00
+c15678b1-0e0e-4384-b804-b2373e2ee403	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-08-12	\N	2025-08-12 20:20:48.466058+00
+525fa5f6-18cd-4163-839b-5093ca7260bb	8d3b5e03-a6ca-44bd-a275-fc406a775527	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Snacks	2025-08-12	\N	2025-08-12 20:20:59.732911+00
+85eb06b3-04e5-4b2a-a51b-10f2704326cd	8d3b5e03-a6ca-44bd-a275-fc406a775527	bba3553c-ff0c-43df-a4c5-df564d492e1c	\N	\N	1	Dinner	2025-08-12	\N	2025-08-12 20:23:58.388797+00
+0b58ced2-87b0-48f6-9945-75cb3924666e	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	50	Dinner	2025-08-12	\N	2025-08-12 22:50:53.574556+00
+3f6b49e4-75a8-4e3f-8c80-9ab14a23014c	f64a8552-0cb5-4097-bb65-c86dd06d352e	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	\N	\N	50	Dinner	2025-08-12	\N	2025-08-12 22:07:58.141026+00
+c22466a2-4f07-4e42-b65c-1c3c28fb97fd	8d3b5e03-a6ca-44bd-a275-fc406a775527	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	\N	\N	62	Dinner	2025-08-12	\N	2025-08-12 23:06:17.98697+00
+873f9c68-2193-49a2-97dd-832494198122	f64a8552-0cb5-4097-bb65-c86dd06d352e	c9e6b0b0-81e3-44f3-b69b-6b9d0f11aeb7	\N	\N	11	Dinner	2025-08-12	\N	2025-08-12 23:06:29.269606+00
+73fe10b5-1fb8-4c0c-bf64-cd59acfb72e9	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	60	Dinner	2025-08-12	\N	2025-08-12 23:06:50.169713+00
+95f7b8f4-d366-48ac-909a-2874d37281f0	8d3b5e03-a6ca-44bd-a275-fc406a775527	c9e6b0b0-81e3-44f3-b69b-6b9d0f11aeb7	\N	\N	12	Dinner	2025-08-12	\N	2025-08-12 23:06:58.75546+00
+bfc8b855-3034-43e2-99ee-fc8520f37025	f64a8552-0cb5-4097-bb65-c86dd06d352e	4025bd8f-9525-49d6-b79c-22abdab12baf	\N	\N	25	Dinner	2025-08-12	\N	2025-08-12 23:06:59.681075+00
+815d4ab6-ec3f-4746-807d-11afc5994d97	8d3b5e03-a6ca-44bd-a275-fc406a775527	29fb3244-b363-42f2-9f2e-9520a9536de9	\N	\N	35	Dinner	2025-08-12	\N	2025-08-12 23:07:07.819723+00
+b0bbb3d5-37dd-407d-9185-15bcb0193385	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	150	Breakfast	2025-08-13	\N	2025-08-13 13:59:02.319681+00
+8d4f7059-8af0-4db5-90c1-e8cda80a7ead	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-08-13	\N	2025-08-13 13:59:08.021777+00
+ec633b32-70f2-4986-9e40-2dd283458e25	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	62	Breakfast	2025-08-13	\N	2025-08-13 13:59:17.169748+00
+c3b06093-3847-4dc6-8e65-394e8957cd36	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	2	Breakfast	2025-08-13	\N	2025-08-13 13:59:29.982613+00
+e19a8cbd-8261-4ed4-ba1c-8ad7a0754023	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	81	Lunch	2025-08-13	\N	2025-08-13 18:43:15.918984+00
+6550bbd1-a7e9-487b-94c3-12b59dd9be83	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	81c92c3b-5766-46b5-afe8-c5e3bb35c221	\N	1	Lunch	2025-08-13	\N	2025-08-13 18:43:29.872579+00
+38cf08d8-dbe7-422a-840a-c4f842ea0daf	f64a8552-0cb5-4097-bb65-c86dd06d352e	4025bd8f-9525-49d6-b79c-22abdab12baf	\N	\N	25	Lunch	2025-08-13	\N	2025-08-13 18:43:48.646083+00
+0b179d15-61ea-49c5-b308-0fba37e0e0fc	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-08-13	\N	2025-08-13 18:50:55.851547+00
+75454920-047d-489a-8c73-51995dbf4c6b	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	320	Breakfast	2025-08-13	\N	2025-08-13 18:50:55.947225+00
+3c61f2a6-9524-43c4-91eb-3fc58c7b4e8e	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-08-13	\N	2025-08-13 18:50:56.017461+00
+554c4743-02e2-4770-8ad7-17b426928b04	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-13	\N	2025-08-13 18:50:56.144896+00
+670202c7-97ce-4b73-9b50-11c7a99bee6d	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	30	Breakfast	2025-08-13	\N	2025-08-13 18:50:56.205206+00
+85af3e58-f155-47d8-b95f-67891449a93a	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	116	Lunch	2025-08-13	\N	2025-08-13 18:50:56.295747+00
+c8668578-35b2-44d5-91da-f44761dd63cd	8d3b5e03-a6ca-44bd-a275-fc406a775527	4d72b3ac-3088-4f46-868a-3f9d560ac001	\N	\N	1	Lunch	2025-08-13	\N	2025-08-13 18:50:56.394756+00
+54c4b68a-a818-44e4-be66-7a05b3eae2f1	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-08-13	\N	2025-08-13 18:50:56.473974+00
+aa848b64-8d19-4c56-bf13-b1870a7d6ef4	8d3b5e03-a6ca-44bd-a275-fc406a775527	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Snacks	2025-08-13	\N	2025-08-13 18:50:56.546854+00
+5efb4f93-fb95-4a38-8349-82d2d454deb6	8d3b5e03-a6ca-44bd-a275-fc406a775527	bba3553c-ff0c-43df-a4c5-df564d492e1c	\N	\N	1	Dinner	2025-08-13	\N	2025-08-13 18:50:56.620995+00
+b2a2ccaa-0b89-4f06-b229-10d32dc211db	8d3b5e03-a6ca-44bd-a275-fc406a775527	c9e6b0b0-81e3-44f3-b69b-6b9d0f11aeb7	\N	\N	12	Dinner	2025-08-13	\N	2025-08-13 18:50:56.991261+00
+2f5ec038-1d40-4146-9b67-4a43b7ae30c8	8d3b5e03-a6ca-44bd-a275-fc406a775527	29fb3244-b363-42f2-9f2e-9520a9536de9	\N	\N	35	Dinner	2025-08-13	\N	2025-08-13 18:50:57.064947+00
+f6b91e85-dc16-484e-a1c9-10ea082f24ac	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	41	Pre Workout	2025-08-13	\N	2025-08-13 19:44:30.609182+00
+954d3b50-629a-45d6-9bf9-982038f50271	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	200	Pre Workout	2025-08-13	\N	2025-08-13 19:44:42.559283+00
+db817762-14c4-4b72-9fa0-f60c524e25e9	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-08-13	\N	2025-08-13 19:44:46.92151+00
+a0dce4ee-2276-4825-ad38-6e895631e005	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Pre Workout	2025-08-13	\N	2025-08-13 19:44:59.81399+00
+b2283b3b-0a71-413a-ac08-3749ffc83409	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	70	Post Workout	2025-08-13	\N	2025-08-13 22:58:57.596784+00
+3c126642-45f5-4fb3-a136-04b57d181bb8	f64a8552-0cb5-4097-bb65-c86dd06d352e	d1a02a83-316a-4070-9b80-62dfea57a7b8	\N	\N	38	Post Workout	2025-08-13	\N	2025-08-13 23:05:58.5936+00
+780e9b08-3f36-4bf7-a7b9-14cc132102dc	8d3b5e03-a6ca-44bd-a275-fc406a775527	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	70	Post Workout	2025-08-13	\N	2025-08-13 23:06:14.609083+00
+e21b7283-e7f6-444a-a0f2-3434dbe6f0fb	8d3b5e03-a6ca-44bd-a275-fc406a775527	d1a02a83-316a-4070-9b80-62dfea57a7b8	\N	\N	38	Post Workout	2025-08-13	\N	2025-08-13 23:06:23.573745+00
+2768da1b-9480-4b67-bbd3-b8a8dc3a7337	8d3b5e03-a6ca-44bd-a275-fc406a775527	0144d773-920b-4611-ad8e-b2f185764612	\N	\N	100	Lunch	2025-08-13	\N	2025-08-13 23:09:01.737885+00
+b7591dd9-9140-4136-aa4a-c5663663f992	8d3b5e03-a6ca-44bd-a275-fc406a775527	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	\N	\N	30	Dinner	2025-08-13	\N	2025-08-13 23:09:48.841631+00
+c1e08a88-e8db-467c-8694-80772b26a232	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	35	Dinner	2025-08-13	\N	2025-08-13 23:10:20.101371+00
+ce23f9e4-74af-4f49-b3f9-328df345d79c	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	0c83ef3d-f768-4ebb-bdfd-2abab9180f15	\N	1	Dinner	2025-08-13	\N	2025-08-13 23:29:07.651892+00
+bb3c8b9c-7513-43fd-bf0c-cb62dd52bfe5	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-09-09	\N	2025-09-09 22:48:14.08082+00
+62ddc827-9c61-486a-bbc6-82de0be07f9b	f64a8552-0cb5-4097-bb65-c86dd06d352e	76e0444b-e7e6-40e2-8bfd-cb2c778acb0b	\N	\N	1	Breakfast	2025-09-09	\N	2025-09-09 22:51:29.619336+00
+e7723a0a-3bfd-47c7-9e18-91ca65aec014	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	130	Dinner	2025-08-13	\N	2025-08-14 00:11:37.823184+00
+06bee990-3d6d-49f9-95d3-c1f4c9509185	f64a8552-0cb5-4097-bb65-c86dd06d352e	4841b3b3-a83b-4ffc-982c-3f9ef8c979d2	\N	\N	3	Dinner	2025-08-13	\N	2025-08-14 00:54:12.926783+00
+e3375ecc-f5c2-41f9-af3a-11d6033dfee8	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	8a34eaee-df30-4519-9b85-b64f0389cdd1	\N	1	Breakfast	2025-08-14	\N	2025-08-14 12:58:49.721965+00
+7684390f-e646-4afd-87bb-c645be25ef75	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	0c83ef3d-f768-4ebb-bdfd-2abab9180f15	\N	1	Lunch	2025-08-14	\N	2025-08-14 17:22:18.421197+00
+91e76a44-8556-4a44-ab2a-7dc13d55e0b8	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-08-14	\N	2025-08-14 17:22:23.5552+00
+fc6cd9ac-ce00-40ff-a9b6-c67c0a814908	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Lunch	2025-08-14	\N	2025-08-14 17:22:45.68593+00
+fc881be3-3075-4fd9-9139-3734fb679d84	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	150	Lunch	2025-08-14	\N	2025-08-14 17:22:54.758315+00
+41d5cb16-a6ca-4adf-a8d0-9e6c2502d3a3	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	6	Lunch	2025-08-14	\N	2025-08-14 17:23:03.812433+00
+b98824ed-3cc0-4d53-b404-a1e07228c976	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	122	Lunch	2025-08-14	\N	2025-08-14 17:29:01.075723+00
+14d2e1db-62ac-469d-98c2-7c838f61684a	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-08-14	\N	2025-08-14 21:55:50.671242+00
+1d030fd2-d72e-48a3-985e-710f9c316936	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	420	Breakfast	2025-08-14	\N	2025-08-14 21:55:58.589846+00
+2bc67661-5b1c-4458-96d4-6a33748b2238	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-08-14	\N	2025-08-14 21:56:32.739285+00
+970ad3f6-4703-4955-bfc4-fd208a5ce0e1	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-08-14	\N	2025-08-14 21:56:37.782757+00
+8c40db43-08ec-40bc-96b3-0038d4bfe047	8d3b5e03-a6ca-44bd-a275-fc406a775527	4d72b3ac-3088-4f46-868a-3f9d560ac001	\N	\N	1	Lunch	2025-08-14	\N	2025-08-14 21:56:53.152682+00
+ab1e144c-c343-47b1-871f-6ee43ee07367	8d3b5e03-a6ca-44bd-a275-fc406a775527	e769a270-0967-4b6f-a25c-e888a3b5d5da	\N	\N	1	Lunch	2025-08-14	\N	2025-08-14 21:57:06.135795+00
+5f292192-5b4d-4d8b-9831-2c65e0ee2473	8d3b5e03-a6ca-44bd-a275-fc406a775527	bba3553c-ff0c-43df-a4c5-df564d492e1c	\N	\N	1	Snacks	2025-08-14	\N	2025-08-14 22:00:56.231082+00
+4c2c956a-dfc4-40ec-acc0-92fc5d7a2674	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	f2347c57-0d28-4dbf-9539-7dea20f65ea1	\N	1	Snacks	2025-08-14	\N	2025-08-14 22:06:53.725811+00
+197dbc49-6a91-4709-ab5c-c8e91f2defce	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	f2347c57-0d28-4dbf-9539-7dea20f65ea1	\N	1	Snacks	2025-08-14	\N	2025-08-14 22:08:44.309607+00
+91523742-b744-4c4c-bb73-8f92997e8d30	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-08-14	\N	2025-08-14 22:11:08.465243+00
+0d3ac60a-ef63-4bd9-b715-6d2e197c9aac	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	8bfa7bf6-ffd6-4f9f-85da-a7f13065ca36	\N	1	Dinner	2025-08-14	\N	2025-08-14 23:44:41.798336+00
+d611e45f-3b41-4e41-9e68-6337c0106411	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	43ec79cf-5f7d-43fc-81ee-baf494c195cd	\N	1	Dinner	2025-08-14	\N	2025-08-14 23:45:06.914245+00
+b72da5b9-9be1-4c15-a1ab-5ed79a41dc91	f64a8552-0cb5-4097-bb65-c86dd06d352e	dda38e85-2316-48c8-b5ae-bd3dfd719541	\N	\N	241	Breakfast	2025-09-05	\N	2025-09-05 18:25:08.085162+00
+f4ed74cd-fc91-4ae8-9b02-abd6ceb2c30e	f64a8552-0cb5-4097-bb65-c86dd06d352e	bba3553c-ff0c-43df-a4c5-df564d492e1c	\N	\N	1	Breakfast	2025-09-05	\N	2025-09-05 18:25:23.226244+00
+5828f0e2-b74c-48d1-a6f1-dd19edc34662	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	15	Breakfast	2025-09-05	\N	2025-09-05 18:25:35.4855+00
+631bcc71-8871-4fc6-ab1f-f11de94759b9	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	\N	1	Breakfast	2025-09-08	\N	2025-09-08 17:17:31.706543+00
+a8b33107-52f5-4135-96c9-3d9fca1cf1e9	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	186	Post Workout	2025-09-09	\N	2025-09-09 22:47:44.790361+00
+2011559d-3ccc-4eda-a595-2707ad89656b	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	1	Post Workout	2025-09-09	\N	2025-09-09 22:47:54.946424+00
+c5e6e092-634d-4898-855a-70da73a40291	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	1	Post Workout	2025-09-09	\N	2025-09-09 22:48:04.464355+00
+3bc67691-c555-4029-8129-3540d034e5fe	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	2	Post Workout	2025-09-09	\N	2025-09-09 22:53:10.78849+00
+7d7766eb-00ca-4afb-8a4e-f91a5b98a485	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-09-09	\N	2025-09-10 00:01:48.687142+00
+715bebe7-9ba0-4e74-9a1a-0246e5915f3f	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	350	Breakfast	2025-09-09	\N	2025-09-10 00:02:01.610859+00
+25e03076-325a-42c3-9a69-d807e65225fa	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-09-09	\N	2025-09-10 00:02:28.34131+00
+f0448109-ba16-4d69-b7fb-bd8d198d5196	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-09-09	\N	2025-09-10 00:02:40.468908+00
+cb8cac52-2eca-4635-9a44-babd622e7260	8d3b5e03-a6ca-44bd-a275-fc406a775527	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Pre Workout	2025-09-09	\N	2025-09-10 00:03:00.484492+00
+4ee09fd8-e70e-491f-91a7-f8d273b088ea	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-09-09	\N	2025-09-10 00:03:13.853583+00
+4fed818b-f794-4810-aba2-2a83f3e03de8	8d3b5e03-a6ca-44bd-a275-fc406a775527	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	80	Post Workout	2025-09-09	\N	2025-09-10 00:03:25.675931+00
+cac1230f-1889-41c4-92f3-93925f3f8d23	8d3b5e03-a6ca-44bd-a275-fc406a775527	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Post Workout	2025-09-09	\N	2025-09-10 00:03:33.225396+00
+b8fa7a34-5277-43fc-837d-6d4e4fb27d61	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	60	Dinner	2025-09-09	\N	2025-09-10 00:04:23.458129+00
+8befd2ea-629f-47d8-bda1-19aa781ed1c7	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	\N	1	Breakfast	2025-09-10	\N	2025-09-10 18:55:15.153917+00
+96c87b4f-a3d7-4d1e-90be-3e5c396f635b	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	ea4d8074-a992-4d4b-911b-97a51a21c814	\N	1	Breakfast	2025-09-10	\N	2025-09-10 18:57:21.798778+00
+baf14187-ba88-48e5-a932-12332e04a824	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	200	Post Workout	2025-09-10	\N	2025-09-10 22:45:02.573225+00
+f3e7276a-e3ec-469d-b24b-4f47f119b124	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Post Workout	2025-09-10	\N	2025-09-10 22:45:02.71993+00
+1e6be678-1114-4efb-b52a-1f8e59c55083	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	2	Post Workout	2025-09-10	\N	2025-09-10 22:45:03.249186+00
+c6d8da54-a49e-4211-a1aa-a4b13183b1f0	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-09-10	\N	2025-09-10 22:45:17.818115+00
+db2239a0-786e-4242-9583-f59045ecca64	8d3b5e03-a6ca-44bd-a275-fc406a775527	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Pre Workout	2025-09-10	\N	2025-09-10 22:45:18.019804+00
+8441c115-c205-42c5-9a6a-dee5347e4e42	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-09-10	\N	2025-09-10 22:45:18.129316+00
+ea1d6ead-58dc-4b02-9c9e-d11e367a44fd	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	60	Dinner	2025-09-10	\N	2025-09-10 22:45:18.380415+00
+37c0257c-47dd-4f7a-88db-3a13fe32f9d6	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-09-10	\N	2025-09-10 22:45:17.619069+00
+8a1388ac-c530-4b4e-b3f9-20c4c1fad99f	8d3b5e03-a6ca-44bd-a275-fc406a775527	a213e8b9-36c9-4ab9-a4d8-1904aa600b82	\N	\N	350	Breakfast	2025-09-10	\N	2025-09-10 22:45:17.702313+00
+3bae0a8f-20ac-4818-b70c-2f797f52c139	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-09-10	\N	2025-09-10 22:45:17.905905+00
+85e68174-99dd-446b-8028-3da1b09efad3	8d3b5e03-a6ca-44bd-a275-fc406a775527	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	1	Post Workout	2025-09-10	\N	2025-09-10 22:46:14.723876+00
+f44f6821-99db-4cee-9180-982ac1fdb6f5	8d3b5e03-a6ca-44bd-a275-fc406a775527	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	27	Post Workout	2025-09-10	\N	2025-09-10 22:46:24.680771+00
+64158b75-000e-496d-822e-11b537c87f7a	8d3b5e03-a6ca-44bd-a275-fc406a775527	2d67f6bf-90a1-4443-93af-ba14e8b8694f	\N	\N	1	Post Workout	2025-09-10	\N	2025-09-10 22:46:35.585965+00
+4eb6f32b-9868-43bc-8fcc-67cd5dc933d2	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	100	Lunch	2025-09-10	\N	2025-09-10 22:46:56.050788+00
+1e8e941a-e059-41f7-b4e6-3e69ee815f97	f64a8552-0cb5-4097-bb65-c86dd06d352e	76e0444b-e7e6-40e2-8bfd-cb2c778acb0b	\N	\N	1	Pre Workout	2025-09-10	\N	2025-09-10 23:15:10.577096+00
+90575d7c-212f-4207-a6ec-a7a71d54fa06	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	1	Dinner	2025-09-10	\N	2025-09-11 00:13:11.53668+00
+fd404f78-4946-40b4-b636-50efd8046275	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	15	Dinner	2025-09-10	\N	2025-09-11 00:13:20.4896+00
+b8175c9d-1b27-477a-ba76-8f8924209e29	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Dinner	2025-09-10	\N	2025-09-11 00:14:50.754391+00
+3715d3bf-01a3-421d-9fab-db236f200c39	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	\N	2	Dinner	2025-09-11	\N	2025-09-11 21:57:53.06327+00
+25cb188b-f22f-4728-a3eb-5f8c503e9861	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	60	Breakfast	2025-09-11	\N	2025-09-11 21:58:06.602732+00
+c06a0f21-96f1-48cf-9daf-d20c690643cc	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-09-11	\N	2025-09-11 21:58:13.499028+00
+78eb618d-b690-4e99-af75-bd7ad2e74ab7	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	240	Breakfast	2025-09-11	\N	2025-09-11 21:58:21.318987+00
+88069a97-b1ae-446e-b302-0b5d54f56813	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-09-11	\N	2025-09-11 21:58:30.824726+00
+0df19448-0170-4c2b-b27c-ce09385b2d0c	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-09-11	\N	2025-09-11 22:00:32.036071+00
+7a485599-17d1-4c8d-9115-a56b651d3186	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-09-11	\N	2025-09-11 22:02:00.573764+00
+ea36ae8d-25c6-4e2e-8de0-9cfe130b5554	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	150	Post Workout	2025-09-11	\N	2025-09-11 22:02:34.190523+00
+889e6dd2-28ba-4a0d-b372-3af2ef2104fa	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	1	Post Workout	2025-09-11	\N	2025-09-11 22:02:44.03771+00
+bce62485-4aec-4a22-9d0d-5687af35f36e	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-09-11	\N	2025-09-11 22:23:17.438749+00
+1955d92d-2d5a-4c22-988b-08eb81a04074	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	350	Breakfast	2025-09-11	\N	2025-09-11 22:23:30.274774+00
+cc323c4b-035b-46a4-a858-012bce35b89b	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-09-11	\N	2025-09-11 22:23:38.222406+00
+0d026726-f31a-42c4-a1bf-25a6868498af	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	100	Lunch	2025-09-11	\N	2025-09-11 22:23:52.072223+00
+1b464005-3807-401a-9ba2-513282e89270	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-09-11	\N	2025-09-11 22:24:04.03098+00
+0bfedd75-50f7-4c75-b11b-304fa5231f42	8d3b5e03-a6ca-44bd-a275-fc406a775527	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	4	Dinner	2025-09-11	\N	2025-09-11 22:46:00.709184+00
+84eba5c8-479b-45ca-a134-9e970684dd3d	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	70	Dinner	2025-09-11	\N	2025-09-11 22:46:13.315246+00
+bb2ea989-ef04-4042-8cce-0d8734aafd4a	8d3b5e03-a6ca-44bd-a275-fc406a775527	29fb3244-b363-42f2-9f2e-9520a9536de9	\N	\N	20	Dinner	2025-09-11	\N	2025-09-11 22:46:20.436833+00
+678d761a-8d89-4dc4-9bb0-a575a00d754c	8d3b5e03-a6ca-44bd-a275-fc406a775527	113756a0-cb6f-4943-bff6-2dac49afd27f	\N	\N	12	Snacks	2025-09-11	\N	2025-09-11 22:47:01.499213+00
+ddaa3bb9-13fe-4316-a1d5-d5f315353cf3	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-09-12	\N	2025-09-12 18:00:49.451288+00
+1afa766d-9a95-4996-b69e-96130621bc45	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	200	Breakfast	2025-09-12	\N	2025-09-12 18:00:57.871477+00
+b72a1f1a-38c6-4bc3-9a58-96d12b36542c	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	1	Breakfast	2025-09-12	\N	2025-09-12 18:01:08.239003+00
+8fa01868-93cf-4a51-833b-73f9a8935f2f	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-09-12	\N	2025-09-12 18:01:17.084415+00
+ec4ea9de-ef5d-4369-af45-61a672039317	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-09-12	\N	2025-09-12 21:16:40.577741+00
+26990ccc-8009-487b-ab50-bb2636064c50	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	2	Breakfast	2025-09-12	\N	2025-09-12 21:21:42.472973+00
+820062e1-6ec0-47fa-b3af-a8b9cbf052e0	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Breakfast	2025-10-06	\N	2025-10-07 00:10:52.743682+00
+3ff2b6a5-0b3b-4ef1-905e-7cc2e3b19696	f64a8552-0cb5-4097-bb65-c86dd06d352e	cb8b3a02-7a86-4bda-a4dc-95d6bc330f29	\N	\N	32	Breakfast	2025-10-06	\N	2025-10-07 00:13:00.482593+00
+59296021-8297-4219-a956-90e3ca534a52	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Lunch	2025-10-06	\N	2025-10-07 00:13:59.761905+00
+57650d40-8def-411c-9e1e-089182889c55	f64a8552-0cb5-4097-bb65-c86dd06d352e	4025bd8f-9525-49d6-b79c-22abdab12baf	\N	\N	25	Dinner	2025-10-06	\N	2025-10-07 00:14:16.310372+00
+411ada10-7918-4e97-b18c-935df8354bec	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Dinner	2025-10-06	\N	2025-10-07 00:14:27.407986+00
+4280c3c6-736f-4760-85a1-07aa125c16de	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	5	Dinner	2025-10-06	\N	2025-10-07 00:14:36.68436+00
+349f4b10-4185-47e9-aa7e-aa6f1b6d4bbc	f64a8552-0cb5-4097-bb65-c86dd06d352e	907ee436-29b0-42ba-a45f-55bc2d3faba2	\N	\N	8	Dinner	2025-10-06	\N	2025-10-07 00:15:05.166098+00
+85268ae0-9e21-4e9b-bd2d-81f14e8a1ec9	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	4	Dinner	2025-10-06	\N	2025-10-07 00:15:19.798842+00
+b17cf0f0-e8a4-42eb-98e9-d10d383afc87	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-06	\N	2025-10-07 00:16:33.672763+00
+1cfb9fda-61c0-43e2-95ce-4e9f7cf80e5b	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	30	Breakfast	2025-10-09	\N	2025-10-09 18:59:58.056376+00
+7f05b8f2-5e6a-4f9d-bbe5-f4a81c6cb0c5	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	300	Breakfast	2025-10-09	\N	2025-10-09 19:00:17.223789+00
+41bb7d6b-30c4-492c-a1bc-04f22371971a	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-10-09	\N	2025-10-09 19:00:24.328405+00
+cebad82b-6f5d-4e3d-bd52-779c491ccd6c	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	15	Breakfast	2025-10-09	\N	2025-10-09 19:00:30.417164+00
+d151c28d-b516-426a-8d3c-9a2a2deb51a9	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-09	\N	2025-10-09 19:01:06.309007+00
+7e53f2a6-1654-4500-ae6e-1d24405b811c	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	80	Lunch	2025-10-09	\N	2025-10-09 19:01:49.232849+00
+bb6711ac-42c8-42f4-9462-bc9124de0eff	8d3b5e03-a6ca-44bd-a275-fc406a775527	4d0f7182-8402-4db7-b9a2-93bf5b0f7542	\N	\N	30	Lunch	2025-10-09	\N	2025-10-09 19:02:07.209223+00
+03bafa14-4aac-4249-bc1c-f3b705e3700d	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-10-09	\N	2025-10-09 19:02:30.732751+00
+b14b9369-9eef-4da8-8b13-fc8fbafbb44e	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-10-09	\N	2025-10-09 21:23:17.386879+00
+011bb75c-d938-4101-9b21-2e7b9bec9634	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	200	Breakfast	2025-10-09	\N	2025-10-09 21:23:35.059201+00
+97703212-24b0-4041-9d75-c7532b2d24e3	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Lunch	2025-10-09	\N	2025-10-09 21:23:53.03457+00
+a705fd97-1543-4ad7-9c91-c54890f9a6e2	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	200	Lunch	2025-10-09	\N	2025-10-09 21:24:31.359014+00
+30404386-2e14-4a49-98ae-e96678c475d4	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-10-09	\N	2025-10-09 21:24:38.424467+00
+9aec90b3-d651-4d79-a789-0e14a5529fbd	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Lunch	2025-10-09	\N	2025-10-09 21:24:47.077172+00
+ed1f6917-d436-4080-9f4c-cd052c79dab0	f64a8552-0cb5-4097-bb65-c86dd06d352e	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Pre Workout	2025-10-09	\N	2025-10-09 21:26:10.311584+00
+2a219d19-5f74-4194-a7dc-2bdbb352bf4e	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Post Workout	2025-10-09	\N	2025-10-09 21:27:25.815095+00
+bfcc1b9c-6c32-49c1-add8-8e70ed734e2e	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	28	Post Workout	2025-10-09	\N	2025-10-09 21:27:43.70777+00
+81efc408-4cdd-4114-b5c0-279e64945712	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-10-09	\N	2025-10-09 21:27:51.736379+00
+66ae532a-b930-4b37-9121-a6bb5b68c8be	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Dinner	2025-10-09	\N	2025-10-10 00:28:32.855901+00
+f12552fa-dcd0-47e4-a185-c950fe9d54dc	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	32dc3704-1843-43a8-8575-bac55fd9c218	\N	1	Dinner	2025-10-09	\N	2025-10-10 00:32:49.343996+00
+e20c5135-cd31-4a90-9501-6192b55c8a4a	f64a8552-0cb5-4097-bb65-c86dd06d352e	1c129e61-2a9d-4b70-a81c-68a6453da485	\N	\N	50	Dinner	2025-10-09	\N	2025-10-10 00:32:59.008153+00
+7087b95c-5d72-4fdf-ab07-8ff6b4fca146	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	32dc3704-1843-43a8-8575-bac55fd9c218	\N	1	Lunch	2025-10-09	\N	2025-10-10 00:35:23.514415+00
+a5a0165f-4c83-4937-8f1b-19ce232c4325	8d3b5e03-a6ca-44bd-a275-fc406a775527	77c1da40-be0e-4df0-ae53-4eaebbbf3e55	\N	\N	1	Dinner	2025-10-09	\N	2025-10-10 00:35:44.047192+00
+ce8d9fc1-3837-42dc-bc09-72345059de93	8d3b5e03-a6ca-44bd-a275-fc406a775527	1c129e61-2a9d-4b70-a81c-68a6453da485	\N	\N	50	Dinner	2025-10-09	\N	2025-10-10 00:36:35.613179+00
+2a6b573e-3e2c-43a6-86b2-4f7e1be32ea8	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Lunch	2025-10-10	\N	2025-10-10 23:09:31.655068+00
+9e335c3e-2a5d-4728-ad84-fd3578b7cddb	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	200	Lunch	2025-10-10	\N	2025-10-10 23:09:31.808637+00
+aae7d9d9-f380-4cc5-be9c-c4222e3968e5	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-10-10	\N	2025-10-10 23:09:31.921173+00
+5f42777b-ed62-4891-9306-c9fbba32a505	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Lunch	2025-10-10	\N	2025-10-10 23:09:32.00697+00
+6b43f485-71d0-4ab4-9e2f-b612c160b860	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Breakfast	2025-10-10	\N	2025-10-10 23:10:12.30549+00
+14da95e7-89be-40f5-bb6a-9136c314207f	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	1	Snacks	2025-10-10	\N	2025-10-10 23:10:39.470841+00
+ecab49cc-9897-4669-a83e-6b9b53dc8492	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Snacks	2025-10-10	\N	2025-10-10 23:10:51.782873+00
+9f297ae3-e8cf-425b-846f-cadcded99fa9	f64a8552-0cb5-4097-bb65-c86dd06d352e	d1a02a83-316a-4070-9b80-62dfea57a7b8	\N	\N	25	Snacks	2025-10-10	\N	2025-10-10 23:11:01.311816+00
+a13f69e0-2982-45c9-8898-93b4ae79871f	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-10-10	\N	2025-10-10 23:11:06.589618+00
+8cf2eddb-ff00-4164-b0ad-6211ed37fe6b	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	2	Snacks	2025-10-10	\N	2025-10-10 23:11:32.094487+00
+757d5215-29af-4e77-b240-81e74fd33c31	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Dinner	2025-10-10	\N	2025-10-10 23:12:41.805027+00
+f9a5f4d1-44e5-4d39-b9d4-9cf6169ab812	f64a8552-0cb5-4097-bb65-c86dd06d352e	1c129e61-2a9d-4b70-a81c-68a6453da485	\N	\N	50	Dinner	2025-10-10	\N	2025-10-10 23:15:13.926507+00
+6c65496f-293d-4e87-ab96-250abd66b42c	f64a8552-0cb5-4097-bb65-c86dd06d352e	113756a0-cb6f-4943-bff6-2dac49afd27f	\N	\N	4	Snacks	2025-10-10	\N	2025-10-11 01:16:36.472157+00
+3f6fcc94-de50-4f3e-a8af-712f39e2519b	f64a8552-0cb5-4097-bb65-c86dd06d352e	6d75f27d-350f-48e5-a8d1-db187befceb2	\N	\N	80	Snacks	2025-10-10	\N	2025-10-11 01:18:48.161871+00
+7613b793-358f-4cf4-bf5a-8533a223f482	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	3c7bdea3-6d60-4d39-929c-5467af4b7627	\N	1	Dinner	2025-10-10	\N	2025-10-11 01:24:57.220316+00
+b6c244e5-07fc-45ad-acc1-8e5eac9972fc	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	100	Lunch	2025-10-14	\N	2025-10-14 19:02:17.563338+00
+ef2aab01-16ba-4cee-a8b1-c1bfa9706ed5	8d3b5e03-a6ca-44bd-a275-fc406a775527	a5bd3fde-7bcd-4d61-afc6-ae130bd65bff	\N	\N	65	Lunch	2025-10-14	\N	2025-10-14 19:03:06.917995+00
+92148a9f-3cb1-4d62-9820-8994340c3db6	8d3b5e03-a6ca-44bd-a275-fc406a775527	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	5	Lunch	2025-10-14	\N	2025-10-14 19:03:17.151784+00
+52cc88c3-3828-4c95-9cdd-cb74e384c1b9	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	330	Breakfast	2025-10-14	\N	2025-10-14 19:03:52.972581+00
+c6b6a616-46eb-447d-8f9a-1886a4576190	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	20	Breakfast	2025-10-14	\N	2025-10-14 19:03:57.992126+00
+f53d6032-fabd-47f9-aa6e-da2fc594a561	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-14	\N	2025-10-14 19:04:02.98493+00
+2f5b9f77-6554-44c0-83aa-4f812f64d592	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-10-14	\N	2025-10-14 19:04:10.895619+00
+5bdbd7c1-9c08-4caa-b076-6a5e7e7c2fba	8d3b5e03-a6ca-44bd-a275-fc406a775527	6d75f27d-350f-48e5-a8d1-db187befceb2	\N	\N	1	Breakfast	2025-10-14	\N	2025-10-14 19:04:14.976477+00
+b688ccf6-8ec3-49b0-b5f7-cd40945fe3ba	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-10-14	\N	2025-10-14 19:04:51.000397+00
+fc301a19-6caf-43e2-88e7-ee3792e4b1ea	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	2	Breakfast	2025-10-14	\N	2025-10-15 01:35:40.553543+00
+069a9f7e-5555-4203-976b-5b45fa33ef4b	f64a8552-0cb5-4097-bb65-c86dd06d352e	4025bd8f-9525-49d6-b79c-22abdab12baf	\N	\N	1	Breakfast	2025-10-14	\N	2025-10-15 01:35:47.077643+00
+200a7f81-4874-41a6-ae06-f7c100cb2393	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Lunch	2025-10-14	\N	2025-10-15 01:37:23.221425+00
+b88ac1cf-e43a-436e-894a-cb2b9efeab16	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	2	Post Workout	2025-10-14	\N	2025-10-15 01:37:32.352327+00
+ee672e2a-4cbc-4376-9cd7-c7ed74052d7b	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	1	Breakfast	2025-10-14	\N	2025-10-15 01:37:56.691367+00
+25c4c090-2f46-4312-816c-3f7711e5e541	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	54	Breakfast	2025-10-14	\N	2025-10-15 01:38:06.669065+00
+5939d0be-d2f2-499e-852f-9d9d59bfaede	f64a8552-0cb5-4097-bb65-c86dd06d352e	1c129e61-2a9d-4b70-a81c-68a6453da485	\N	\N	50	Dinner	2025-10-14	\N	2025-10-15 01:40:01.948345+00
+e5bf15a8-aaa3-461b-8e20-5f9f5ce5f06e	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	3c7bdea3-6d60-4d39-929c-5467af4b7627	\N	1	Dinner	2025-10-14	\N	2025-10-15 01:41:03.215533+00
+ccaa7da2-5b32-4ecd-bda0-4258daa2fa82	8d3b5e03-a6ca-44bd-a275-fc406a775527	6d75f27d-350f-48e5-a8d1-db187befceb2	\N	\N	1	Pre Workout	2025-10-14	\N	2025-10-15 21:21:03.088148+00
+e5128507-8a2d-4d71-9d1a-a9b2568cd116	8d3b5e03-a6ca-44bd-a275-fc406a775527	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Dinner	2025-10-14	\N	2025-10-15 21:21:37.822292+00
+f550a332-3d98-418d-847d-97af8f60ce30	8d3b5e03-a6ca-44bd-a275-fc406a775527	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	65	Dinner	2025-10-14	\N	2025-10-15 21:21:52.487452+00
+69002d9c-75b9-436d-bc66-19e33a0f5d48	8d3b5e03-a6ca-44bd-a275-fc406a775527	113756a0-cb6f-4943-bff6-2dac49afd27f	\N	\N	15	Snacks	2025-10-14	\N	2025-10-15 21:22:28.898261+00
+8aa2bf13-9ff1-4fb4-8e3f-4a082748da3d	8d3b5e03-a6ca-44bd-a275-fc406a775527	29fb3244-b363-42f2-9f2e-9520a9536de9	\N	\N	18	Dinner	2025-10-14	\N	2025-10-15 21:23:19.666487+00
+37be165a-0f15-4bc2-9428-ac15c4b83f17	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	15	Breakfast	2025-10-15	\N	2025-10-15 21:23:51.903079+00
+f948448f-1a97-4174-8cb4-332096f0dbfc	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	330	Breakfast	2025-10-15	\N	2025-10-15 21:23:58.323205+00
+ff8ea7a7-315b-4914-9699-029f750b74af	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-15	\N	2025-10-15 21:24:11.187999+00
+dd7fe1ce-f5ad-4b88-9d7a-6ef17869ab46	8d3b5e03-a6ca-44bd-a275-fc406a775527	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	5	Breakfast	2025-10-15	\N	2025-10-15 21:24:24.112309+00
+fe7b53be-5c65-4a8b-bef4-80e90c1b63cb	8d3b5e03-a6ca-44bd-a275-fc406a775527	0144d773-920b-4611-ad8e-b2f185764612	\N	\N	65	Lunch	2025-10-15	\N	2025-10-15 21:24:57.353627+00
+89f25cb8-3821-4c14-9dda-b59ed67259ef	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-10-15	\N	2025-10-15 21:25:29.991072+00
+2214c08d-d6ea-44f3-98e9-4e28c651214b	8d3b5e03-a6ca-44bd-a275-fc406a775527	fd822b01-8f99-4b23-8162-69970e68453e	\N	\N	40	Snacks	2025-10-15	\N	2025-10-15 21:29:04.010919+00
+4901cdd1-be72-48bb-8c3a-b0334ef7ab2d	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	35	Breakfast	2025-10-15	\N	2025-10-15 21:35:23.084553+00
+a662ce36-91c8-431e-81b6-fe7ac07b9dab	8d3b5e03-a6ca-44bd-a275-fc406a775527	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	1	Dinner	2025-10-15	\N	2025-10-15 21:57:24.981124+00
+6342d9e0-b3a2-4243-98ac-6c9543b5dbb4	8d3b5e03-a6ca-44bd-a275-fc406a775527	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	15	Dinner	2025-10-15	\N	2025-10-15 21:57:34.993737+00
+c70e1927-50f1-41aa-bdde-f9032fecc11b	8d3b5e03-a6ca-44bd-a275-fc406a775527	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	60	Dinner	2025-10-15	\N	2025-10-15 21:57:52.037882+00
+2f525574-2e8c-41cb-a36b-428511ce14d3	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-10-15	\N	2025-10-15 22:13:33.906025+00
+ef385d69-853f-4a9a-98a8-d5a5535d8224	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-15	\N	2025-10-15 22:14:02.520775+00
+125ec6fe-b736-4331-b2db-17e70b43d80e	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-10-15	\N	2025-10-15 22:14:28.880483+00
+d4ffcfae-c25d-4604-9ffe-14449744c3c8	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	200	Breakfast	2025-10-15	\N	2025-10-15 22:15:30.385083+00
+5c4249f5-173c-4753-83ae-15937b863199	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Lunch	2025-10-15	\N	2025-10-15 22:16:04.466672+00
+465eb591-041c-4aad-bfda-fc3ea039d2a5	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Snacks	2025-10-15	\N	2025-10-15 22:16:18.46234+00
+ad3551ff-b1cb-433b-bd55-492698c79c55	f64a8552-0cb5-4097-bb65-c86dd06d352e	1c129e61-2a9d-4b70-a81c-68a6453da485	\N	\N	50	Dinner	2025-10-15	\N	2025-10-15 22:18:25.0247+00
+5689e53f-8f91-4f5a-a79b-cb84ce01a023	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	3c7bdea3-6d60-4d39-929c-5467af4b7627	\N	1	Dinner	2025-10-15	\N	2025-10-15 22:19:00.068386+00
+995fb42f-0e4a-46ee-b2a4-4647f456ea90	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	78	Snacks	2025-10-15	\N	2025-10-15 22:16:50.070557+00
+3f1fddac-e29c-4c43-9787-45ebbc906278	f64a8552-0cb5-4097-bb65-c86dd06d352e	cb8b3a02-7a86-4bda-a4dc-95d6bc330f29	\N	\N	23	Snacks	2025-10-15	\N	2025-10-15 22:53:10.42149+00
+bf10dc82-bc10-4d5f-8eaf-ac6a58434e88	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Dinner	2025-10-15	\N	2025-10-15 22:58:03.150638+00
+080b2c40-edf5-4f48-b5d7-78663782bad6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	b6a3e809-6af4-4804-bd2c-a40bf0900a7f	\N	1	Dinner	2025-10-15	\N	2025-10-16 00:46:05.528334+00
+ddacc4d3-496b-4340-8127-8900763959f1	f64a8552-0cb5-4097-bb65-c86dd06d352e	113756a0-cb6f-4943-bff6-2dac49afd27f	\N	\N	1	Dinner	2025-10-15	\N	2025-10-16 02:01:36.097449+00
+ffde4e87-a0a4-4a90-8c58-dcecafa175b0	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-16	\N	2025-10-16 16:34:16.814383+00
+264c3920-7972-4fa2-b91f-996ac1a7bdf2	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-10-16	\N	2025-10-16 16:34:16.951135+00
+38571b9c-c8c4-41c0-9b33-e0f116f737b7	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	60	Breakfast	2025-10-16	\N	2025-10-16 16:34:16.505856+00
+923a8d76-f2cd-41fa-9b07-889eeacf7b5d	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	80	Dinner	2025-10-16	\N	2025-10-17 00:34:40.81253+00
+ae236ef4-3693-4945-9346-aa9d2176f83a	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	229	Breakfast	2025-10-16	\N	2025-10-16 16:34:17.081219+00
+4d985f6b-d3e2-46bc-a251-9d50271de9d4	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Dinner	2025-10-16	\N	2025-10-16 16:35:17.086328+00
+5942dce3-d322-4ce2-9d7f-7f43ddaaae0f	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-10-16	\N	2025-10-16 20:28:26.751342+00
+8e841d38-84c4-44d4-9de7-d5c07114b882	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	3	Dinner	2025-10-16	\N	2025-10-17 00:33:56.670756+00
+a7ad3da8-7615-4d09-94eb-22639ce0701f	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	85	Breakfast	2025-10-17	\N	2025-10-17 19:04:23.501499+00
+74ebaf8a-8754-442b-9a04-0ea237de82ac	f64a8552-0cb5-4097-bb65-c86dd06d352e	cb8b3a02-7a86-4bda-a4dc-95d6bc330f29	\N	\N	22	Breakfast	2025-10-17	\N	2025-10-17 19:04:29.376158+00
+1e086d6a-03b4-4a28-8b76-6245a399af52	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Dinner	2025-10-17	\N	2025-10-17 19:04:45.870281+00
+8db4a1f9-5687-46ea-a226-2b10425e96f2	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	3	Snacks	2025-10-17	\N	2025-10-17 19:20:52.900289+00
+a59c29c5-e790-48a4-8e00-3dae638bae81	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-17	\N	2025-10-17 19:21:39.745429+00
+0fc42332-ca7f-4d13-843d-f252f5a877f7	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Dinner	2025-10-17	\N	2025-10-18 00:35:50.005576+00
+57d2172a-a8a5-4787-8b6e-f6c65dbf66e0	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-22	\N	2025-10-22 23:17:50.608344+00
+5332e553-90c5-4f89-8179-7d619537bff4	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	1	Breakfast	2025-10-22	\N	2025-10-22 23:17:55.862099+00
+45981676-499a-426f-86d4-4b215deece1b	f64a8552-0cb5-4097-bb65-c86dd06d352e	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	253	Breakfast	2025-10-22	\N	2025-10-22 23:18:36.014668+00
+2cf68b80-5dca-4e68-8538-625a7b2a98e0	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	26c5212b-85e6-41b6-8af8-f5503ff21e97	\N	1	Breakfast	2025-10-23	\N	2025-10-23 21:14:18.179877+00
+ff2151dc-5557-4c52-b650-90af3b2f9145	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-10-23	\N	2025-10-23 21:14:27.463441+00
+f0a0b966-948a-4da1-9b72-937dc3607097	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	90	Breakfast	2025-10-23	\N	2025-10-23 21:14:34.541128+00
+7a46357b-b048-42eb-945e-00471f73b9b2	f64a8552-0cb5-4097-bb65-c86dd06d352e	cb8b3a02-7a86-4bda-a4dc-95d6bc330f29	\N	\N	25	Breakfast	2025-10-23	\N	2025-10-23 21:14:42.646132+00
+025d9bd8-4c35-450c-8fcd-385715e26b12	f64a8552-0cb5-4097-bb65-c86dd06d352e	1c129e61-2a9d-4b70-a81c-68a6453da485	\N	\N	50	Dinner	2025-10-23	\N	2025-10-23 21:14:52.034288+00
+60267f54-3d93-4c2c-a445-0f7c56a54a67	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Dinner	2025-10-23	\N	2025-10-23 21:15:21.652248+00
+66c1a536-0ae5-4be0-92ac-b53bcdb8ebb8	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Breakfast	2025-10-23	\N	2025-10-23 22:39:30.264802+00
+980b9d7a-2e5b-49a2-a7e6-7520e7308541	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-23	\N	2025-10-23 22:39:30.376413+00
+0741d6b5-be8d-4df6-bb60-4adaff98dfb8	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Breakfast	2025-10-23	\N	2025-10-23 22:39:30.470564+00
+e766fec5-f205-4f78-aa76-a72bceddeb5b	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	200	Breakfast	2025-10-23	\N	2025-10-23 22:39:30.571376+00
+6c8cdbfb-9007-451a-82f1-7a3c334d31d3	f64a8552-0cb5-4097-bb65-c86dd06d352e	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Pre Workout	2025-10-26	\N	2025-10-26 21:28:42.477803+00
+fc0f55da-2c27-4f8d-840b-6cbb0f0b4e1a	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Pre Workout	2025-10-26	\N	2025-10-26 21:28:49.541683+00
+03402168-f2eb-4838-97d5-fb62ff358bcd	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	3c7bdea3-6d60-4d39-929c-5467af4b7627	\N	1	Dinner	2025-10-23	\N	2025-10-23 23:28:09.435483+00
+02b56100-18ac-4fed-a108-dd07f3dbcc33	f64a8552-0cb5-4097-bb65-c86dd06d352e	388b01c9-4149-493a-a69a-ba317b2071f6	\N	\N	55	Post Workout	2025-10-23	\N	2025-10-23 23:28:22.74767+00
+6eb43c95-8d69-4773-8005-d16ced0a3153	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f66b5e4-67ae-4efd-bde7-0d87dd383cfc	\N	\N	40	Post Workout	2025-10-23	\N	2025-10-23 23:28:32.109711+00
+4245c7ea-6de6-4c4c-86b7-1c46c7505bce	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f66b5e4-67ae-4efd-bde7-0d87dd383cfc	\N	\N	30	Breakfast	2025-10-24	\N	2025-10-24 15:10:53.754375+00
+504c2700-31e3-4083-aaea-64f96a254738	f64a8552-0cb5-4097-bb65-c86dd06d352e	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	\N	\N	35	Breakfast	2025-10-24	\N	2025-10-24 15:11:01.487262+00
+0d38f731-07aa-4f58-89ee-9dda44be067d	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	170	Breakfast	2025-10-24	\N	2025-10-24 15:11:08.714016+00
+97e8dc58-6881-4a7c-b398-b98ddf7f090a	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	1	Breakfast	2025-10-24	\N	2025-10-24 15:14:22.847243+00
+88664397-864d-4779-a5d3-83000e07b7b6	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Breakfast	2025-10-24	\N	2025-10-24 17:06:23.940499+00
+840e2ee8-717c-4185-9a73-914ed7d9faec	f64a8552-0cb5-4097-bb65-c86dd06d352e	fe8141c3-3fca-4c2b-b094-1a0a090f3154	\N	\N	90	Snacks	2025-10-24	\N	2025-10-24 17:08:43.927391+00
+b18adf38-0030-4f1f-a6a8-f16fd9bbcbd6	f64a8552-0cb5-4097-bb65-c86dd06d352e	cb8b3a02-7a86-4bda-a4dc-95d6bc330f29	\N	\N	25	Snacks	2025-10-24	\N	2025-10-24 17:08:51.484764+00
+22163be9-6184-493e-8522-8192edaec941	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-10-24	\N	2025-10-24 18:47:44.400634+00
+181f2c92-7747-4164-a9a5-6f6e88084000	f64a8552-0cb5-4097-bb65-c86dd06d352e	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	155	Dinner	2025-10-24	\N	2025-10-24 23:08:17.046966+00
+61e65859-2d14-4652-b2dd-07e0339eb90e	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	2	Dinner	2025-10-24	\N	2025-10-24 23:09:10.727875+00
+9b64705b-d792-4dec-a298-1b1e745ee07d	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	3	Dinner	2025-10-24	\N	2025-10-24 23:09:30.505742+00
+e0ca2549-334b-4ab8-b8f1-32caa8eea45b	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Dinner	2025-10-24	\N	2025-10-24 23:09:45.178316+00
+47ca9af7-0397-4895-9b95-d337f5d01a80	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	240	Dinner	2025-10-24	\N	2025-10-24 23:09:52.919966+00
+ed863e56-dc35-47a4-8681-3540d60c1f05	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Dinner	2025-10-24	\N	2025-10-24 23:10:02.757572+00
+3d1fd73b-5920-4d24-af32-ef088458d651	f64a8552-0cb5-4097-bb65-c86dd06d352e	8b12697e-2210-4009-a4f8-1b6b59e15814	\N	\N	13	Dinner	2025-10-24	\N	2025-10-24 23:11:44.165113+00
+2434b5db-92d2-4dfc-8a61-4a2593105fb2	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Dinner	2025-10-24	\N	2025-10-24 23:11:53.364755+00
+4821950f-d2bb-4198-97c8-cb24c326f523	f64a8552-0cb5-4097-bb65-c86dd06d352e	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Dinner	2025-10-24	\N	2025-10-24 23:11:59.144444+00
+2667542a-1ee7-4c49-928f-2c54bab852c9	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f66b5e4-67ae-4efd-bde7-0d87dd383cfc	\N	\N	20	Post Workout	2025-10-24	\N	2025-10-25 01:11:33.690061+00
+31552081-cf45-42a9-9744-7d4cdc692f5a	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	125	Post Workout	2025-10-24	\N	2025-10-25 01:40:38.707403+00
+6d897b13-4d81-4659-8bd6-9860e7f604f7	f64a8552-0cb5-4097-bb65-c86dd06d352e	79f3f737-2a88-4702-8317-6a41ddaefeea	\N	\N	1	Post Workout	2025-10-24	\N	2025-10-25 01:43:14.715297+00
+212af8cb-2306-471f-a87e-d7de0a504375	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f66b5e4-67ae-4efd-bde7-0d87dd383cfc	\N	\N	40	Breakfast	2025-10-25	\N	2025-10-25 17:03:49.967041+00
+5d48bab1-9d2b-4c28-a602-48670f920ef4	f64a8552-0cb5-4097-bb65-c86dd06d352e	388b01c9-4149-493a-a69a-ba317b2071f6	\N	\N	26	Breakfast	2025-10-25	\N	2025-10-25 17:04:05.370414+00
+f305b094-6264-49ca-abd4-4df00e0cc59c	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	3	Breakfast	2025-10-25	\N	2025-10-25 17:04:28.56036+00
+bed7a138-3214-497d-b3fb-ecf1113ef6e4	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	170	Breakfast	2025-10-25	\N	2025-10-25 17:04:50.350184+00
+f69e5e7e-c4b1-4b71-b78a-06e4ec367b39	f64a8552-0cb5-4097-bb65-c86dd06d352e	c90cf0b9-f38d-4de1-98cc-e02fdca60570	\N	\N	1	Snacks	2025-10-25	\N	2025-10-25 22:39:19.438192+00
+957be6c7-bafc-49c9-a589-cfd594f16328	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-10-25	\N	2025-10-25 22:39:31.308942+00
+0208fef7-acc8-497d-b731-2c0c22554049	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Lunch	2025-10-25	\N	2025-10-25 22:40:12.771963+00
+aa757b3b-4273-42da-aa99-c428e39fb5e4	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	250	Lunch	2025-10-25	\N	2025-10-25 22:40:20.445795+00
+b8ab0070-6b03-46dd-aa5e-0d83e7dc51f4	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	10	Lunch	2025-10-25	\N	2025-10-25 22:40:26.479719+00
+9b2d4c10-0986-4218-9b9a-5d88a60faa0f	f64a8552-0cb5-4097-bb65-c86dd06d352e	8b12697e-2210-4009-a4f8-1b6b59e15814	\N	\N	13	Lunch	2025-10-25	\N	2025-10-25 22:40:33.468695+00
+7a40f46f-ab40-431c-8958-d6ba27efeeaa	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-10-25	\N	2025-10-25 22:40:38.857419+00
+00d013c5-0edf-41ad-9428-1391c1af510b	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	3	Breakfast	2025-10-26	\N	2025-10-26 16:46:39.524152+00
+a1fc0e51-8112-40b2-b04c-35fb095b2845	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f66b5e4-67ae-4efd-bde7-0d87dd383cfc	\N	\N	40	Breakfast	2025-10-26	\N	2025-10-26 16:46:44.954928+00
+9f83f165-d7c4-419b-a67a-a6291311cbf4	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	170	Breakfast	2025-10-26	\N	2025-10-26 16:46:51.651794+00
+03c94e72-0d1d-409e-bf1f-7ef75cb688f2	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Post Workout	2025-10-26	\N	2025-10-26 21:28:09.370797+00
+e9cc67e7-1136-4ce9-b85e-c7aa37f56d1a	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	240	Post Workout	2025-10-26	\N	2025-10-26 21:28:15.610121+00
+06597a7e-80f6-4b3b-823f-9343f46fa34a	f64a8552-0cb5-4097-bb65-c86dd06d352e	8b12697e-2210-4009-a4f8-1b6b59e15814	\N	\N	13	Post Workout	2025-10-26	\N	2025-10-26 21:28:21.928068+00
+dd12dfaa-d19c-4059-a7fe-c7e6b7d5ecad	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Post Workout	2025-10-26	\N	2025-10-26 21:28:27.610549+00
+fb291d8c-0306-4e1f-8cc7-514fc475cbcf	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	30	Breakfast	2025-10-27	\N	2025-10-27 19:27:30.321248+00
+d1b45d80-03d6-4e57-b44b-3f4c2865592b	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	81c92c3b-5766-46b5-afe8-c5e3bb35c221	\N	1	Dinner	2025-10-26	\N	2025-10-26 21:53:48.815876+00
+d0cd3d94-5b95-4806-a0d2-698b541dc605	f64a8552-0cb5-4097-bb65-c86dd06d352e	1c129e61-2a9d-4b70-a81c-68a6453da485	\N	\N	50	Dinner	2025-10-26	\N	2025-10-26 22:09:36.523043+00
+a1fbd25b-3699-418f-9c2a-b923611c0535	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	15	Snacks	2025-10-26	\N	2025-10-26 22:10:19.631888+00
+af0e885a-5a3d-45b2-ae30-5231f58b22fc	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	14	Snacks	2025-10-26	\N	2025-10-26 22:12:12.399095+00
+cca96fef-b5a9-4e2f-a355-301716733fda	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6de53fab-e18f-4e9b-997b-7229ed036593	\N	1	Dinner	2025-10-26	\N	2025-10-26 22:13:23.726613+00
+7853f66e-369a-4b77-af00-10195aa85e3f	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	62	Snacks	2025-10-26	\N	2025-10-26 22:19:13.600154+00
+1b9f036d-0799-4ee8-b30d-cad0a8d6cd63	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	3c7bdea3-6d60-4d39-929c-5467af4b7627	\N	1	Dinner	2025-10-26	\N	2025-10-26 22:57:15.643403+00
+4fef2379-e661-45b4-b55c-a75cd31ee15b	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	340	Breakfast	2025-10-27	\N	2025-10-27 19:26:58.755094+00
+2eb9a736-2fca-400a-ad2c-d934d342f72b	8d3b5e03-a6ca-44bd-a275-fc406a775527	8b12697e-2210-4009-a4f8-1b6b59e15814	\N	\N	13	Breakfast	2025-10-27	\N	2025-10-27 19:27:15.773517+00
+9775d7f0-6add-47d4-bc99-c82d68532784	8d3b5e03-a6ca-44bd-a275-fc406a775527	2989970e-4de3-417b-a078-37cbedf7869c	\N	\N	20	Breakfast	2025-10-27	\N	2025-10-27 19:27:40.142467+00
+beab5eac-d2c3-410d-bd6a-8b853ae14bd7	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-27	\N	2025-10-27 19:33:33.73707+00
+e80ed635-d55b-4258-9392-9a389df1bc1a	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-10-27	\N	2025-10-27 19:34:13.144006+00
+c838fa70-b22c-461f-951e-2adf7da1d592	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	100	Lunch	2025-10-27	\N	2025-10-27 19:38:03.10421+00
+09be3179-7356-4a5c-bf2c-12b67545116f	8d3b5e03-a6ca-44bd-a275-fc406a775527	04495e15-14a2-465e-9b57-b70dd8865a2f	\N	\N	93	Lunch	2025-10-27	\N	2025-10-27 19:40:34.887635+00
+34bb44d1-c41f-443c-b664-e91482c85ea5	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f66b5e4-67ae-4efd-bde7-0d87dd383cfc	\N	\N	40	Breakfast	2025-10-27	\N	2025-10-27 21:42:28.75288+00
+3003e97c-57ee-49aa-b0c7-d795fe529ca7	f64a8552-0cb5-4097-bb65-c86dd06d352e	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	3	Breakfast	2025-10-27	\N	2025-10-27 21:44:07.62108+00
+06e412b1-47fe-41a4-a08a-84e4006460d4	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	170	Breakfast	2025-10-27	\N	2025-10-27 21:44:35.360085+00
+f87c4c42-f160-44f6-8b8d-f26a8cc1eeb9	f64a8552-0cb5-4097-bb65-c86dd06d352e	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	40	Lunch	2025-10-27	\N	2025-10-27 21:44:57.574123+00
+cd608eac-23f2-400e-a8f9-36d331d43661	f64a8552-0cb5-4097-bb65-c86dd06d352e	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	240	Lunch	2025-10-27	\N	2025-10-27 21:45:04.915056+00
+a97e80ff-5705-432a-8fd5-d7c6b87f362f	f64a8552-0cb5-4097-bb65-c86dd06d352e	85a06565-36fb-4da3-8329-609cb5569ea6	\N	\N	4	Lunch	2025-10-27	\N	2025-10-27 21:45:13.54578+00
+c3bdc723-4614-4321-9cf6-db223eff7a92	f64a8552-0cb5-4097-bb65-c86dd06d352e	8b12697e-2210-4009-a4f8-1b6b59e15814	\N	\N	13	Lunch	2025-10-27	\N	2025-10-27 21:45:19.610546+00
+9045e1f2-d413-4e91-9a56-285609b86cf7	f64a8552-0cb5-4097-bb65-c86dd06d352e	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Lunch	2025-10-27	\N	2025-10-27 21:46:30.080182+00
+cdb5a061-0307-453c-9d5f-8d3be3769937	f64a8552-0cb5-4097-bb65-c86dd06d352e	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	62	Snacks	2025-10-27	\N	2025-10-27 21:51:45.58856+00
+641cdaa0-579a-4371-8170-be4a08b3a2d5	f64a8552-0cb5-4097-bb65-c86dd06d352e	097ac32b-2445-420d-a237-254fe3da445e	\N	\N	30	Snacks	2025-10-27	\N	2025-10-27 21:51:54.473388+00
+32ec3a58-4ad7-4d07-8b39-e9244e03daab	f64a8552-0cb5-4097-bb65-c86dd06d352e	51d92638-ab79-4a7c-a5b3-8825132826b8	\N	\N	2	Dinner	2025-10-27	\N	2025-10-27 23:41:21.682359+00
+2541118f-6b3e-480f-8917-22cbff08d4fc	f64a8552-0cb5-4097-bb65-c86dd06d352e	4025bd8f-9525-49d6-b79c-22abdab12baf	\N	\N	25	Dinner	2025-10-27	\N	2025-10-27 23:41:51.529614+00
+f17e5351-1b74-4341-95ef-4481d7b218a0	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	81c92c3b-5766-46b5-afe8-c5e3bb35c221	\N	1	Dinner	2025-10-27	\N	2025-10-27 23:42:25.54356+00
+e35d9cc2-b741-4746-b1c2-5666c92d92e2	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6de53fab-e18f-4e9b-997b-7229ed036593	\N	1	Dinner	2025-10-27	\N	2025-10-27 23:47:45.622032+00
+ffb0bf6a-e5af-46c3-9c51-e1e0c044b254	f64a8552-0cb5-4097-bb65-c86dd06d352e	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	70	Dinner	2025-10-27	\N	2025-10-27 23:48:38.736275+00
+011c5cc2-a441-406d-aee3-954b14f0fa41	f64a8552-0cb5-4097-bb65-c86dd06d352e	935408a3-830f-43e0-997b-004741f18c71	\N	\N	2	Dinner	2025-10-27	\N	2025-10-27 23:51:24.605604+00
+6f0501c6-dcc4-4a9d-8ca6-3a9409f22cca	8d3b5e03-a6ca-44bd-a275-fc406a775527	b993fc4a-02df-4b0f-973a-8370f8f752cf	\N	\N	70	Snacks	2025-10-27	\N	2025-10-28 00:15:51.101519+00
+cfbf9899-3c47-447d-9af9-6b3be4ee69b3	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	58	Dinner	2025-10-27	\N	2025-10-28 00:16:27.57623+00
+a53a48b6-2074-4502-89ba-3ea7c4d6d307	8d3b5e03-a6ca-44bd-a275-fc406a775527	ebb756a2-ba0f-44b4-a92b-c7442bb24341	\N	\N	400	Breakfast	2025-10-28	\N	2025-10-28 22:42:51.119107+00
+520f76f8-49ea-421d-9de5-5d3a83d9c54a	8d3b5e03-a6ca-44bd-a275-fc406a775527	8b12697e-2210-4009-a4f8-1b6b59e15814	\N	\N	13	Breakfast	2025-10-28	\N	2025-10-28 22:43:06.635318+00
+be5535dd-bcb4-483a-a6e1-5d67fe0e5c48	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Breakfast	2025-10-28	\N	2025-10-28 22:43:20.560816+00
+57704170-aa4c-4d94-8ad7-483e255a37fd	8d3b5e03-a6ca-44bd-a275-fc406a775527	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	\N	\N	30	Breakfast	2025-10-28	\N	2025-10-28 22:43:34.574011+00
+d5493c5a-0963-4ce3-9fe2-dd8fcdacc53b	8d3b5e03-a6ca-44bd-a275-fc406a775527	04495e15-14a2-465e-9b57-b70dd8865a2f	\N	\N	50	Lunch	2025-10-28	\N	2025-10-28 22:43:46.751803+00
+1f319b0c-e3fa-4c33-b568-25a3deef1018	8d3b5e03-a6ca-44bd-a275-fc406a775527	2f0a5e57-451d-459c-af13-c9481ca40bba	\N	\N	100	Lunch	2025-10-28	\N	2025-10-28 22:44:09.901763+00
+ce557801-e2dc-47d0-98e2-eb449e8d4658	8d3b5e03-a6ca-44bd-a275-fc406a775527	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	\N	\N	1	Snacks	2025-10-28	\N	2025-10-28 22:44:20.858964+00
+686989ba-9b8f-43c1-b1f4-69c302e6f1a3	8d3b5e03-a6ca-44bd-a275-fc406a775527	8ce3b664-aedc-4805-83c2-f13519f19350	\N	\N	79	Snacks	2025-10-28	\N	2025-10-28 22:44:37.53275+00
+60fe0a52-db7b-48fc-a4e0-fc3f7f518812	8d3b5e03-a6ca-44bd-a275-fc406a775527	4acc5707-82a6-4cd5-8489-9016f1b5c01f	\N	\N	1	Snacks	2025-10-28	\N	2025-10-28 22:44:56.684768+00
+581cf4c5-41fc-4537-9198-52c10ce2cd55	8d3b5e03-a6ca-44bd-a275-fc406a775527	cbeaf31b-00c0-41e6-9579-de281ad0f877	\N	\N	70	Dinner	2025-10-28	\N	2025-10-29 00:15:37.237579+00
+a7034695-0aa7-439e-b9be-5287406517f8	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	36cb40fc-baaf-43f0-b061-51163651729a	\N	1	Dinner	2025-10-28	\N	2025-10-29 00:15:54.860579+00
+2abe04d3-3185-4488-a150-4645fe4f87ec	8d3b5e03-a6ca-44bd-a275-fc406a775527	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	120	Breakfast	2025-10-27	\N	2025-10-29 00:19:09.089495+00
+199ef602-acb3-41cc-8fce-3fa683761f7a	8d3b5e03-a6ca-44bd-a275-fc406a775527	6db77deb-8ce8-4d6e-9024-f89e213dc3bc	\N	\N	114	Breakfast	2025-10-28	\N	2025-10-29 00:20:09.807847+00
+\.
+
+
+--
+-- Data for Name: backup_recipe_ingredients; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.backup_recipe_ingredients (id, recipe_id, food_id, quantity) FROM stdin;
+6de31097-ea38-4ebd-b7f3-e876581a4d68	82a4675d-ea89-44e4-95f8-df859eaaea22	dda38e85-2316-48c8-b5ae-bd3dfd719541	1048
+fc328bf5-de10-4e0d-978d-50da6bd0382f	82a4675d-ea89-44e4-95f8-df859eaaea22	80204400-751d-43c9-a302-e9d3a5ee9af3	50
+d5f79c05-3f1f-422f-acfe-55797c651ba3	82a4675d-ea89-44e4-95f8-df859eaaea22	ade3b8ac-6ac1-4acb-9c72-aabd1d2e7cec	70
+9414e7ce-124e-4fdd-bf8f-2710f83b4bc8	3b3e9594-084b-48be-9aba-3e3edcc02782	79f3f737-2a88-4702-8317-6a41ddaefeea	10
+9845fc07-a644-48aa-8997-84c5c9aa96c3	3b3e9594-084b-48be-9aba-3e3edcc02782	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	35
+38f7e80e-d5de-4b02-879b-1b54df9ed12a	3b3e9594-084b-48be-9aba-3e3edcc02782	cbeaf31b-00c0-41e6-9579-de281ad0f877	47
+8005d8cb-1212-4e50-ad27-a9cc548b4b52	3b3e9594-084b-48be-9aba-3e3edcc02782	29fb3244-b363-42f2-9f2e-9520a9536de9	35
+23822353-0d4c-4311-ad41-956b889cc7cb	6bd4e45a-2ef0-4ce6-ba8f-ab0ff2bedc18	51a2a27e-8eb9-4447-afde-56539f5d96c9	150
+7f324e9d-a530-4439-96ef-712fe6f2fdc3	b6a3e809-6af4-4804-bd2c-a40bf0900a7f	1c129e61-2a9d-4b70-a81c-68a6453da485	70
+bca2d142-f5dd-4a22-ad7e-93f8f8a07511	b6a3e809-6af4-4804-bd2c-a40bf0900a7f	40c5c35c-9409-4681-9b47-ffd49d1c6cd7	50
+18d5b338-ca8b-45d8-9321-b25ec3015a6e	a779d447-0171-4fcd-88ed-ad22ff2b9359	30fe39d7-51d3-4b99-9268-f8c0478ce5b0	373
+6d2b466a-0b36-4f86-97d2-29f6ec825879	a779d447-0171-4fcd-88ed-ad22ff2b9359	79f3f737-2a88-4702-8317-6a41ddaefeea	15
+e7c12008-8fdd-45aa-8899-636d657b0644	3318e167-95f0-422e-a8f9-db337bff937c	4d0f7182-8402-4db7-b9a2-93bf5b0f7542	210
+34c724da-9477-488e-97b0-0b13dd893606	3318e167-95f0-422e-a8f9-db337bff937c	79f3f737-2a88-4702-8317-6a41ddaefeea	15
+d42a45f3-7d91-4bee-8109-63dc8e0b1ad3	32dc3704-1843-43a8-8575-bac55fd9c218	40c5c35c-9409-4681-9b47-ffd49d1c6cd7	109
+583ab597-36c2-4a24-9110-8dd3039da6b9	32dc3704-1843-43a8-8575-bac55fd9c218	46ba7549-3979-418b-a0ab-41e6255c50dc	10
+e8583f14-f305-4534-95ee-d4ba5d7becb1	2e72221c-10c9-4151-9f3d-e5b25dd1202e	dda38e85-2316-48c8-b5ae-bd3dfd719541	480
+7a24fdab-ae96-4dfb-9e15-c02e272df310	2e72221c-10c9-4151-9f3d-e5b25dd1202e	79f3f737-2a88-4702-8317-6a41ddaefeea	5
+895cd17d-7b49-47f2-b70d-fb64add11d92	2e72221c-10c9-4151-9f3d-e5b25dd1202e	cbeaf31b-00c0-41e6-9579-de281ad0f877	25
+fcb4a31f-18c2-4244-bdbe-44de39c05f1a	2e72221c-10c9-4151-9f3d-e5b25dd1202e	5576889a-2e87-491f-b3d5-5bbc719d9aee	28
+05ffb579-960b-41e2-ada1-91192d2f22e4	26c5212b-85e6-41b6-8af8-f5503ff21e97	dda38e85-2316-48c8-b5ae-bd3dfd719541	1298
+e66a0fa7-c835-4d88-889c-e54bd8dc1f20	26c5212b-85e6-41b6-8af8-f5503ff21e97	3546eafa-710b-41c3-a1d9-16ae43e4e41e	40
+9ba70d1e-fa5a-47dc-b59b-418bb329ab33	26c5212b-85e6-41b6-8af8-f5503ff21e97	29fb3244-b363-42f2-9f2e-9520a9536de9	225
+60dc1398-1ebc-4fda-a102-3e239554d940	26c5212b-85e6-41b6-8af8-f5503ff21e97	935408a3-830f-43e0-997b-004741f18c71	10
+356154e7-d458-4e12-ac4c-aebcb426829f	0c83ef3d-f768-4ebb-bdfd-2abab9180f15	1c129e61-2a9d-4b70-a81c-68a6453da485	200
+491491fe-ead1-4593-b33e-a3939cc8e44a	81c92c3b-5766-46b5-afe8-c5e3bb35c221	dda38e85-2316-48c8-b5ae-bd3dfd719541	525
+41ee734d-3512-4497-9705-d68fc1337062	81c92c3b-5766-46b5-afe8-c5e3bb35c221	3546eafa-710b-41c3-a1d9-16ae43e4e41e	5
+00d52f81-7969-4382-9131-fbb4076b9b02	8a34eaee-df30-4519-9b85-b64f0389cdd1	a0406417-9f86-4f7b-bb5f-7f10d31602aa	115
+3148ddd4-f5f8-43c4-8de3-ba27c76acf35	8a34eaee-df30-4519-9b85-b64f0389cdd1	7de51135-cd57-4d9f-9ed8-6b6a9dafd9fb	122
+0c77f391-79ca-4cb1-a083-29f1c2df835d	8a34eaee-df30-4519-9b85-b64f0389cdd1	29fb3244-b363-42f2-9f2e-9520a9536de9	76
+ebbacc10-0853-4ae8-81bf-97b942241c51	8a34eaee-df30-4519-9b85-b64f0389cdd1	ea34966b-0042-4b3e-9b87-9f67f0f3601f	155
+c1ceecca-22b0-4db9-8cda-5ea73d4024c4	8a34eaee-df30-4519-9b85-b64f0389cdd1	79f3f737-2a88-4702-8317-6a41ddaefeea	4
+a2dbdf70-94e7-4afe-aa65-f883fb30caca	f2347c57-0d28-4dbf-9539-7dea20f65ea1	2a60d221-a394-4df3-bdbf-eb9c6019507d	30
+e19e6cfb-4030-429d-8081-87a2e1ef0218	f2347c57-0d28-4dbf-9539-7dea20f65ea1	bba3553c-ff0c-43df-a4c5-df564d492e1c	2
+e6c45c93-4f74-4fc0-b93b-dbe852e69304	f2347c57-0d28-4dbf-9539-7dea20f65ea1	6f07e010-96c5-4069-8ee9-7d88af8a0b56	27
+9f89820e-563d-464b-8a0e-a0f6c873e4b2	8bfa7bf6-ffd6-4f9f-85da-a7f13065ca36	dda38e85-2316-48c8-b5ae-bd3dfd719541	719
+0d08285f-8f9e-43f5-a8b2-bd0fe31a2933	8bfa7bf6-ffd6-4f9f-85da-a7f13065ca36	cbeaf31b-00c0-41e6-9579-de281ad0f877	107
+3b34b6b3-1abd-486e-82a6-222cada17597	8bfa7bf6-ffd6-4f9f-85da-a7f13065ca36	29fb3244-b363-42f2-9f2e-9520a9536de9	67
+3a4151d3-5021-4f10-91d4-65036b6a7d76	8bfa7bf6-ffd6-4f9f-85da-a7f13065ca36	79f3f737-2a88-4702-8317-6a41ddaefeea	9
+2abb51e1-afdd-4b1d-93ed-d16c6b4fb8d8	8bfa7bf6-ffd6-4f9f-85da-a7f13065ca36	ea34966b-0042-4b3e-9b87-9f67f0f3601f	165
+ebb69ec6-d847-4aae-aa53-53f8576e7047	43ec79cf-5f7d-43fc-81ee-baf494c195cd	1c129e61-2a9d-4b70-a81c-68a6453da485	180
+1f38ab28-88ae-48f3-b56a-6063137b7bb7	6de53fab-e18f-4e9b-997b-7229ed036593	cbeaf31b-00c0-41e6-9579-de281ad0f877	60
+419cc63c-7998-4975-9085-49b2ecaa3fe0	6de53fab-e18f-4e9b-997b-7229ed036593	c9e6b0b0-81e3-44f3-b69b-6b9d0f11aeb7	15
+900e6b18-59d1-4e50-bdfc-d5d7c0fac1d1	3c7bdea3-6d60-4d39-929c-5467af4b7627	fff09453-127d-45af-8878-72c20fe1d5cc	30
+76cd2e08-3bf3-46a1-8c16-0bea59acece5	3c7bdea3-6d60-4d39-929c-5467af4b7627	40c5c35c-9409-4681-9b47-ffd49d1c6cd7	109
+a516496e-3452-4216-aa36-9b490d6757b8	3c7bdea3-6d60-4d39-929c-5467af4b7627	79f3f737-2a88-4702-8317-6a41ddaefeea	5
+359a8b5c-a117-40c3-99df-225fde0cd801	36cb40fc-baaf-43f0-b061-51163651729a	1c129e61-2a9d-4b70-a81c-68a6453da485	100
+fbde7e92-2ae5-4c92-b9ea-91afa890bbbc	36cb40fc-baaf-43f0-b061-51163651729a	40c5c35c-9409-4681-9b47-ffd49d1c6cd7	57
+d584e42c-26b6-47fa-a281-e359535c12a8	36cb40fc-baaf-43f0-b061-51163651729a	935408a3-830f-43e0-997b-004741f18c71	5
+eeeeaff3-8c5a-418e-a4c1-fd81bc91af5e	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	dda38e85-2316-48c8-b5ae-bd3dfd719541	520
+2c68fb6a-569b-447f-ae52-ec85dfb44fb9	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	79f3f737-2a88-4702-8317-6a41ddaefeea	10
+77287e32-47a1-40a8-8b66-6b9f18f16d29	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	3546eafa-710b-41c3-a1d9-16ae43e4e41e	10
+f718c338-2307-4b12-9fda-a25a5487fab9	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	ebb756a2-ba0f-44b4-a92b-c7442bb24341	157
+edc82df7-4b4a-40ba-a89c-4d3d47603e24	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	b80593c4-ffbb-4e6d-9c70-2b9131be8a97	30
+71641d40-8853-4860-9e60-390a43c21f38	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	907ee436-29b0-42ba-a45f-55bc2d3faba2	48
+f1e6b643-6b28-4a9f-bd6f-e4e9d37bb3bd	9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	51d92638-ab79-4a7c-a5b3-8825132826b8	520
+927a9dc6-2ac9-4abb-8af3-c601e3d1a8bf	ea4d8074-a992-4d4b-911b-97a51a21c814	ddfc80f0-6af3-44f0-92b1-f60d4a83fe87	40
+5c1c1359-f478-4a28-aac3-f04a30d73ad6	ea4d8074-a992-4d4b-911b-97a51a21c814	ebb756a2-ba0f-44b4-a92b-c7442bb24341	212
+048bb884-6762-4373-a709-48efb1242664	ea4d8074-a992-4d4b-911b-97a51a21c814	85a06565-36fb-4da3-8329-609cb5569ea6	10
+699b72c0-d5cf-47a1-8efd-8a6e02cb5c5e	ea4d8074-a992-4d4b-911b-97a51a21c814	84e5ef11-f588-4558-8d3f-ecb8e1c0e07b	1
+\.
+
+
+--
+-- Data for Name: backup_recipes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.backup_recipes (id, name, total_servings, created_at, updated_at) FROM stdin;
+82a4675d-ea89-44e4-95f8-df859eaaea22	Honey Chipotle Chicken	5	2025-07-20 01:20:38.13631+00	2025-07-20 01:20:38.13631+00
+3b3e9594-084b-48be-9aba-3e3edcc02782	Paneer sabji	1	2025-07-25 00:09:49.967232+00	2025-07-25 00:09:49.967232+00
+6bd4e45a-2ef0-4ce6-ba8f-ab0ff2bedc18	Pancharatna Dal	4	2025-07-26 00:38:45.719867+00	2025-07-26 00:38:45.719867+00
+b6a3e809-6af4-4804-bd2c-a40bf0900a7f	khichdi	2	2025-08-03 19:21:20.248209+00	2025-08-03 19:21:20.248209+00
+a779d447-0171-4fcd-88ed-ad22ff2b9359	Sprouts 	4	2025-08-03 22:43:10.545568+00	2025-08-03 22:43:10.545568+00
+3318e167-95f0-422e-a8f9-db337bff937c	Moong	4	2025-08-05 21:41:30.875868+00	2025-08-05 21:41:30.875868+00
+2e72221c-10c9-4151-9f3d-e5b25dd1202e	BBQ Chicken	2	2025-07-31 20:06:51.172994+00	2025-07-31 20:06:51.172994+00
+0c83ef3d-f768-4ebb-bdfd-2abab9180f15	Lime Rice	4	2025-08-11 19:38:20.851529+00	2025-08-11 19:38:20.851529+00
+8a34eaee-df30-4519-9b85-b64f0389cdd1	pasta 	2	2025-08-14 12:58:01.858596+00	2025-08-14 12:58:01.858596+00
+f2347c57-0d28-4dbf-9539-7dea20f65ea1	Quesadillas 	2	2025-08-14 22:05:03.552059+00	2025-08-14 22:05:03.552059+00
+8bfa7bf6-ffd6-4f9f-85da-a7f13065ca36	Chicken curry 	4	2025-08-14 23:43:02.157407+00	2025-08-14 23:43:02.157407+00
+43ec79cf-5f7d-43fc-81ee-baf494c195cd	Rice - Aug 14	4	2025-08-14 23:44:17.655345+00	2025-08-14 23:44:17.655345+00
+9ec5c78f-a57b-4552-b8fa-4bf0fc7839cc	Chicken Potato	4	2025-09-08 17:03:33.519015+00	2025-09-08 17:03:33.519015+00
+ea4d8074-a992-4d4b-911b-97a51a21c814	Oats smoothie 	1	2025-09-10 18:56:38.223218+00	2025-09-10 18:56:38.223218+00
+32dc3704-1843-43a8-8575-bac55fd9c218	Dal Dhokli	4	2025-10-10 00:31:26.743948+00	2025-10-10 00:31:26.743948+00
+26c5212b-85e6-41b6-8af8-f5503ff21e97	Chicken kabaab	7	2025-10-07 00:08:40.46362+00	2025-10-07 00:08:40.46362+00
+81c92c3b-5766-46b5-afe8-c5e3bb35c221	Chicken 	4	2025-08-04 22:36:07.645657+00	2025-08-04 22:36:07.645657+00
+6de53fab-e18f-4e9b-997b-7229ed036593	Homemade chipotle sauce 	3	2025-10-26 21:56:46.478134+00	2025-10-26 21:56:46.478134+00
+3c7bdea3-6d60-4d39-929c-5467af4b7627	Dal	5	2025-10-11 01:24:19.367016+00	2025-10-11 01:24:19.367016+00
+36cb40fc-baaf-43f0-b061-51163651729a	khichdi 2.0	3	2025-10-28 23:25:05.496461+00	2025-10-28 23:25:05.496461+00
+\.
+
+
+--
+-- Data for Name: food_items; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.food_items (id, name, calories, protein, carbs, fat, fiber, created_at, base_unit, serving_label, serving_size) FROM stdin;
+c6740c40-6ad4-417a-8060-e92602781266	Tortillas whole wheat 	154.93	11.27	46.48	8.45	42.25	2026-03-21 16:19:18.897771+00	g	1 tortilla 	71.00
+2001a697-1e7f-4052-8e98-9430ff0ecba5	Ratlami sev	571.43	14.29	42.86	3.57	\N	2026-04-01 23:16:11.892264+00	g	\N	28.00
+9c144720-daa4-4ff8-bf2c-a6a18c8e84a6	Tofu	94.12	11.76	1.18	4.71	\N	2025-12-29 22:03:57.17805+00	g	\N	85.00
+bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	Egg White	54.35	10.87	0	0	\N	2026-01-06 01:38:26.424549+00	g	\N	46.00
+b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	Egg	140	12	0	10	\N	2026-01-06 01:41:05.062822+00	g	1 Egg	50.00
+8ec31fd4-7eb5-4572-872b-57f73cf7bf03	Protein Pasta	339.29	17.86	67.86	1.79	8.93	2026-01-06 01:42:12.293926+00	g	\N	56.00
+0b882454-c2f1-4e08-9eee-d7a7390e4e5e	PB2	375	50	37.5	12.5	12.5	2026-01-06 01:42:59.807071+00	g	\N	16.00
+19f957ee-7d69-47a7-b0bf-c6303dac16fd	2% reduced fat milk	50	3.33	5	2.08	\N	2026-01-06 01:44:36.573838+00	ml	\N	240.00
+2ea34745-ffa5-4548-b127-8f26c93c79af	Peanut Butter (Reduced Fat)	527.78	19.44	41.67	33.33	5.56	2026-01-06 01:47:13.104209+00	g	\N	36.00
+f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	Tomatoes 	18	0.9	3.9	0.2	1.2	2025-12-29 22:09:49.33648+00	g	\N	100.00
+352efce9-8bb2-4cd3-8ac3-7eeee0292972	Onion	40	1.1	9.3	0.1	1.7	2026-01-06 01:49:11.836727+00	g	\N	100.00
+36acc9d8-b010-42f2-b635-690e40e6a335	Bell Pepper	26	1	6	0.3	2.1	2026-01-06 01:49:48.336946+00	g	\N	100.00
+d1509a69-780c-421b-842b-c8703f751d63	Mong Raw	313.73	25.49	56.86	0.98	9.8	2026-01-06 01:54:32.968809+00	g	\N	51.00
+d9532837-98f1-4059-b643-61f2500f93f9	Greek Yogurt	64.71	10.59	4.12	0	\N	2026-01-06 01:56:44.714781+00	g	\N	170.00
+189a84e7-43b7-4b80-a116-e718c6e2d960	Light Butter	250	0	0	28.57	\N	2026-01-06 01:57:36.37751+00	g	\N	14.00
+e694131b-2992-4216-b602-a9577ef708b3	Oats	375	12.5	67.5	7.5	10	2026-01-06 02:03:20.323562+00	g	\N	40.00
+1232e839-e940-4da5-a815-a8e620c5e1df	White Bread	285.71	7.14	53.57	3.57	3.57	2026-01-06 02:05:12.287638+00	g	1 Slice	28.00
+20e38624-5d83-4ac5-aa33-d5d8b352ae44	Protein powder 	400	80	10	6.67	\N	2025-12-29 22:03:15.861961+00	g	1 Scoop	30.00
+24a8661d-d81c-4110-9715-e3470e589abf	Raw rice	333.33	6.67	77.78	0	\N	2026-01-06 20:50:35.83159+00	g	\N	45.00
+33394501-b4ee-4508-8faf-0a854aba80ea	Cooked rice	130	2.67	28	0.4	\N	2026-01-06 20:52:00.317516+00	g	\N	150.00
+b78945a3-c18a-4de5-99e9-7f9ef7c39e9b	Yellow mong dal raw	347	24	63	2	9	2026-01-06 23:13:25.426952+00	g	\N	100.00
+84933a2f-fb82-4789-984a-2b9e484a944a	Baby spinach 	23.33	3	3.67	0.33	2.33	2026-01-06 23:14:48.609707+00	g	\N	30.00
+1131f4e6-5ee6-4d89-bfa5-548ac1b43393	Paneer	321.43	25	3.57	25	\N	2026-01-07 00:35:55.672686+00	g	\N	28.00
+abe38d67-4dba-4850-8f0b-aa9e194017c4	Surati bhusu	533.33	9.33	46.67	38	\N	2026-01-07 18:31:48.47142+00	g	\N	30.00
+721d4ae8-34d0-41f3-99eb-735c54a57544	Avacado	160	2	9	15	\N	2026-01-08 00:05:56.972459+00	g	\N	100.00
+3a16c197-ca86-4411-9eaa-b4778044bf3a	Besan	387.1	22.58	58.06	6.45	9.68	2026-01-09 21:15:43.58746+00	g	\N	31.00
+489cda86-cd2a-409b-a854-ea7ebb8b281c	Small banana	90	1.1	23	0.2	\N	2026-01-06 20:56:13.531679+00	g	1 piece	100.00
+3767d7a2-986d-4f45-b2d9-3d274d4950af	Canola oil 	857.14	0	0	100	\N	2026-01-10 17:17:59.229326+00	g	\N	14.00
+f51676a4-6098-447c-b54f-17a9bc555d3c	Protein bar	400	26.67	46.67	13.33	\N	2026-01-10 17:25:10.867971+00	g	1 bar	45.00
+484acd94-b042-4599-acc8-032b46e086b7	Almond	580	21	22	50	12	2026-01-12 00:04:37.12023+00	g	\N	100.00
+48e23829-47ab-49ee-bbc8-b04ad97e2d32	Walnut	650	15	14	65	7	2026-01-12 00:05:53.494905+00	g	\N	100.00
+36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	Toor dal	360	20	60	2	14	2026-01-12 00:17:11.826257+00	g	\N	100.00
+3b1ece8a-60f5-4439-9837-2ecbb55f381c	Amul cheese cube	320	20	0	28	\N	2026-01-12 00:29:30.081663+00	g	1 piece	25.00
+83c5b322-876c-4358-8635-f8f8c3675271	Chick peas	92.31	4.62	14.62	1.54	\N	2026-01-12 18:52:55.030432+00	g	\N	130.00
+0b4d6278-dca3-4d9a-9d59-3616b92f5835	Deep Chaki atta	366.67	13.33	73.33	3.33	\N	2026-01-17 20:19:51.554588+00	g	\N	30.00
+b93a381d-a372-496b-a872-2ed4113cd016	Berries	50	1.43	12.14	0.71	6.43	2026-01-17 22:45:24.657492+00	g	\N	140.00
+816e9699-5a1f-41a1-8c93-67828a6d4182	Black chickpeas	354.17	22.92	58.33	6.25	10.42	2026-01-18 04:18:47.430833+00	g	\N	48.00
+61ae0668-bf27-415d-ab4b-bbac9b64f029	Jaggary	375	0	0	0	\N	2026-01-19 16:46:37.890173+00	g	\N	8.00
+771e0156-e3cf-4126-b4ea-6a4016ff2be1	Sprouts	38.46	2.88	5.77	0	\N	2026-01-19 22:56:37.804483+00	g	\N	104.00
+73c80421-4af0-463c-86c5-4a2aa354058f	Strawberry jam	58.82	0	29.41	0	\N	2026-01-26 21:22:54.897561+00	g	\N	17.00
+93821da6-270b-4b6d-a628-b67f2fb4cf73	Penuts	600	26.67	16.67	50	\N	2026-01-29 23:49:08.132494+00	g	\N	30.00
+1e797623-772f-44a8-a538-513a63f137b4	Makhana	86.67	6.67	20	0	\N	2026-01-31 21:02:41.598701+00	g	\N	15.00
+267f413a-a138-437e-b5c4-01636a5d8172	Rice cake 	384.62	0	84.62	0	\N	2026-02-03 19:18:38.004045+00	g	1 Cake	13.00
+84fc0ecb-49c0-4126-a366-3bf4b47ef865	Tuver	340.43	21.28	61.7	2.13	8.51	2026-02-03 21:22:43.208919+00	g	\N	47.00
+4f700e91-709d-4b05-a353-1f5a48bd85f4	Quest cookies & cream	288.46	34.62	44.23	11.54	11.54	2026-02-04 22:32:16.453092+00	g	1 bar	52.00
+be8c3f69-bf39-406b-8333-9ea1a1c2f8a1	Orange	47.06	0.94	11.18	0.12	\N	2026-02-12 20:27:51.378541+00	g	\N	170.00
+2100d345-6ecf-47a8-acf4-d182b3095001	Tortillas 	154.93	14.08	45.07	8.45	\N	2026-02-18 17:36:17.063111+00	g	1 tortilla	71.00
+cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	Olive oil	800	0	0	93.33	\N	2026-02-18 17:39:59.691599+00	ml	\N	15.00
+4f228f37-03e8-4231-b247-8e2c6cc7b75c	Strawberry 	33.33	0.83	7.92	0	\N	2026-03-07 01:13:32.265098+00	g	\N	24.00
+ba0eb735-7292-408a-a535-2ec0b2432fcc	Peanuts 	600	26.67	16.67	50	10	2026-03-08 20:46:36.088125+00	g	\N	30.00
+73d849ea-8dcf-4d86-b530-9e43d15db907	Cottage cheese	79.65	11.5	4.42	2.21	\N	2026-03-15 18:31:38.809501+00	g	\N	113.00
+a0646884-c6fd-404b-a305-a12aba10e947	Black Beans	69.23	4.62	12.31	0.38	3.85	2026-03-15 19:29:45.463702+00	g	\N	130.00
+895a9866-541e-4339-9b20-1b3576ef2b92	Maggi	386.67	8	58.67	12	\N	2026-03-21 01:02:20.033508+00	g	1 	75.00
+31af3d47-98d5-49b8-9510-ecf45602e5d5	Sugar	400	0	100	0	\N	2026-04-01 23:19:22.288868+00	g	\N	4.00
+a31a29ad-1ee0-44ca-901f-bc922c1fb173	Sourdough 	229.68	8.83	44.17	0	1.77	2026-04-06 22:35:49.486707+00	g	\N	56.60
+d66078f7-b7c1-419d-a824-2598cffa67ac	Golden raisins	314.29	2.86	80	0	\N	2026-04-06 22:36:48.564065+00	g	\N	35.00
+\.
+
+
+--
+-- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.recipes (id, name, total_servings, created_at, updated_at, total_calories, total_protein, total_carbs, total_fat, total_fiber, is_meal_prep, date_prepared, total_weight, weight_unit, user_id, created_by_name, base_recipe_name, batch_date, is_base_recipe, parent_recipe_id) FROM stdin;
+6d2b1d5b-ca3f-4345-891a-83da77c7703d	Protein pasta (1 serving) (Jan 25)	2	2026-01-26 21:24:46.637711+00	2026-01-26 21:24:46.637711+00	1060.75	67.82	92.41	53.53	12.36	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Protein pasta (1 serving)	2026-01-26	f	6fd2794c-d0dd-46d9-a360-419c0f1c48cb
+2ecab1a5-4ac2-44a0-be1c-af07322ed58f	Dahiwale chole 2.0	2	2026-01-12 19:19:15.13293+00	2026-01-12 19:19:15.13293+00	504.62	50.58	59.65	4.67	1.98	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Dahiwale chole 2.0	\N	t	\N
+b634159d-9915-4db1-8ab2-69673ecbfac4	Protein Pasta	2	2026-01-06 02:55:32.330292+00	2026-01-06 02:55:32.330292+00	573.76	41.21	85.66	10.20	11.74	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Protein Pasta	\N	t	\N
+e9997906-3d21-4360-b789-d2255e60a7b6	Oats smoothie zena	1	2026-01-12 19:54:49.06202+00	2026-01-12 19:54:49.06202+00	388.06	34.97	36.58	13.00	4.11	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Oats smoothie zena	\N	t	\N
+a3a91fd5-3516-4f01-b9c5-8fa389f28751	Dahiwale sprout	2	2026-01-27 00:51:37.967379+00	2026-01-27 00:51:37.967379+00	244.31	27.64	29.80	0.36	3.04	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Dahiwale sprout	\N	t	\N
+4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75	Berries oats smoothie	1	2026-01-17 22:46:37.75731+00	2026-01-17 22:46:37.75731+00	245.00	29.45	22.93	5.30	3.29	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Berries oats smoothie	\N	t	\N
+e07545a1-4d02-449f-9b01-b3e8ff112807	Moong palak chilla	2	2026-01-06 23:15:46.223861+00	2026-01-06 23:15:46.223861+00	739.72	54.90	68.38	32.10	9.70	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Moong palak chilla	\N	t	\N
+9f76a624-f670-4dbd-b7c9-34f7b454b1f1	Palak paratha	1	2026-01-17 20:21:48.313389+00	2026-01-17 20:21:48.313389+00	486.20	25.66	60.80	17.66	0.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Palak paratha	\N	t	\N
+3ad4f175-d7a2-4054-85e7-1b6d8b4d553b	Oat smoothie - Deep	1	2026-01-07 18:00:45.890267+00	2026-01-07 18:00:45.890267+00	456.25	43.41	51.63	11.54	6.63	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Oat smoothie - Deep	\N	t	\N
+a283524b-5395-420d-90a5-0a7f4613d4fd	Dal	2	2026-01-31 02:35:16.586325+00	2026-01-31 02:35:16.586325+00	376.71	12.00	36.00	11.20	8.40	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Dal	\N	t	\N
+dbf25f66-3b2d-419f-933d-abe7de74ba5a	Sprout chilla	1	2026-01-19 23:14:32.658245+00	2026-01-19 23:14:32.658245+00	152.50	11.75	7.25	8.75	0.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Sprout chilla	\N	t	\N
+6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	Protein Pasta (Jan 11)	4	2026-01-12 17:40:29.367642+00	2026-01-12 17:40:29.367642+00	1803.65	107.87	203.40	73.88	27.73	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Protein Pasta	2026-01-12	f	b634159d-9915-4db1-8ab2-69673ecbfac4
+1c98c1f8-82c4-4549-81be-24bbc0847589	Oat smoothie-zena	1	2026-01-14 21:51:07.995132+00	2026-01-14 21:51:07.995132+00	293.75	36.33	26.38	7.21	3.63	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Oat smoothie-zena	\N	t	\N
+61dddbab-c735-4e20-af28-b5e8f8c98441	Khichdi	1	2026-01-12 00:18:37.077124+00	2026-01-12 00:18:37.077124+00	238.67	7.34	50.89	0.40	2.80	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Khichdi	\N	t	\N
+1af4f1e8-5200-4edf-a04f-6a9f30648272	Berries oats smoothie (Jan 19)	1	2026-01-20 21:41:09.236978+00	2026-01-20 21:41:09.236978+00	255.00	30.12	23.93	5.72	3.29	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Berries oats smoothie	2026-01-20	f	4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75
+fd15e1b0-5476-48d1-a22b-b97bebd50d59	Protein Pasta (Jan 16)	3	2026-01-17 21:13:37.55026+00	2026-01-17 21:13:37.55026+00	1324.40	80.12	139.84	58.00	18.87	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Protein Pasta	2026-01-17	f	b634159d-9915-4db1-8ab2-69673ecbfac4
+fbe6102b-5245-49fd-ba79-ef02748d5443	Oat smoothie strawberry 	1	2026-01-17 21:16:21.630089+00	2026-01-17 21:16:21.630089+00	465.00	39.49	55.50	11.49	6.00	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Oat smoothie strawberry 	\N	t	\N
+aeab82ed-3a88-45ad-a767-1619c41a57b0	Spinach Pasta	4	2026-02-02 02:52:12.737787+00	2026-02-02 02:52:12.737787+00	1656.04	104.19	180.17	68.70	25.30	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Spinach Pasts	\N	t	\N
+f420ddef-a84e-49fc-b71f-54b024e3844f	Yellow moong chilla	1	2026-01-20 23:01:18.879609+00	2026-01-20 23:01:18.879609+00	284.72	20.80	29.78	10.90	4.05	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Yellow moong chilla	\N	t	\N
+0422bae5-0d25-4bf9-9cd6-46b6a99fbfd2	Kala chana with dahi	2	2026-01-19 16:50:22.402289+00	2026-01-19 16:50:22.402289+00	590.06	45.45	75.17	14.46	12.36	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Kala chana with dahi	\N	t	\N
+16dd936c-09a0-45fe-ae27-d43aa5b0a14a	Palak paratha (Jan 26)	3	2026-01-27 23:55:43.514229+00	2026-01-27 23:55:43.514229+00	566.53	29.23	76.57	18.43	0.70	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Palak paratha	2026-01-27	f	9f76a624-f670-4dbd-b7c9-34f7b454b1f1
+46dca9aa-9aaf-4ba8-8b55-2ebe44d605d5	Paneer chole biryani	2	2026-01-21 02:49:38.84847+00	2026-01-21 02:49:38.84847+00	1136.04	56.49	172.16	26.64	2.64	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Paneer chole biryani	\N	t	\N
+bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	Chai (Jan 20)	1	2026-01-21 12:08:39.145206+00	2026-01-21 12:08:39.145206+00	177.50	6.83	10.25	4.26	0.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Chai	2026-01-21	f	94131989-f241-4bc9-9e5f-dcf1b4e641d0
+0765c69d-925f-4d30-b561-fcc53db46514	Berries oats smoothie (Jan 21)	1	2026-01-22 20:58:10.930722+00	2026-01-22 20:58:10.930722+00	292.50	31.37	30.68	6.47	4.29	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Berries oats smoothie	2026-01-22	f	4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75
+15d90a1f-78bf-4f7d-8d5f-3014c2814d7b	Oat smoothie - Deep (Jan 10)	1	2026-01-11 19:54:48.975346+00	2026-01-11 19:54:48.975346+00	525.00	47.49	61.50	13.49	8.00	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Oat smoothie - Deep	2026-01-11	f	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b
+94131989-f241-4bc9-9e5f-dcf1b4e641d0	Chai	1	2026-01-19 16:47:16.421748+00	2026-01-19 16:47:16.421748+00	175.00	6.66	10.00	4.16	0.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Chai	\N	t	\N
+272ce18c-eae9-4eb0-bec5-d5b09326f3cb	Shimla mirch	2	2026-01-29 23:50:15.153519+00	2026-01-29 23:50:15.153519+00	422.32	33.80	23.50	21.75	2.14	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Shimla mirch	\N	t	\N
+400a1e6f-c4cf-4667-944a-1743cf5f4799	Rotis	4	2026-01-29 23:50:55.981322+00	2026-01-29 23:50:55.981322+00	435.24	13.33	73.33	11.33	0.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Rotis	\N	t	\N
+4a86b07c-d51d-497e-b32f-3d38403f2045	Oats smoothie zena (Jan 28)	1	2026-01-29 23:54:02.082318+00	2026-01-29 23:54:02.082318+00	245.00	29.83	21.50	5.58	2.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Oats smoothie zena	2026-01-29	f	e9997906-3d21-4360-b789-d2255e60a7b6
+cc93fd1b-07c5-4065-a895-bc9dd77f1f73	Oat smoothie - Deep (Jan 11)	1	2026-01-12 17:37:16.346839+00	2026-01-12 17:37:16.346839+00	525.00	47.49	61.50	13.49	8.00	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Oat smoothie - Deep	2026-01-12	f	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b
+6fd2794c-d0dd-46d9-a360-419c0f1c48cb	Protein pasta 	1	2026-01-10 17:20:36.757731+00	2026-01-10 17:20:36.757731+00	486.73	27.99	51.78	21.83	7.17	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Protein pasta (1 serving)	\N	t	\N
+77145b37-0eaa-4f7d-b676-d5afb64a65a8	Dal (Jan 31)	2	2026-02-01 01:58:56.824898+00	2026-02-01 01:58:56.824898+00	710.57	24.00	72.00	17.40	16.80	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Dal	2026-02-01	f	a283524b-5395-420d-90a5-0a7f4613d4fd
+797afd32-cb07-492c-ae1c-fb5b85411dd5	Protein pasta  (Jan 27)	2	2026-01-28 20:00:42.391163+00	2026-01-28 20:00:42.391163+00	990.88	64.92	96.56	44.91	13.38	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Protein pasta (1 serving)	2026-01-28	f	6fd2794c-d0dd-46d9-a360-419c0f1c48cb
+14384779-fadf-4add-a491-00c024835a6f	Spinach Black cheakpeas 	3	2026-02-01 19:15:15.044272+00	2026-02-01 19:15:15.044272+00	577.90	43.95	78.85	12.65	14.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Spinach Black cheakpeas 	\N	t	\N
+7e22102c-272d-4a35-a57e-c4965ecacb50	Tuver	2	2026-02-03 21:26:07.149738+00	2026-02-03 21:26:07.149738+00	409.00	21.28	61.70	10.13	8.51	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Tuver	\N	t	\N
+4df1faad-6300-4b8e-b970-343b628b4e9a	Spinach pasta 6 serving 	6	2026-02-08 18:16:27.671013+00	2026-02-08 18:16:27.671013+00	2402.90	151.06	267.96	96.85	37.56	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Spinach pasta 6 serving 	\N	t	\N
+a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	Suki tuver	2	2026-02-05 22:01:34.43094+00	2026-02-05 22:01:34.43094+00	438.94	21.63	64.68	12.16	9.05	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Suki tuver	\N	t	\N
+c499602f-a6d7-41e1-b5a9-c4fb5edb2827	Oat smoothie-zena (Feb 8)	1	2026-02-09 23:29:23.875564+00	2026-02-09 23:29:23.875564+00	267.50	32.83	23.75	6.33	2.75	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Oat smoothie-zena	2026-02-09	f	1c98c1f8-82c4-4549-81be-24bbc0847589
+a64f3f20-d3fd-4b7f-8775-fbf92b1d4384	Khichdi (Feb 8)	2	2026-02-09 23:31:02.033404+00	2026-02-09 23:31:02.033404+00	359.33	11.67	75.45	0.70	4.90	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Khichdi	2026-02-09	f	61dddbab-c735-4e20-af28-b5e8f8c98441
+e064a5db-7aa5-4f9f-bdba-71da5d4b29f0	Khichdi (Feb 10)	4	2026-02-11 03:26:05.752882+00	2026-02-11 03:26:05.752882+00	682.66	21.34	144.89	1.20	8.40	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Khichdi	2026-02-11	f	61dddbab-c735-4e20-af28-b5e8f8c98441
+e3fa1f6c-7399-4daf-a413-552f3d3823e2	Vagharelo rice	21	2026-02-11 03:27:47.898031+00	2026-02-11 03:27:47.898031+00	421.90	7.22	82.43	8.05	0.85	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Vagharelo rice	\N	t	\N
+761b723a-bade-48c3-b4ca-d2c83387014d	Palak paneer roti	8	2026-02-12 01:29:18.127905+00	2026-02-12 01:29:18.127905+00	932.03	42.41	149.72	21.74	0.58	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Palak paneer roti	\N	t	\N
+baacd4f3-ade2-4366-aeb4-b29201cab8a0	Dal (Feb 12)	4	2026-02-13 01:25:51.166117+00	2026-02-13 01:25:51.166117+00	755.57	24.00	72.00	17.40	16.80	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Dal	2026-02-13	f	a283524b-5395-420d-90a5-0a7f4613d4fd
+d44d74c6-a74d-4765-8c77-8d59db25c9b8	Oat smoothie-zena (Apr 5)	1	2026-04-06 21:05:37.320998+00	2026-04-06 21:05:37.320998+00	356.25	39.25	35.63	9.00	4.63	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Oat smoothie-zena	2026-04-06	f	1c98c1f8-82c4-4549-81be-24bbc0847589
+293b1acb-b9e7-4576-a608-88119bbdf1a7	Egg yogurt sandwich 	4	2026-04-06 22:25:29.519641+00	2026-04-06 22:25:29.519641+00	344.71	34.59	4.12	20.00	0.00	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Egg yogurt sandwich 	\N	t	\N
+35bd906e-4c15-4ea2-bb52-ec16cc3b0020	Chole paneer wrap	2	2026-02-18 11:35:19.496998+00	2026-02-18 11:35:19.496998+00	721.60	51.27	108.24	34.89	0.66	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Chole paneer wrap	\N	t	\N
+d5314ffb-2caf-4d1e-a9b1-a856005335af	Oat smoothie-zena (Feb 17)	1	2026-02-18 22:30:09.872095+00	2026-02-18 22:30:09.872095+00	245.00	29.83	21.50	5.58	2.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Oat smoothie-zena	2026-02-18	f	1c98c1f8-82c4-4549-81be-24bbc0847589
+1ae6ed7c-d074-4ac9-916c-338f8d100989	Mug	1	2026-02-19 15:28:39.210969+00	2026-02-19 15:28:39.210969+00	306.25	13.00	29.00	7.50	5.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Mug	\N	t	\N
+5ca671ab-9dbe-48e4-b90b-04f59729f0a5	Oats smoothie with strawberries 	1	2026-03-07 01:14:51.035719+00	2026-03-07 01:14:51.035719+00	270.50	31.20	25.15	6.31	2.00	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Oats smoothie with strawberries 	\N	t	\N
+06dfcdc9-b735-4327-bd77-68f41fba21a6	Gotalo	2	2026-03-07 19:31:14.881795+00	2026-03-07 19:31:14.881795+00	345.81	25.53	9.03	23.26	2.16	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Gotalo	\N	t	\N
+953999da-cb65-4811-9123-8bda1b19d171	Chana chaat	1	2026-03-08 20:45:50.028732+00	2026-03-08 20:45:50.028732+00	267.05	24.05	37.64	3.24	6.10	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Chana chaat	\N	t	\N
+f0d1c69e-7ca5-4abc-8602-03be0697e783	Cottage cheese toast without cheese	2	2026-03-15 18:34:55.813264+00	2026-03-15 18:34:55.813264+00	250.00	17.00	34.99	4.50	2.00	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Cottage cheese toast without cheese	\N	t	\N
+eb29fde0-bd14-437d-b82a-be4b8a4129fb	Black Beans paneer tiki	2	2026-03-15 19:30:35.587302+00	2026-03-15 19:30:35.587302+00	586.30	41.39	50.41	27.17	13.13	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Black Beans paneer tiki	\N	t	\N
+fb0bf74a-9c4a-4f5a-9596-a53c81359e1a	Dal (Mar 16)	4	2026-03-17 01:34:41.523493+00	2026-03-17 01:34:41.523493+00	707.00	24.00	72.00	11.73	16.80	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Dal	2026-03-17	f	a283524b-5395-420d-90a5-0a7f4613d4fd
+b7b6384e-06f7-40b1-885e-2e41dfd4f29b	Mug (Mar 17)	4	2026-03-18 19:15:33.133588+00	2026-03-18 19:15:33.133588+00	1068.26	52.00	115.99	24.40	19.99	f	\N	\N	g	f64a8552-0cb5-4097-bb65-c86dd06d352e	Deep	Mug	2026-03-18	f	1ae6ed7c-d074-4ac9-916c-338f8d100989
+6bd42f85-e7c9-4e91-be94-0acb85674592	Sev tameta	2	2026-04-01 23:20:44.946986+00	2026-04-01 23:20:44.946986+00	394.04	8.98	42.87	10.49	5.39	f	\N	\N	g	8d3b5e03-a6ca-44bd-a275-fc406a775527	Zena	Sev tameta	\N	t	\N
+\.
+
+
+--
+-- Data for Name: meal_entries; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.meal_entries (id, user_id, food_id, recipe_id, prepared_meal_id, quantity, meal_type, date, notes, created_at, quantity_type) FROM stdin;
+a822709c-9a79-4830-91ce-f7f9afbf0964	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	240	Breakfast	2026-01-15	\N	2026-01-15 13:29:26.000371+00	ml
+eb02e6e6-65d9-456e-b1b4-4fa3ee6ab320	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-15	\N	2026-01-15 15:36:59.447952+00	g
+ffccec1e-3c91-4e2a-b92d-df936871be7e	8d3b5e03-a6ca-44bd-a275-fc406a775527	33394501-b4ee-4508-8faf-0a854aba80ea	\N	\N	193	Lunch	2026-01-15	\N	2026-01-15 17:42:26.503417+00	g
+d5685dbf-7b9b-47ec-8750-b28af0192ff4	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-01-15	\N	2026-01-15 22:20:23.089335+00	g
+0929a702-73cb-4f99-9e67-c61d4b681995	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	260	Breakfast	2026-01-16	\N	2026-01-16 15:49:27.758774+00	ml
+a4743902-fd7a-4d59-9db9-210c0f5d891c	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-16	\N	2026-01-16 15:50:16.380468+00	g
+f80db382-4d42-4fe5-8ccc-ce9fd0de977f	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-01-16	\N	2026-01-16 16:13:48.066383+00	g
+151b1aa5-9deb-471e-b0a3-47f2eaa42d22	f64a8552-0cb5-4097-bb65-c86dd06d352e	e694131b-2992-4216-b602-a9577ef708b3	\N	\N	50	Breakfast	2026-01-06	\N	2026-01-06 02:04:06.481042+00	g
+b3b4f7e8-4a2b-4ad6-94f3-30c61be7b3df	f64a8552-0cb5-4097-bb65-c86dd06d352e	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	200	Breakfast	2026-01-06	\N	2026-01-06 02:04:13.855493+00	ml
+fdf52c0a-b6b4-487d-a73c-7f92df7b19c1	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-01-06	\N	2026-01-06 02:06:06.08261+00	g
+027fbe4c-dcf1-438b-85d5-e66516f781c7	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-06	\N	2026-01-06 02:10:42.815269+00	g
+8a80b4e8-0d49-4222-86bd-bce3255ad66c	f64a8552-0cb5-4097-bb65-c86dd06d352e	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	\N	\N	12	Breakfast	2026-01-06	\N	2026-01-06 02:25:46.693679+00	g
+98586a97-3fdc-422a-9348-f4c64f32d084	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Dinner	2026-01-06	\N	2026-01-06 02:53:27.567717+00	g
+60e5108b-5669-45fa-8438-c0422ecf0f58	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	240	Breakfast	2026-01-06	\N	2026-01-06 20:47:54.279726+00	ml
+4b982e1d-cac5-4f95-9ffc-4a7b3e73c770	8d3b5e03-a6ca-44bd-a275-fc406a775527	d1509a69-780c-421b-842b-c8703f751d63	\N	\N	35	Lunch	2026-01-06	\N	2026-01-06 20:48:32.865375+00	g
+275097c5-90e0-4fb2-8822-e83bb1181f54	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Lunch	2026-01-06	\N	2026-01-06 20:49:00.040961+00	g
+ddb19230-7083-484b-a3dc-8936bca750ce	8d3b5e03-a6ca-44bd-a275-fc406a775527	33394501-b4ee-4508-8faf-0a854aba80ea	\N	\N	150	Lunch	2026-01-06	\N	2026-01-06 20:52:14.5339+00	g
+35d8f37d-ace0-4692-8e4f-46992e1d0a27	8d3b5e03-a6ca-44bd-a275-fc406a775527	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-01-06	\N	2026-01-06 20:56:44.218661+00	g
+e9517b66-a851-4e53-8ac9-9df830fed19c	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-01-06	\N	2026-01-06 21:55:39.816092+00	g
+c8c099b2-9735-4365-9dc0-6dd2f9df90b6	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	250	Dinner	2026-01-06	\N	2026-01-06 02:52:50.82866+00	g
+842c5072-6bf6-4e99-8a58-496b7a883edb	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	6	Dinner	2026-01-06	\N	2026-01-06 23:09:13.998543+00	g
+511e55aa-8390-470b-b116-b6612c09e62a	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	b634159d-9915-4db1-8ab2-69673ecbfac4	\N	1	Lunch	2026-01-06	\N	2026-01-06 23:11:09.157475+00	servings
+c616592c-d160-4adf-8e8d-45fff5ebc03f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	e07545a1-4d02-449f-9b01-b3e8ff112807	\N	1	Dinner	2026-01-06	\N	2026-01-07 00:36:47.841178+00	servings
+e8085b6f-0b0a-485b-a826-cea765d52597	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	e07545a1-4d02-449f-9b01-b3e8ff112807	\N	1	Dinner	2026-01-06	\N	2026-01-07 00:37:46.794725+00	servings
+550b61af-0cba-4949-a793-9616626e5695	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-01-07	\N	2026-01-07 12:29:43.858714+00	g
+a6bc1a06-2ef1-4e78-8e1f-86deaa848ff7	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	300.1	Breakfast	2026-01-07	\N	2026-01-07 12:29:57.018331+00	g
+2a42a044-8b46-4f85-b7ec-6929d6fff85a	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	4	Breakfast	2026-01-07	\N	2026-01-07 12:30:07.731537+00	g
+3df99f9f-434a-4ce3-9454-aa5d2e1fa0e3	f64a8552-0cb5-4097-bb65-c86dd06d352e	84933a2f-fb82-4789-984a-2b9e484a944a	\N	\N	39	Breakfast	2026-01-07	\N	2026-01-07 12:35:19.447565+00	g
+4f2ab67c-13f0-4b28-b562-0f7ad79306d8	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-07	\N	2026-01-07 17:58:44.779801+00	g
+6a979e01-fefa-4047-9142-805bfb89ea45	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	b634159d-9915-4db1-8ab2-69673ecbfac4	\N	1	Lunch	2026-01-07	\N	2026-01-07 17:59:11.643392+00	servings
+9a859b50-3bd4-48d4-978b-fa8fa9e04497	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b	\N	1	Breakfast	2026-01-07	\N	2026-01-07 18:01:16.109229+00	servings
+fa1aef63-bf65-4d36-a009-ecfa0a12422f	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	240	Breakfast	2026-01-07	\N	2026-01-07 18:32:08.493086+00	ml
+c4ed6ab5-4b16-40aa-8e03-c373db736c55	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-07	\N	2026-01-07 18:32:24.68354+00	g
+db45b601-677f-42a8-830c-b987778ba714	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	b634159d-9915-4db1-8ab2-69673ecbfac4	\N	1	Lunch	2026-01-07	\N	2026-01-07 18:32:43.587232+00	servings
+3213635a-f838-4009-aa31-4250e8a18867	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Lunch	2026-01-07	\N	2026-01-07 18:33:06.374575+00	g
+4ddcd9ff-28b0-4dc3-8eed-e27249ce6848	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	2	Snacks	2026-01-07	\N	2026-01-08 00:06:32.892665+00	g
+8d08c8da-a162-49d1-9bec-888e8943deb4	8d3b5e03-a6ca-44bd-a275-fc406a775527	721d4ae8-34d0-41f3-99eb-735c54a57544	\N	\N	100	Snacks	2026-01-07	\N	2026-01-08 00:07:18.082465+00	g
+d985f09a-f3de-43d8-9769-c7b345f62c54	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Dinner	2026-01-07	\N	2026-01-08 00:07:36.371338+00	g
+a8f060f7-20b1-4a65-b9c7-51482471017a	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	240	Breakfast	2026-01-08	\N	2026-01-09 03:05:39.045142+00	ml
+b2509129-2b78-4ec5-aecd-380922f5507c	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	30	Breakfast	2026-01-08	\N	2026-01-09 03:05:47.499458+00	g
+38550cf5-19d1-455a-95fe-10ea957265d0	8d3b5e03-a6ca-44bd-a275-fc406a775527	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	\N	\N	1	Lunch	2026-01-08	\N	2026-01-09 03:05:59.082602+00	g
+46b21cd0-7a7c-4d1b-9f1e-f645db9162db	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Lunch	2026-01-08	\N	2026-01-09 03:06:11.330026+00	g
+79740974-7267-46db-9e1c-e8d63b152d0a	8d3b5e03-a6ca-44bd-a275-fc406a775527	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Snacks	2026-01-08	\N	2026-01-09 03:06:28.056254+00	g
+96e66bc7-c19f-4363-ac69-730faaa1e974	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Snacks	2026-01-08	\N	2026-01-09 03:06:41.891799+00	g
+0c8975c5-33d0-405d-8098-59a5b2bcf917	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Dinner	2026-01-08	\N	2026-01-09 03:06:56.138779+00	g
+0e4899ae-381b-4cf9-9d98-b762eed0fed2	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	130	Breakfast	2026-01-09	\N	2026-01-09 17:35:39.065626+00	g
+737d1269-8f2f-4a15-8f29-4f67789ea5c7	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-01-09	\N	2026-01-09 17:36:00.808659+00	g
+0b478d53-c8dd-4092-beb9-a7984ced3971	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b	\N	1	Lunch	2026-01-10	\N	2026-01-10 16:53:01.136213+00	servings
+b9a8c71d-4e19-4d2b-9517-bd09517c856c	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Breakfast	2026-01-09	\N	2026-01-09 17:35:31.048857+00	g
+eb36b115-214a-4d0e-8897-fcab36820010	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	2	Breakfast	2026-01-09	\N	2026-01-09 21:17:10.808525+00	g
+6d362a8d-b5e7-47a6-b0b4-cd3abb7bf935	f64a8552-0cb5-4097-bb65-c86dd06d352e	2ea34745-ffa5-4548-b127-8f26c93c79af	\N	\N	20	Snacks	2026-01-09	\N	2026-01-09 21:20:51.896194+00	g
+37ce34f2-f51a-4ce9-8bdc-b3eb69ab86bc	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	28	Snacks	2026-01-09	\N	2026-01-09 21:20:58.693288+00	g
+2e34a74e-e498-465c-a7ee-7acbfd047adf	f64a8552-0cb5-4097-bb65-c86dd06d352e	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Snacks	2026-01-09	\N	2026-01-09 21:30:49.290201+00	ml
+eccc5995-37cc-44e5-9347-fc42b08d60b5	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-09	\N	2026-01-10 00:16:53.436992+00	g
+e44a006a-1971-43e5-be01-2d0241f255cc	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b	\N	1	Lunch	2026-01-09	\N	2026-01-10 00:18:04.700982+00	servings
+2347d132-177d-43b3-be70-2f331c29b9e0	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-01-09	\N	2026-01-10 00:40:17.131732+00	g
+51732d1d-1b53-49f5-a4c1-81e2496111f0	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Breakfast	2026-01-10	\N	2026-01-10 16:52:04.248754+00	g
+466357f8-1b39-418a-a7ae-7c45ff96b1e8	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	130	Breakfast	2026-01-10	\N	2026-01-10 16:52:19.405733+00	g
+29f79ad8-cc22-47ae-9b3e-251593754579	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	3	Breakfast	2026-01-10	\N	2026-01-10 16:52:39.354434+00	g
+35cff9c9-15c7-4c42-9e90-90b2024bc7ee	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Snacks	2026-01-10	\N	2026-01-10 17:21:45.301104+00	g
+e4861a83-dbb0-4250-b2d6-a1a3137cfc49	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6fd2794c-d0dd-46d9-a360-419c0f1c48cb	\N	1	Dinner	2026-01-10	\N	2026-01-10 17:21:00.613203+00	servings
+1e55e87f-e262-4d39-8316-f570c4290466	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-10	\N	2026-01-10 17:21:30.42824+00	g
+dc9365ba-64a7-4821-8300-047a6636c1ab	f64a8552-0cb5-4097-bb65-c86dd06d352e	2ea34745-ffa5-4548-b127-8f26c93c79af	\N	\N	20	Snacks	2026-01-10	\N	2026-01-10 17:21:58.634417+00	g
+58ea05d2-4e52-4c9a-ab28-bfd01568a708	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	100	Dinner	2026-01-10	\N	2026-01-11 03:49:36.268938+00	g
+85c65317-43d1-4eae-acc4-f02461ca972b	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	50	Dinner	2026-01-10	\N	2026-01-11 03:49:15.055344+00	g
+50dc9c96-d754-4067-b381-d93fc8269163	f64a8552-0cb5-4097-bb65-c86dd06d352e	84933a2f-fb82-4789-984a-2b9e484a944a	\N	\N	30	Breakfast	2026-01-10	\N	2026-01-11 04:30:43.561891+00	g
+cbb1b59b-4e68-4a63-8917-9df0698f24ad	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Breakfast	2026-01-11	\N	2026-01-11 19:52:16.679872+00	g
+2131eea5-e45a-46bc-b627-010987fd99a8	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	130	Breakfast	2026-01-11	\N	2026-01-11 19:52:16.679872+00	g
+2654cc21-550a-4024-84a9-1cf43d4ecc31	f64a8552-0cb5-4097-bb65-c86dd06d352e	84933a2f-fb82-4789-984a-2b9e484a944a	\N	\N	30	Breakfast	2026-01-11	\N	2026-01-11 19:52:16.679872+00	g
+12155595-c275-4962-b5dd-c88c6e81b2dc	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	2	Breakfast	2026-01-11	\N	2026-01-11 19:52:16.679872+00	g
+63918e81-9a15-469d-80e0-2a4d2712c19f	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	15d90a1f-78bf-4f7d-8d5f-3014c2814d7b	\N	1	Lunch	2026-01-11	\N	2026-01-11 19:55:05.501865+00	servings
+a681f3bb-51f2-482e-a98f-a81b6c3ed764	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	100	Dinner	2026-01-11	\N	2026-01-11 21:18:55.872837+00	g
+90345423-ca32-432f-b452-c7dc96ffd4cb	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Dinner	2026-01-11	\N	2026-01-11 21:19:18.028598+00	g
+5efc350d-ac66-4066-b35c-6a221d9bcef8	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-11	\N	2026-01-12 00:15:38.251615+00	g
+918f9614-e624-40cf-b70f-2349db8ec19f	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-01-11	\N	2026-01-12 00:15:53.05744+00	g
+6c6217a8-f2a7-460d-9386-69fed762789b	f64a8552-0cb5-4097-bb65-c86dd06d352e	84933a2f-fb82-4789-984a-2b9e484a944a	\N	\N	40	Breakfast	2026-01-13	\N	2026-01-14 00:20:29.944359+00	g
+eb7f0890-2caf-4f0a-bca7-a9b1f79877db	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	50	Breakfast	2026-01-12	\N	2026-01-13 01:33:41.135191+00	g
+d05d2c05-c4b0-422a-b36e-0796b0308900	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	340	Breakfast	2026-01-11	\N	2026-01-12 00:19:02.096824+00	ml
+7d201a98-0f12-4f14-ab7b-3db4bdd00523	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	30	Breakfast	2026-01-11	\N	2026-01-12 00:19:17.890866+00	g
+5c05ce9e-ea89-4978-8182-43029f9d4ddd	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-11	\N	2026-01-12 00:19:55.47061+00	g
+36de76fe-0549-4780-9cb7-165cd356f1c4	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Lunch	2026-01-11	\N	2026-01-12 00:20:12.609287+00	servings
+35d2f0cb-5836-4624-92f3-b6c555bd1a0d	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	100	Lunch	2026-01-11	\N	2026-01-12 00:20:22.515921+00	g
+fb356ace-2858-4a9d-8ce5-bcb3f0bea6c0	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-11	\N	2026-01-12 00:20:34.50108+00	g
+82022c2d-35d4-4e4d-9355-5c1bd74b9c0f	8d3b5e03-a6ca-44bd-a275-fc406a775527	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	30	Dinner	2026-01-11	\N	2026-01-12 00:20:45.791076+00	g
+2686a5cc-1bca-42a0-9a4a-213e9ecbf702	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	74	Dinner	2026-01-11	\N	2026-01-12 00:20:59.635375+00	g
+c2f9af2f-beb7-462e-9f11-b9c48722096d	8d3b5e03-a6ca-44bd-a275-fc406a775527	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	\N	\N	28	Dinner	2026-01-11	\N	2026-01-12 00:21:11.47322+00	g
+e40d9b62-2266-459e-b760-1ca4a1eac596	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	15	Snacks	2026-01-11	\N	2026-01-12 00:21:34.20239+00	g
+9dc79eac-ff6f-428d-b605-cef7fdb6781a	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	240	Breakfast	2026-01-11	\N	2026-01-12 00:24:58.852442+00	ml
+befcafb5-5094-4549-bdde-6a5600d3c119	f64a8552-0cb5-4097-bb65-c86dd06d352e	352efce9-8bb2-4cd3-8ac3-7eeee0292972	\N	\N	30	Dinner	2026-01-11	\N	2026-01-12 00:27:26.754901+00	g
+e00b3f27-7f8b-422f-8e8f-8991baee396b	f64a8552-0cb5-4097-bb65-c86dd06d352e	3b1ece8a-60f5-4439-9837-2ecbb55f381c	\N	\N	25	Dinner	2026-01-11	\N	2026-01-12 00:29:53.474757+00	g
+99f243a1-982c-4c09-b4a1-219413ac41e2	f64a8552-0cb5-4097-bb65-c86dd06d352e	3b1ece8a-60f5-4439-9837-2ecbb55f381c	\N	\N	25	Breakfast	2026-01-12	\N	2026-01-13 04:02:04.476372+00	g
+451f29ed-e371-4aa8-b4c2-be109f9b0923	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	20	Snacks	2026-01-11	\N	2026-01-12 00:16:08.807325+00	g
+9c3bf9c6-6cde-4ea6-a881-ce3da0b82c02	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Breakfast	2026-01-12	\N	2026-01-12 17:40:53.265357+00	g
+ffc3e0d5-401c-4cc8-a48b-1c66bf6dc081	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	130	Breakfast	2026-01-12	\N	2026-01-12 17:40:53.265357+00	g
+aee8739e-5fd5-481c-81d8-228b19a2c569	f64a8552-0cb5-4097-bb65-c86dd06d352e	84933a2f-fb82-4789-984a-2b9e484a944a	\N	\N	30	Breakfast	2026-01-12	\N	2026-01-12 17:40:53.265357+00	g
+704f87a2-31bc-4846-a9d6-21003f0f704f	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	2	Breakfast	2026-01-12	\N	2026-01-12 17:40:53.265357+00	g
+39291fc7-db1e-4bab-a024-2a6d08358a6e	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-01-12	\N	2026-01-12 17:41:13.011399+00	g
+02e94ee9-552a-4d31-a698-5bb59cb2d96e	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-01-11	\N	2026-01-12 17:41:31.353018+00	g
+4d7c1795-5ea8-4a68-9306-ac5b5e1f82d4	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Lunch	2026-01-12	\N	2026-01-12 17:42:09.53321+00	servings
+ace3a159-eda4-4336-a5fe-5308bc849fb1	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Dinner	2026-01-12	\N	2026-01-12 17:42:46.042362+00	servings
+fb31b9d9-c447-4645-a6ec-b9aa1f8b1270	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-01-12	\N	2026-01-12 17:43:00.99938+00	g
+d23f8f83-3e87-4350-9dcf-73470157b6d5	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-12	\N	2026-01-12 17:44:29.354856+00	g
+bae9136d-7eb9-4344-9e76-8f350dfc650c	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	310	Breakfast	2026-01-12	\N	2026-01-12 18:55:26.890264+00	ml
+d0caf9d3-9013-4644-aa4e-5c06be268e20	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	30	Breakfast	2026-01-12	\N	2026-01-12 18:55:42.16093+00	g
+f12607d0-8f48-4985-ab95-cd201c6c5388	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-12	\N	2026-01-12 18:56:04.806892+00	g
+ae6234b6-f0fb-45ae-bb49-f602862f0694	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-01-12	\N	2026-01-12 18:56:52.154073+00	g
+575fbfd1-c69a-40c4-80cf-c6536529b0c5	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	2ecab1a5-4ac2-44a0-be1c-af07322ed58f	\N	1	Lunch	2026-01-12	\N	2026-01-12 19:19:59.084786+00	servings
+544d6d73-c097-44bd-b4c0-208830e94027	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	e9997906-3d21-4360-b789-d2255e60a7b6	\N	1	Pre Workout	2026-01-12	\N	2026-01-12 19:55:23.164834+00	servings
+cd8d1b57-001f-4e81-82f6-68134fa94017	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	350	Breakfast	2026-01-13	\N	2026-01-13 19:32:22.89603+00	ml
+5a8887eb-eaf8-4be5-97f8-8c4991d2c57d	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	30	Breakfast	2026-01-13	\N	2026-01-13 19:32:33.10113+00	g
+a042b1f0-b0a1-4155-9737-aab31cfd47d6	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Lunch	2026-01-13	\N	2026-01-13 19:33:17.335248+00	g
+65281670-9eba-4f94-addd-cc3e240b2b9f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	e9997906-3d21-4360-b789-d2255e60a7b6	\N	1	Pre Workout	2026-01-13	\N	2026-01-13 19:34:27.097561+00	servings
+a88bc3b4-ee93-480f-a936-d2ed52597fd5	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Lunch	2026-01-13	\N	2026-01-14 00:13:16.972826+00	servings
+f7156fb0-48cf-4590-b31d-22e56a08f466	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Breakfast	2026-01-13	\N	2026-01-14 00:20:29.944359+00	g
+95a43e92-4571-4b61-b169-24be57803fd0	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	130	Breakfast	2026-01-13	\N	2026-01-14 00:20:29.944359+00	g
+3727a28f-d9cd-49d0-b014-919aff86d146	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	2	Breakfast	2026-01-13	\N	2026-01-14 00:20:29.944359+00	g
+7ed4a2d6-4480-4eb9-8c92-32733dc3f62d	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-01-13	\N	2026-01-14 00:20:29.944359+00	g
+c9476f8b-e525-45e8-8c2f-05c0795fb244	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Lunch	2026-01-13	\N	2026-01-14 00:20:29.944359+00	servings
+772e4996-0dd1-4f61-baf4-bcc5ddcef958	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Dinner	2026-01-13	\N	2026-01-14 00:20:29.944359+00	servings
+2faed7a6-5a43-4349-b156-a235db0c8ad8	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-01-13	\N	2026-01-14 00:20:29.944359+00	g
+8ca09ca1-7a8f-421c-86c7-2949920a4c5a	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-13	\N	2026-01-14 01:54:15.738051+00	g
+33aedfc2-c8b7-401e-a08f-a599d1807a4b	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	40	Dinner	2026-01-13	\N	2026-01-14 00:29:08.169076+00	g
+f176ec3d-fa75-4327-9e21-5ecf5b37ee45	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Dinner	2026-01-13	\N	2026-01-14 01:56:09.095465+00	g
+6ee7b5a1-0818-44e9-84cb-d91ad29b5a5c	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	320	Breakfast	2026-01-14	\N	2026-01-14 21:48:58.322795+00	ml
+0a2c80c3-db6b-43ca-aefc-ccf1568fc723	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-14	\N	2026-01-14 21:49:11.691285+00	g
+30e2b0de-10ba-4cda-b670-41ed1e65acaf	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-01-14	\N	2026-01-14 21:51:27.809464+00	servings
+8bc27675-88da-435b-ac3b-3705e0eb0344	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Dinner	2026-01-14	\N	2026-01-14 21:51:45.523522+00	servings
+3e0310ee-956c-4a67-87c9-cbee5ba8c50b	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Pre Workout	2026-01-14	\N	2026-01-14 21:52:03.609819+00	g
+2a50fd6f-40f9-41a6-9ba4-a22bdc09c197	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Dinner	2026-01-14	\N	2026-01-15 00:35:15.278114+00	g
+a1d5217f-341c-4403-969d-5361945d9069	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Breakfast	2026-01-14	\N	2026-01-15 02:31:27.957302+00	g
+822b21f5-c7e0-4cf2-858f-0ac071dffcc7	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	130	Breakfast	2026-01-14	\N	2026-01-15 02:31:27.957302+00	g
+cefbcde4-afc1-447f-b9d2-fbf63eb0d0c8	f64a8552-0cb5-4097-bb65-c86dd06d352e	84933a2f-fb82-4789-984a-2b9e484a944a	\N	\N	40	Breakfast	2026-01-14	\N	2026-01-15 02:31:27.957302+00	g
+4c179aab-8078-4342-b498-39f67fb74627	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	2	Breakfast	2026-01-14	\N	2026-01-15 02:31:27.957302+00	g
+1c56a4d1-0a89-42dc-b27f-c65c1832818b	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-15	\N	2026-01-15 13:29:37.461806+00	g
+b50620f1-7ba7-4c89-8041-f811c492f592	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Lunch	2026-01-14	\N	2026-01-15 02:31:27.957302+00	servings
+46416c84-199b-4802-8dd5-ad85cf5ff58a	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Dinner	2026-01-14	\N	2026-01-15 02:31:27.957302+00	servings
+51c1784c-f11d-4246-b0b5-344edc84decf	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-01-14	\N	2026-01-15 02:31:27.957302+00	g
+979e48af-87a9-4277-8500-81031a5738a9	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	2ecab1a5-4ac2-44a0-be1c-af07322ed58f	\N	1	Lunch	2026-01-15	\N	2026-01-15 17:42:10.130102+00	servings
+8c10bd8a-d1b0-4849-827d-73d97f9f7a3c	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	80	Post Workout	2026-01-15	\N	2026-01-15 23:28:21.80563+00	g
+ca72d5ac-100d-44a5-83df-1699826cc451	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-16	\N	2026-01-16 15:50:27.772975+00	g
+91d8af9e-b1a1-447f-a78e-73bf8a814dce	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	200	Breakfast	2026-01-16	\N	2026-01-16 16:13:58.923714+00	g
+967640ba-bd1a-409b-b9e4-9f097b1df213	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-01-16	\N	2026-01-16 16:14:11.270771+00	g
+9f3725fa-98be-4c3b-bd15-a9592a39a0d6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Lunch	2026-01-16	\N	2026-01-16 18:07:12.194288+00	servings
+10797099-e6f7-44d9-a07b-7d38ffbd2a3c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Pre Workout	2026-01-16	\N	2026-01-16 23:45:53.443199+00	servings
+e15bebbc-7e46-408b-b83b-79613dba65ba	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Lunch	2026-01-16	\N	2026-01-16 23:52:31.990648+00	servings
+953d4809-5b4b-4d4c-b786-a755b47f7bf7	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-01-16	\N	2026-01-16 23:53:20.123275+00	g
+b6dad743-0f4f-4105-b8e0-d54c599dc090	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Dinner	2026-01-16	\N	2026-01-16 23:53:46.467108+00	servings
+3b23a30f-9757-4a5b-b37b-284a4ca43485	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-16	\N	2026-01-16 23:55:15.646237+00	g
+098fe6a7-db4d-4c7a-aea8-f1af999f7e3a	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	80	Dinner	2026-01-16	\N	2026-01-16 23:56:04.642063+00	g
+e80cef24-cfec-449e-9a3e-0d4d59c23e50	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	50	Dinner	2026-01-16	\N	2026-01-16 23:55:34.433689+00	g
+f3a61e19-ddfd-45df-9328-bb5285e8758c	f64a8552-0cb5-4097-bb65-c86dd06d352e	84933a2f-fb82-4789-984a-2b9e484a944a	\N	\N	40	Breakfast	2026-01-16	\N	2026-01-17 00:51:51.563784+00	g
+263dafac-fd95-4a2b-989c-2b74ff304c74	8d3b5e03-a6ca-44bd-a275-fc406a775527	33394501-b4ee-4508-8faf-0a854aba80ea	\N	\N	100	Dinner	2026-01-16	\N	2026-01-17 04:41:32.322261+00	g
+25931aee-d47b-4314-b1f4-e9f80e74799a	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	240	Breakfast	2026-01-17	\N	2026-01-17 18:20:55.696237+00	ml
+0ddcd666-4866-42f5-83a1-9d8d95c11ee1	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-17	\N	2026-01-17 18:21:08.355885+00	g
+ee64a73b-93f8-4097-beee-c82fb0034ac0	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-01-17	\N	2026-01-17 18:21:18.334503+00	g
+f8cfda00-7596-4b7f-a544-021d0e4259a7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	9f76a624-f670-4dbd-b7c9-34f7b454b1f1	\N	1	Lunch	2026-01-17	\N	2026-01-17 20:22:04.243077+00	servings
+6ab6220e-2e7c-4579-b490-7d13b3360dc6	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	70	Lunch	2026-01-17	\N	2026-01-17 20:22:19.330507+00	g
+1d7ae205-a922-4c3a-bde7-2b2b9c0da611	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Dinner	2026-01-17	\N	2026-01-17 21:14:16.907391+00	servings
+7ca82a99-7a7c-4d71-b11e-f12dffca5029	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-01-17	\N	2026-01-17 21:14:25.29548+00	g
+87c0af64-f8ec-4ae2-ac7c-416866a309dc	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	200	Breakfast	2026-01-17	\N	2026-01-17 21:14:25.29548+00	g
+9c89adf3-c214-491d-bdf8-5d43cc4a9728	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-01-17	\N	2026-01-17 21:14:25.29548+00	g
+49ce5707-c048-420a-9dd4-450a24ff552c	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-17	\N	2026-01-17 21:14:25.29548+00	g
+778ebd87-b611-4f96-8d53-b9d44701e126	f64a8552-0cb5-4097-bb65-c86dd06d352e	84933a2f-fb82-4789-984a-2b9e484a944a	\N	\N	40	Breakfast	2026-01-17	\N	2026-01-17 21:14:25.29548+00	g
+d789bfc1-c836-4eed-ad53-846c68e02168	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	fbe6102b-5245-49fd-ba79-ef02748d5443	\N	1	Lunch	2026-01-17	\N	2026-01-17 21:18:29.424022+00	servings
+bcd5d931-4c09-4e83-871c-f9e08d124f25	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75	\N	1	Pre Workout	2026-01-19	\N	2026-01-19 22:13:51.433049+00	servings
+ecd97936-3948-463b-a951-024e96c97aa6	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	90	Dinner	2026-01-17	\N	2026-01-17 21:14:25.29548+00	g
+cabee1ce-f50a-4d01-907e-c86d1676346d	f64a8552-0cb5-4097-bb65-c86dd06d352e	f51676a4-6098-447c-b54f-17a9bc555d3c	\N	\N	45	Snacks	2026-01-17	\N	2026-01-17 22:11:22.638371+00	g
+883d9b0e-8e17-4a8d-8ee9-b1a37648d346	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75	\N	1	Snacks	2026-01-17	\N	2026-01-17 22:47:08.335298+00	servings
+a96f05ef-5265-407a-a93a-bc08d68eb6bf	8d3b5e03-a6ca-44bd-a275-fc406a775527	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	30	Dinner	2026-01-17	\N	2026-01-18 03:29:30.557802+00	g
+ce6bece9-47a8-4a6d-9333-c781596d0a80	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	9f76a624-f670-4dbd-b7c9-34f7b454b1f1	\N	0.3	Breakfast	2026-01-17	\N	2026-01-18 04:20:16.590881+00	servings
+a73e7dc6-8a56-489e-97d8-bf4b39797fc1	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-19	\N	2026-01-19 16:32:59.198736+00	g
+6fb804c7-1a6e-4225-8c68-5c13c56b878b	8d3b5e03-a6ca-44bd-a275-fc406a775527	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-01-19	\N	2026-01-19 16:33:27.223558+00	g
+936a01c7-825c-46d6-9658-b2286088b347	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-19	\N	2026-01-19 16:33:37.576576+00	g
+6735c383-8319-47df-b054-a703db0550c0	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	94131989-f241-4bc9-9e5f-dcf1b4e641d0	\N	1	Breakfast	2026-01-19	\N	2026-01-19 16:48:33.909577+00	servings
+3845a3ea-8a40-46c8-a53d-4a94bd6c2e1d	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-01-19	\N	2026-01-19 16:50:59.740492+00	g
+98e9ecb9-34ba-4b67-815a-90f2d391a959	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	0422bae5-0d25-4bf9-9cd6-46b6a99fbfd2	\N	1	Lunch	2026-01-19	\N	2026-01-19 16:50:41.234927+00	servings
+5dcb7443-a7e5-4254-a244-e879a557260c	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	12	Breakfast	2026-01-19	\N	2026-01-19 23:46:09.010593+00	g
+020a22b4-637b-4914-8f7f-830858781ac2	8d3b5e03-a6ca-44bd-a275-fc406a775527	352efce9-8bb2-4cd3-8ac3-7eeee0292972	\N	\N	25	Dinner	2026-01-19	\N	2026-01-19 23:58:45.74246+00	g
+f054e127-6985-46d1-b2ed-760033ded242	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	94131989-f241-4bc9-9e5f-dcf1b4e641d0	\N	1	Breakfast	2026-01-20	\N	2026-01-20 14:34:24.070434+00	servings
+8142d657-85d2-46dd-ab6f-c42e270394c4	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-20	\N	2026-01-20 14:34:59.840756+00	g
+fd32a46b-0f56-4803-9f1a-70dcf1c4ec14	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-20	\N	2026-01-20 14:35:21.149448+00	g
+91a70e26-d226-4085-b1a2-14c0cce3d6fd	8d3b5e03-a6ca-44bd-a275-fc406a775527	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	\N	\N	35	Dinner	2026-01-19	\N	2026-01-19 23:50:13.289908+00	g
+d037b623-6f26-43ae-b7db-1d5df977883c	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Dinner	2026-01-19	\N	2026-01-19 23:50:31.464372+00	g
+7943e2db-51a3-43bb-8a4d-c8b476fe3995	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	0422bae5-0d25-4bf9-9cd6-46b6a99fbfd2	\N	1	Lunch	2026-01-20	\N	2026-01-20 18:29:19.895911+00	servings
+a407eddf-0e38-42a7-9826-57b11c4f15f8	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-01-20	\N	2026-01-20 18:29:36.476485+00	g
+c154972e-721e-45a3-b60e-0411f28f9fb9	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1af4f1e8-5200-4edf-a04f-6a9f30648272	\N	1	Post Workout	2026-01-20	\N	2026-01-20 21:41:30.9381+00	servings
+ca362c26-078c-46d6-b8ea-86cfebb299c7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	f420ddef-a84e-49fc-b71f-54b024e3844f	\N	1	Dinner	2026-01-20	\N	2026-01-20 23:14:46.666844+00	servings
+86c976e9-b435-4731-883f-bcba2bfc0622	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	50	Snacks	2026-01-20	\N	2026-01-21 02:14:59.13311+00	ml
+cb4b4404-5c5e-47ed-b38f-f98b882288a6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	94131989-f241-4bc9-9e5f-dcf1b4e641d0	\N	1	Breakfast	2026-01-21	\N	2026-01-21 12:09:04.145411+00	servings
+680a5205-aaf0-4a61-b81e-24375a17178f	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	15	Breakfast	2026-01-21	\N	2026-01-21 12:09:15.004605+00	g
+ee9d55d5-08dc-4f24-ad1e-f9bcff58d9be	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	46dca9aa-9aaf-4ba8-8b55-2ebe44d605d5	\N	1	Lunch	2026-01-21	\N	2026-01-21 12:09:36.672355+00	servings
+dc0b7809-ca63-4a35-be85-602f88594e39	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Lunch	2026-01-21	\N	2026-01-21 12:09:56.227101+00	g
+4946b5f3-759e-4e3b-bcc4-8a9596105337	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Pre Workout	2026-01-21	\N	2026-01-21 12:10:14.337799+00	g
+f098e3af-37d6-42a9-997a-3c869d14a8b1	8d3b5e03-a6ca-44bd-a275-fc406a775527	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	40	Dinner	2026-01-21	\N	2026-01-21 12:10:47.467253+00	g
+458adc13-17c0-48ef-8287-06b2d0c084e6	8d3b5e03-a6ca-44bd-a275-fc406a775527	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	\N	\N	28	Dinner	2026-01-21	\N	2026-01-21 12:11:03.520961+00	g
+b42b095b-e9ce-4fc0-a24f-6419ec454a23	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	40	Dinner	2026-01-21	\N	2026-01-21 12:11:19.625694+00	g
+2bd84382-1db5-46f9-b8eb-ab5343d49897	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-01-22	\N	2026-01-22 15:04:06.052626+00	servings
+14a36b8d-e0a6-44cc-9ea8-2c63e0a84e96	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	15	Breakfast	2026-01-22	\N	2026-01-22 15:04:22.875525+00	g
+171bb523-993a-4ef9-90b6-688c05829881	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-22	\N	2026-01-22 15:04:37.555879+00	g
+d20144ac-012e-4e51-8184-7e83a234e2df	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Lunch	2026-01-22	\N	2026-01-22 15:05:36.111658+00	servings
+ebfcb16f-24d8-4d89-a859-0a82264bebde	8d3b5e03-a6ca-44bd-a275-fc406a775527	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Pre Workout	2026-01-22	\N	2026-01-22 18:42:13.342756+00	g
+78d11e05-a198-40de-9562-74969bd34258	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	0765c69d-925f-4d30-b561-fcc53db46514	\N	1	Post Workout	2026-01-22	\N	2026-01-22 20:58:26.668167+00	servings
+3ea0e4ea-1934-4f3f-9e26-1ae5682b0277	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Dinner	2026-01-22	\N	2026-01-23 02:40:16.430663+00	g
+5a91d87c-4fa8-4a04-87b1-2c012935d945	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	60	Snacks	2026-01-29	\N	2026-01-30 03:25:19.440996+00	g
+12256a6f-c0fe-42d9-bc30-435ccc738fd9	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Dinner	2026-01-22	\N	2026-01-23 00:23:40.952617+00	ml
+bc98f0cb-87ce-466d-a314-d13a18a89faa	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-01-23	\N	2026-01-23 18:58:38.484018+00	servings
+3046f186-2c9c-4fff-b462-b1d5b8743a5a	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	15	Breakfast	2026-01-23	\N	2026-01-23 18:58:46.35665+00	g
+e696292e-6eb6-4cdf-8694-255bf6bd3c06	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-23	\N	2026-01-23 18:58:56.858339+00	g
+5c90e93e-4d6b-4ee4-910c-1175ad16fddb	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	\N	1	Lunch	2026-01-23	\N	2026-01-23 18:59:56.244424+00	servings
+b64d32fb-4dfe-4874-b1be-0cddc02372d7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	0765c69d-925f-4d30-b561-fcc53db46514	\N	1	Snacks	2026-01-23	\N	2026-01-24 00:26:46.933397+00	servings
+ef97b0cf-ed7f-4b5c-805a-1af08edaebf4	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-01-25	\N	2026-01-25 21:35:36.13629+00	servings
+82c50c61-4fbb-4e02-9c30-f3490a4d6bb9	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	30	Breakfast	2026-01-25	\N	2026-01-25 21:35:47.648691+00	g
+cb275154-77d8-4d1e-a07c-1d3e6e2b33cd	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Lunch	2026-01-25	\N	2026-01-25 21:36:02.348281+00	servings
+04ccbe08-5bea-4df1-9c8e-2c2320716031	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	65	Lunch	2026-01-25	\N	2026-01-25 21:36:14.098092+00	g
+982ac8c2-d532-4f05-8b89-68c99515530b	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-25	\N	2026-01-25 21:36:25.80589+00	g
+36195ca1-2fad-44de-9722-0f23768ac044	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Snacks	2026-01-25	\N	2026-01-25 21:37:20.30716+00	g
+1ad4baf8-64a3-4e9f-909f-213f24887370	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1af4f1e8-5200-4edf-a04f-6a9f30648272	\N	1	Snacks	2026-01-25	\N	2026-01-25 21:37:42.668862+00	servings
+8025721d-74fa-43cd-b265-c04bdec7490b	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-01-26	\N	2026-01-26 21:23:12.572645+00	servings
+87c78d20-c2de-42e5-b975-9d228326d798	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	15	Breakfast	2026-01-26	\N	2026-01-26 21:23:21.374436+00	g
+07cf98c0-113b-46f9-bac1-68db33d8cb64	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-26	\N	2026-01-26 21:23:32.270695+00	g
+d4e67bf2-e0f7-4645-9336-19e9cec18928	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	6d2b1d5b-ca3f-4345-891a-83da77c7703d	\N	1	Lunch	2026-01-26	\N	2026-01-26 21:26:28.66384+00	servings
+9cf2143c-dd05-4870-9729-75908ba52957	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Pre Workout	2026-01-26	\N	2026-01-26 21:27:03.898122+00	g
+4c72b8eb-8241-4441-b5d6-77a6aac4fdea	8d3b5e03-a6ca-44bd-a275-fc406a775527	73c80421-4af0-463c-86c5-4a2aa354058f	\N	\N	20	Pre Workout	2026-01-26	\N	2026-01-26 21:27:14.588702+00	g
+5cdbf088-1759-41dc-8118-b9cb9483e108	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1af4f1e8-5200-4edf-a04f-6a9f30648272	\N	1	Post Workout	2026-01-26	\N	2026-01-26 21:27:53.080089+00	servings
+f88b1c44-b5fa-4cef-b40e-bf3f54d291d0	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	50	Dinner	2026-01-26	\N	2026-01-27 02:38:52.066693+00	ml
+8b5fd643-322f-4fa1-a882-68e8f949014a	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-01-27	\N	2026-01-27 21:39:13.137085+00	servings
+8bdf905a-f5fc-40cf-868a-86fe68217496	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-27	\N	2026-01-27 21:39:24.327991+00	g
+b52df38d-e1c3-42a2-9038-07327b0a5e93	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-27	\N	2026-01-27 21:39:40.286489+00	g
+68dfafd0-edfa-4d22-82ee-3b2af7a4e4f4	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a3a91fd5-3516-4f01-b9c5-8fa389f28751	\N	1	Lunch	2026-01-27	\N	2026-01-27 21:39:55.829021+00	servings
+c8739566-2c99-4721-ad70-454c6b743353	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-01-27	\N	2026-01-27 21:40:23.66377+00	g
+c1693069-9d86-443e-8ec5-af4ef8bf3d40	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1af4f1e8-5200-4edf-a04f-6a9f30648272	\N	1	Pre Workout	2026-01-27	\N	2026-01-27 21:40:35.072837+00	servings
+8fec6a13-bc67-44f4-8f77-325d0e6ca43b	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	16dd936c-09a0-45fe-ae27-d43aa5b0a14a	\N	1.5	Dinner	2026-01-27	\N	2026-01-28 00:33:57.479094+00	servings
+99047577-ad3f-47e7-90bf-48c105b554d0	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	45	Dinner	2026-01-27	\N	2026-01-28 00:34:39.683984+00	g
+b4fa9b60-e226-4757-b579-4ad2815442bc	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Dinner	2026-01-27	\N	2026-01-28 00:44:10.185925+00	ml
+27adc323-de84-4fc1-9390-e8185f6c188f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-01-28	\N	2026-01-28 21:00:24.007938+00	servings
+881a5623-c9cc-4d43-8a31-0af32bc4891c	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-28	\N	2026-01-28 21:00:33.184813+00	g
+286ea553-0cfb-4245-b727-74824864f103	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-28	\N	2026-01-28 21:00:45.048695+00	g
+246eec5a-b257-4269-b883-2275605f35fc	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a3a91fd5-3516-4f01-b9c5-8fa389f28751	\N	1	Lunch	2026-01-28	\N	2026-01-28 21:01:00.63342+00	servings
+d296efd7-8031-4185-8138-245e0cb666f1	8d3b5e03-a6ca-44bd-a275-fc406a775527	33394501-b4ee-4508-8faf-0a854aba80ea	\N	\N	183	Breakfast	2026-01-28	\N	2026-01-28 21:01:16.217929+00	g
+afa12272-db9d-438e-9516-948cc565000d	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Pre Workout	2026-01-28	\N	2026-01-28 21:01:29.866625+00	g
+78ce2653-246a-47e4-992d-25c8bcf28e7b	8d3b5e03-a6ca-44bd-a275-fc406a775527	73c80421-4af0-463c-86c5-4a2aa354058f	\N	\N	25	Pre Workout	2026-01-28	\N	2026-01-28 21:01:45.684952+00	g
+1d0260f0-1752-4037-9227-47395e0661c8	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1af4f1e8-5200-4edf-a04f-6a9f30648272	\N	1	Post Workout	2026-01-28	\N	2026-01-28 21:50:37.297196+00	servings
+ec55e308-9736-477c-a032-a1d85bf1561b	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Dinner	2026-01-28	\N	2026-01-29 13:45:31.975212+00	ml
+01231042-9311-40a7-9c4f-5e94f625aebf	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-01-29	\N	2026-01-29 23:51:09.987347+00	servings
+04157a6f-bf8f-4395-b421-6680d648fbbe	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-29	\N	2026-01-29 23:51:32.391313+00	g
+0cec4a1d-69bb-4226-9556-c3743fb13f1e	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	272ce18c-eae9-4eb0-bec5-d5b09326f3cb	\N	1	Lunch	2026-01-29	\N	2026-01-29 23:51:45.973076+00	servings
+43ae5876-cd97-4db7-9bb5-752633d4b2a4	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-01-29	\N	2026-01-29 23:52:03.106215+00	servings
+89cf53bd-b9b6-48cd-bc90-6a0255941233	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-29	\N	2026-01-29 23:52:15.875462+00	g
+66416478-3fd2-4604-a80c-4a9d7c401f28	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Pre Workout	2026-01-29	\N	2026-01-29 23:52:33.455349+00	g
+1626b5b4-a747-4ec6-a6f9-906f5419ffef	8d3b5e03-a6ca-44bd-a275-fc406a775527	73c80421-4af0-463c-86c5-4a2aa354058f	\N	\N	20	Pre Workout	2026-01-29	\N	2026-01-29 23:52:49.260703+00	g
+ee4737a8-1e53-48b9-906f-557fae44fb01	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	4a86b07c-d51d-497e-b32f-3d38403f2045	\N	1	Post Workout	2026-01-29	\N	2026-01-29 23:54:24.61945+00	servings
+87cdb818-c8be-4c3f-a86d-e2b0c60b770d	f64a8552-0cb5-4097-bb65-c86dd06d352e	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	\N	\N	16	Snacks	2026-01-29	\N	2026-01-30 03:25:31.036287+00	g
+2f83ab26-d932-4b5a-8a69-b824f44d06d1	f64a8552-0cb5-4097-bb65-c86dd06d352e	e694131b-2992-4216-b602-a9577ef708b3	\N	\N	40	Snacks	2026-01-29	\N	2026-01-30 03:25:45.867679+00	g
+2137f5b6-223d-4ee0-8887-8f588f5ee8e8	f64a8552-0cb5-4097-bb65-c86dd06d352e	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	200	Snacks	2026-01-29	\N	2026-01-30 03:25:55.560625+00	ml
+006fbe7d-fcd7-405c-baed-5358120f982b	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	797afd32-cb07-492c-ae1c-fb5b85411dd5	\N	1	Dinner	2026-01-29	\N	2026-01-30 03:27:54.877215+00	servings
+7a3e75f4-7854-4c47-b6d1-cc8da323e574	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	28	Snacks	2026-01-29	\N	2026-01-30 03:28:17.069151+00	g
+ff3f6fdf-9522-4058-887d-f358bc90f668	f64a8552-0cb5-4097-bb65-c86dd06d352e	73c80421-4af0-463c-86c5-4a2aa354058f	\N	\N	9	Snacks	2026-01-29	\N	2026-01-30 03:28:27.316532+00	g
+bc732eba-7e51-4591-a7ab-9fa34755ba17	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Lunch	2026-01-29	\N	2026-01-30 03:28:56.162807+00	g
+9bfba854-ceb2-4f91-b639-d1d0d40f3276	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	40	Dinner	2026-01-29	\N	2026-01-30 03:30:03.32523+00	g
+5082d321-8a37-4d21-9a1c-f4e54fc56adb	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Breakfast	2026-01-29	\N	2026-01-30 04:51:49.704563+00	ml
+5daef028-877d-4a1c-99ae-6d27e63e1b8d	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-01-30	\N	2026-01-30 16:00:31.266156+00	servings
+ec3a3b42-9bab-4545-945e-1050e5a5ad67	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	797afd32-cb07-492c-ae1c-fb5b85411dd5	\N	1	Dinner	2026-01-30	\N	2026-01-30 16:03:19.704515+00	servings
+b1f7ce4e-9a81-4a4a-8bb8-461e0cc9a8da	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Lunch	2026-01-30	\N	2026-01-30 16:04:19.316215+00	g
+634b85f7-c2b5-436d-a5b7-88289ad0df95	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	200	Lunch	2026-01-30	\N	2026-01-30 16:05:24.972307+00	g
+449124aa-79e2-4ce8-a599-3df9dc962996	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-30	\N	2026-01-30 16:06:39.845861+00	g
+53b029b2-d2d1-45af-aae2-2e3942736589	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Breakfast	2026-01-30	\N	2026-01-30 16:10:08.519688+00	g
+e516fb3d-8df1-46ff-bd7a-384863509959	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-01-30	\N	2026-01-30 21:56:20.51967+00	servings
+7ec44d10-bb0f-4bdd-b1dc-71149ad34b1c	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-01-30	\N	2026-01-30 21:56:31.920913+00	g
+ac273851-26fa-47d8-a2ee-c193b6d0aca7	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-30	\N	2026-01-30 21:56:44.76971+00	g
+756e3304-153e-4705-8e69-da0ee49cf0f0	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	272ce18c-eae9-4eb0-bec5-d5b09326f3cb	\N	1	Lunch	2026-01-30	\N	2026-01-30 21:57:00.212891+00	servings
+98567b6e-7e2c-4d6a-8191-366eca9683ed	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-01-30	\N	2026-01-30 21:57:13.897228+00	servings
+7551cf42-de2f-486d-a37a-b065cc80093f	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	70	Pre Workout	2026-01-30	\N	2026-01-30 21:57:29.819747+00	g
+6c178190-5b42-4b0e-8d86-d81ba7a7a08e	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-01-30	\N	2026-01-30 21:59:17.8263+00	servings
+b39c3a05-f8e2-4d7f-8ded-48843b44626e	8d3b5e03-a6ca-44bd-a275-fc406a775527	33394501-b4ee-4508-8faf-0a854aba80ea	\N	\N	150	Dinner	2026-01-30	\N	2026-01-31 02:34:13.490533+00	g
+f3db84bb-3a36-45c9-8c7c-cb4db4a15ba3	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a283524b-5395-420d-90a5-0a7f4613d4fd	\N	1	Dinner	2026-01-30	\N	2026-01-31 02:35:32.964271+00	servings
+3f3de57d-b0a4-4c2b-b06d-7f7abfc79800	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	4	Lunch	2026-01-30	\N	2026-01-30 16:04:33.535207+00	g
+b3ec3f68-d883-46c7-ac16-375c7ea69b52	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-01-30	\N	2026-01-31 04:39:29.695141+00	g
+765e63c5-a664-40ef-aaad-c0d8e223cc09	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-01-30	\N	2026-01-31 04:40:54.520568+00	g
+ea6ae9ea-623d-4695-932e-bfd80d9dc054	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	a283524b-5395-420d-90a5-0a7f4613d4fd	\N	1	Dinner	2026-01-30	\N	2026-01-31 04:41:11.948186+00	servings
+f87f92a5-0e05-44f9-b478-b94333ab2425	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-01-30	\N	2026-01-31 04:41:25.827936+00	g
+ae9cca47-1068-4575-a0ca-340f5ad80b02	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	94131989-f241-4bc9-9e5f-dcf1b4e641d0	\N	1	Breakfast	2026-01-31	\N	2026-01-31 21:03:40.614224+00	servings
+2331fa3d-7fd9-44da-9778-730e952719f2	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	30	Breakfast	2026-01-31	\N	2026-01-31 21:03:52.323588+00	g
+f33f4db9-01c4-4b4e-93e4-1ece34a3223b	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-31	\N	2026-01-31 21:04:05.895535+00	g
+ace8a992-c1b6-4bb5-b72e-12c65663a740	8d3b5e03-a6ca-44bd-a275-fc406a775527	1e797623-772f-44a8-a538-513a63f137b4	\N	\N	25	Lunch	2026-01-31	\N	2026-01-31 21:04:18.910217+00	g
+b4de715d-58ea-482c-9c51-f9c57d3dfda0	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	106	Lunch	2026-01-31	\N	2026-01-31 21:04:30.308113+00	g
+3300321f-f796-4726-9887-422353573be7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	4a86b07c-d51d-497e-b32f-3d38403f2045	\N	1	Snacks	2026-01-31	\N	2026-01-31 21:04:56.752781+00	servings
+2bf29ace-9678-4809-bd46-d259f7fc9c81	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-01-31	\N	2026-01-31 21:32:51.622956+00	servings
+858b98c3-4a7d-42bf-9ef7-ddd5912364e9	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	200	Lunch	2026-01-31	\N	2026-01-31 21:34:01.515075+00	g
+a3a03b20-e936-4910-adb2-e9ad13baf430	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	4	Lunch	2026-01-31	\N	2026-01-31 21:34:37.230035+00	g
+fd413d91-051c-4ed9-8281-bbb8392e737e	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Lunch	2026-01-31	\N	2026-01-31 21:33:48.571477+00	g
+674ec997-23db-4bfa-abde-9482a5a0721a	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-01-31	\N	2026-01-31 21:35:30.700246+00	g
+93c40702-a8a0-456e-9b1e-70a302a747ab	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	70	Dinner	2026-01-31	\N	2026-01-31 23:31:01.488467+00	g
+88fa6903-b9ab-4c4e-ba00-ba0fb654ad77	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Snacks	2026-01-31	\N	2026-01-31 21:38:49.288181+00	g
+0fdf688f-7ea4-4b72-a3d7-3be6add61792	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	200	Snacks	2026-01-31	\N	2026-01-31 21:37:23.075069+00	g
+715148f0-ac1a-4474-ba33-e02426a6521f	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	77145b37-0eaa-4f7d-b676-d5afb64a65a8	\N	1	Dinner	2026-01-31	\N	2026-02-01 01:59:48.497494+00	servings
+277d43aa-3d53-4f6e-85da-6820a48983c5	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	77145b37-0eaa-4f7d-b676-d5afb64a65a8	\N	0.75	Dinner	2026-01-31	\N	2026-02-01 02:05:25.528219+00	servings
+80798254-c347-4cd9-9128-ad892462d715	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-01-31	\N	2026-01-31 21:37:45.753849+00	g
+fffaab71-72d6-4456-be35-19c7006e7195	f64a8552-0cb5-4097-bb65-c86dd06d352e	1e797623-772f-44a8-a538-513a63f137b4	\N	\N	50	Snacks	2026-01-31	\N	2026-01-31 21:47:20.914934+00	g
+93915c87-1f77-4806-905e-97a557d2ef41	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Breakfast	2026-02-01	\N	2026-02-01 16:14:05.084073+00	g
+eead14f1-d6c3-445e-86dc-b2a4924f172a	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	180	Breakfast	2026-02-01	\N	2026-02-01 16:14:15.727454+00	g
+22406bfd-61ec-4554-9959-2c5c7870bbca	f64a8552-0cb5-4097-bb65-c86dd06d352e	721d4ae8-34d0-41f3-99eb-735c54a57544	\N	\N	70	Snacks	2026-01-31	\N	2026-01-31 21:38:26.656865+00	g
+def0d6d0-a7e4-4bd8-ab75-3f01c199c2ed	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	4	Breakfast	2026-02-01	\N	2026-02-01 16:14:34.312497+00	g
+00ec3dd8-ad97-48bf-b575-ac103c36dac6	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	70	Dinner	2026-01-31	\N	2026-01-31 21:36:35.078068+00	g
+f49d5c24-a87c-4730-9e08-52670e25bd7f	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	15	Breakfast	2026-01-31	\N	2026-01-31 23:31:41.197639+00	g
+abfdfb29-2ac8-4187-b263-e800e717769c	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Lunch	2026-02-01	\N	2026-02-01 21:54:24.18944+00	g
+dc7becdf-9d1b-4d88-b863-dc28f4cd4ab2	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	200	Breakfast	2026-01-31	\N	2026-01-31 23:31:49.692708+00	ml
+81b3fb4e-b960-4c72-bcfb-bdde21db1c69	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Snacks	2026-01-31	\N	2026-01-31 23:30:40.599703+00	g
+082cddcb-ad9a-4bda-b0cd-2f10b8fce96c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	94131989-f241-4bc9-9e5f-dcf1b4e641d0	\N	1	Breakfast	2026-02-01	\N	2026-02-01 19:07:36.984741+00	servings
+d2303e0f-d1ea-40c3-8abd-e8c8023d1157	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	30	Breakfast	2026-02-01	\N	2026-02-01 19:07:36.984741+00	g
+4e61ee99-f625-4cbf-bda9-19d4e4cb92e6	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-01	\N	2026-02-01 19:07:36.984741+00	g
+a499059a-e3fa-4cf8-900a-aa8b31ff1a66	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	4a86b07c-d51d-497e-b32f-3d38403f2045	\N	1	Snacks	2026-02-01	\N	2026-02-01 19:07:36.984741+00	servings
+7fae3f97-7ca5-4e08-a702-e3074a621174	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	77145b37-0eaa-4f7d-b676-d5afb64a65a8	\N	0.75	Dinner	2026-02-01	\N	2026-02-01 19:07:36.984741+00	servings
+ee874b91-1c75-40d2-b2d1-b3f83ce796c4	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	70	Dinner	2026-02-01	\N	2026-02-01 19:07:36.984741+00	g
+2c1c9da4-5bce-49db-a94f-82c3a7a23c91	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	60	Dinner	2026-02-01	\N	2026-02-01 19:07:36.984741+00	g
+417bb0bc-844e-4d55-a825-386df02ad28a	8d3b5e03-a6ca-44bd-a275-fc406a775527	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Lunch	2026-02-01	\N	2026-02-01 19:09:15.571788+00	g
+0243242f-623c-4354-9a6e-ab8a3b75da40	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-02-01	\N	2026-02-01 22:02:25.746324+00	servings
+4df38b15-e358-4635-8471-495e049c1d38	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-02-01	\N	2026-02-01 22:03:02.441338+00	g
+78aacd55-37e9-46ad-a595-6fe3e2155596	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	100	Dinner	2026-02-01	\N	2026-02-01 22:08:33.753919+00	g
+6cc71ff8-4c6d-4817-9259-91279db2c829	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	77145b37-0eaa-4f7d-b676-d5afb64a65a8	\N	1	Dinner	2026-02-01	\N	2026-02-01 22:09:07.822618+00	servings
+40778571-a8f3-477b-9d4f-1736a1c19795	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	15	Snacks	2026-02-01	\N	2026-02-01 22:09:24.806037+00	g
+d5e8ba51-5cf6-4f4f-9fc5-03b273b5f6c9	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	2	Snacks	2026-02-01	\N	2026-02-01 22:11:48.517758+00	g
+1aed8681-8280-49ac-a289-acac9ca44ad1	f64a8552-0cb5-4097-bb65-c86dd06d352e	352efce9-8bb2-4cd3-8ac3-7eeee0292972	\N	\N	32	Snacks	2026-02-01	\N	2026-02-01 22:23:22.460202+00	g
+a3cf6681-e987-4145-87a6-ab1c773c302f	f64a8552-0cb5-4097-bb65-c86dd06d352e	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	\N	\N	40	Snacks	2026-02-01	\N	2026-02-01 22:23:40.420276+00	g
+72e9a457-8ddd-40bb-a450-c415485b7b55	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Snacks	2026-02-01	\N	2026-02-01 22:08:48.213569+00	g
+5e55003d-8aa7-4473-bcc1-e6ec7aa65858	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	40	Breakfast	2026-02-01	\N	2026-02-01 22:26:31.275633+00	g
+e9cb6f43-252f-4168-b382-3d49e6169254	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	220	Snacks	2026-02-01	\N	2026-02-01 22:11:10.780363+00	g
+c2a8f0e2-4ec9-4263-bb3f-2cfbc11d011e	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	14384779-fadf-4add-a491-00c024835a6f	\N	1	Lunch	2026-02-02	\N	2026-02-01 19:15:33.648225+00	servings
+52bf3ead-be3b-4f2b-aefd-8c6856ea7039	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-02-02	\N	2026-02-01 19:15:44.904111+00	servings
+4c35253a-fe7b-4d9e-9d91-83b6868d5d06	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	180	Breakfast	2026-02-02	\N	2026-02-02 02:48:55.965392+00	g
+3407ea8a-e524-402b-b641-58c0a9c3663b	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-02-02	\N	2026-02-02 02:48:55.965392+00	servings
+1d45f2ca-f130-4c79-8ccf-f5a65d757170	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-02-02	\N	2026-02-02 02:48:55.965392+00	g
+b9237cd8-e188-4ee6-857d-b685f168b42b	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	1	Dinner	2026-02-02	\N	2026-02-02 02:54:04.897373+00	servings
+1351123b-0984-41f3-9dde-2fb6e3779063	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-02-03	\N	2026-02-03 21:28:12.401966+00	servings
+2afe5129-b369-4da4-bb9c-9d7bdf5fbeed	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-02-02	\N	2026-02-02 02:48:55.965392+00	g
+8135421c-d64f-40ed-8653-c506b1f30c66	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-02-02	\N	2026-02-02 02:48:55.965392+00	g
+776bd0c8-dec7-4b6a-8c6f-d61b81b0751c	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-02-03	\N	2026-02-03 21:28:25.864044+00	g
+8e1f4584-ae83-4d06-a836-98d3e39b780b	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-02-02	\N	2026-02-02 03:00:45.749012+00	g
+33a1ce77-5810-40a7-84ed-4cdb9153e641	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	120	Snacks	2026-02-02	\N	2026-02-02 02:48:55.965392+00	g
+4108ef85-898f-48c4-b48c-e9e56425f256	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	80	Dinner	2026-02-02	\N	2026-02-02 02:56:53.047901+00	g
+d2d096e5-089e-4036-808b-fd6a14030cd4	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-02	\N	2026-02-02 17:59:31.156791+00	servings
+7b09dd1c-fa17-4a37-b0d5-326979b11148	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-02	\N	2026-02-02 17:59:43.031244+00	g
+12c80531-bdd0-47c0-9c38-18a58e15c718	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-02	\N	2026-02-02 17:59:55.448854+00	g
+aee75b4a-5621-4f35-97ca-2c3b8839fb61	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	84	Snacks	2026-02-02	\N	2026-02-02 02:48:55.965392+00	g
+ccc43f00-7a45-4ed7-98a7-c4b4922aa31c	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	3	Breakfast	2026-02-02	\N	2026-02-02 02:48:55.965392+00	g
+de44cb86-3c5e-4cb3-bb75-aad6535411c2	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-02-02	\N	2026-02-02 19:53:31.023961+00	servings
+fd8164fe-9e08-4acf-a23b-ff149b456190	8d3b5e03-a6ca-44bd-a275-fc406a775527	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	30	Dinner	2026-02-02	\N	2026-02-02 19:53:52.828615+00	g
+aeab338d-64ab-4f8c-b7f9-7052d79994f6	8d3b5e03-a6ca-44bd-a275-fc406a775527	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	\N	\N	30	Dinner	2026-02-02	\N	2026-02-02 19:54:15.41019+00	g
+0599a905-6418-4d55-a7b3-77f68873b552	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	28	Snacks	2026-02-02	\N	2026-02-02 22:24:03.641638+00	g
+6101e762-703c-4470-b67d-3669c25b5f7d	8d3b5e03-a6ca-44bd-a275-fc406a775527	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	30	Dinner	2026-02-03	\N	2026-02-03 22:50:09.196065+00	g
+6741f962-c1f8-44e8-823d-eb4acd5c80d6	8d3b5e03-a6ca-44bd-a275-fc406a775527	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	\N	\N	30	Dinner	2026-02-03	\N	2026-02-03 22:50:23.754445+00	g
+9df27b86-3549-448b-97ff-928f095a5750	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Snacks	2026-02-03	\N	2026-02-03 22:50:38.921436+00	ml
+8d2ae96a-de83-4731-b193-e874145751fd	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Dinner	2026-02-02	\N	2026-02-02 21:38:15.584854+00	ml
+e806eff2-1459-4ef2-8929-a30009a84824	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	180	Breakfast	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+8d1228ff-4e85-4756-839e-86ed35397faa	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	3	Breakfast	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+8702ee82-8185-4144-9ed3-ce41addef2b1	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-02-03	\N	2026-02-03 15:25:26.429205+00	servings
+315d489e-e35d-4a71-b7e9-8e131379ae4e	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+a8372b05-7545-4573-a819-905394b66322	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+5a6e6a90-7b6d-4c31-b413-cf61a226a019	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	120	Snacks	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+e94f25c8-2466-4354-9d46-e8f99263c03b	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	1	Dinner	2026-02-03	\N	2026-02-03 15:25:26.429205+00	servings
+d11fbacc-ef7a-43fd-a833-d4efc02e8459	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	80	Dinner	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+dd387201-6a38-416f-8b6b-452d750354f2	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+ad76cf85-7967-4988-9f16-66d48e0b77c0	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Snacks	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+1e54241b-1320-47da-9e4e-23dd54efb54b	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	200	Breakfast	2026-02-03	\N	2026-02-03 15:25:26.429205+00	g
+3bb51a5e-9667-43c2-b7e9-f76ff31dc821	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-03	\N	2026-02-03 21:27:04.668929+00	servings
+51345cdb-29f9-47dd-96b3-c9cc7701fc5b	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-03	\N	2026-02-03 21:27:13.215378+00	g
+7ad5ecae-e2dc-4308-bc1e-cc97ba7cd528	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-03	\N	2026-02-03 21:27:23.869953+00	g
+e1a92629-b2ef-4ff3-b0bc-1be8fa97c111	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	14384779-fadf-4add-a491-00c024835a6f	\N	1	Lunch	2026-02-03	\N	2026-02-03 21:27:37.56294+00	servings
+3d9818ff-1a71-4082-9357-52b6783e575a	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-02-03	\N	2026-02-03 21:27:51.262517+00	servings
+6231f081-5b4e-4673-9162-d59877ffbef4	f64a8552-0cb5-4097-bb65-c86dd06d352e	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Snacks	2026-02-03	\N	2026-02-04 03:56:59.058345+00	g
+db7d9700-938d-4faa-b439-cd5a3dc493e7	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	a283524b-5395-420d-90a5-0a7f4613d4fd	\N	0.25	Dinner	2026-02-03	\N	2026-02-04 04:51:18.183261+00	servings
+0832d3f8-3b0c-4697-99be-5d7ab2e1f86f	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	25	Dinner	2026-02-03	\N	2026-02-04 04:55:42.100344+00	g
+94ba6465-e595-4007-8dc2-52ed1a0c4853	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	180	Breakfast	2026-02-04	\N	2026-02-04 21:46:03.332924+00	g
+40ccc307-7323-483c-9a3c-801a7c7281aa	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	3	Breakfast	2026-02-04	\N	2026-02-04 21:46:03.332924+00	g
+2115f469-5de1-4845-aad8-4e9a0a3cb091	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-02-04	\N	2026-02-04 21:46:03.332924+00	servings
+ffa20be8-66c5-4563-9f43-88d93b8b509c	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-02-04	\N	2026-02-04 21:46:03.332924+00	g
+e74984aa-6e40-47b1-8d81-92d82e32f2cf	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-02-04	\N	2026-02-04 21:46:03.332924+00	g
+57db2915-5adc-42ce-bf5d-3594a9b37690	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	1	Dinner	2026-02-04	\N	2026-02-04 21:46:03.332924+00	servings
+fa2c3d8d-f35a-4c9d-a5b4-3079bff69282	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-02-04	\N	2026-02-04 21:46:03.332924+00	g
+e11fa6c9-d4da-4687-82a8-239618546db2	f64a8552-0cb5-4097-bb65-c86dd06d352e	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	26	Snacks	2026-02-04	\N	2026-02-04 21:46:03.332924+00	g
+557b1903-19fb-46a8-b1d7-a08dfcd25c79	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-02-04	\N	2026-02-04 22:25:26.838128+00	servings
+4cace31c-4f84-41d8-b6e5-205fa1fb77e6	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-02-04	\N	2026-02-04 22:25:26.838128+00	g
+f1579dfd-47d9-45ea-8b49-ba26e62ea183	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-04	\N	2026-02-04 22:25:26.838128+00	servings
+8b943a38-046f-48b2-b4c8-95eb3690504c	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-04	\N	2026-02-04 22:25:26.838128+00	g
+0c2fa196-1cbd-4b55-829d-f3d35e47beb4	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-04	\N	2026-02-04 22:25:26.838128+00	g
+266657e9-0e5f-47f3-9b7f-da74ed21849f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	14384779-fadf-4add-a491-00c024835a6f	\N	1	Lunch	2026-02-04	\N	2026-02-04 22:25:26.838128+00	servings
+37b42d17-3b40-4d3c-81ee-c170d93325ee	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-02-04	\N	2026-02-04 22:25:26.838128+00	servings
+779dbbc8-4551-4de1-9e8f-8504e5ef1eac	8d3b5e03-a6ca-44bd-a275-fc406a775527	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Pre Workout	2026-02-04	\N	2026-02-04 22:25:49.717992+00	g
+aec0b6fa-8579-4fee-b1b7-3d081861b1ff	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f700e91-709d-4b05-a353-1f5a48bd85f4	\N	\N	52	Snacks	2026-02-04	\N	2026-02-04 22:34:19.10727+00	g
+cb46f6a1-00b1-42ba-b7fa-8df44d33a712	f64a8552-0cb5-4097-bb65-c86dd06d352e	36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	\N	\N	30	Breakfast	2026-02-04	\N	2026-02-04 22:34:39.957777+00	g
+f567a379-e0a4-4da2-ad55-fa48509dbacf	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-02-04	\N	2026-02-04 21:46:03.332924+00	g
+258af18e-3264-43a5-98bb-8b0a786e8895	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	70	Breakfast	2026-02-04	\N	2026-02-04 22:27:11.424024+00	g
+41ad791c-a92b-40d5-8c02-50c6fe376fcf	8d3b5e03-a6ca-44bd-a275-fc406a775527	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	30	Dinner	2026-02-04	\N	2026-02-05 02:20:32.590353+00	g
+de522354-b1cf-4cb5-9f88-8ea74f0540ee	8d3b5e03-a6ca-44bd-a275-fc406a775527	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	\N	\N	30	Dinner	2026-02-04	\N	2026-02-05 02:20:43.767783+00	g
+9dec6267-2b3d-40f2-a9db-8b0d16d4f761	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-05	\N	2026-02-05 22:01:55.598832+00	servings
+644ba624-9138-4f83-a289-88d2084bb6c2	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-05	\N	2026-02-05 22:02:04.045539+00	g
+96cdba77-0469-4fb7-aa7f-b6a9de9c446c	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-05	\N	2026-02-05 22:02:16.084161+00	g
+98d9f0b3-844e-430f-8c60-8a28f2bfe585	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Lunch	2026-02-05	\N	2026-02-05 22:02:31.276999+00	servings
+c1608af3-406e-498c-8145-db90023a825f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-02-05	\N	2026-02-05 22:02:48.748766+00	servings
+a99c520f-900a-41a0-b686-067851b2d4fa	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Snacks	2026-02-05	\N	2026-02-05 22:03:02.044816+00	g
+bb9ef29d-5e3a-4dad-b134-8a4c59b909a5	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Snacks	2026-02-05	\N	2026-02-05 22:03:22.47693+00	servings
+75bfc293-2ef8-44a0-8747-a95e3a8ed530	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f700e91-709d-4b05-a353-1f5a48bd85f4	\N	\N	52	Breakfast	2026-02-06	\N	2026-02-07 04:17:48.446288+00	g
+b72b4c92-1a49-4070-9bdd-282d3d9f0baf	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	0.5	Dinner	2026-02-05	\N	2026-02-05 22:06:07.276732+00	servings
+d0a72661-5acb-44e1-a57e-7617f6a3dadb	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	180	Breakfast	2026-02-05	\N	2026-02-06 00:13:46.442566+00	g
+4b9ef292-bd8c-448c-8eee-7a592113aeb1	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	3	Breakfast	2026-02-05	\N	2026-02-06 00:13:46.442566+00	g
+db1c5a1f-1507-42d0-bb37-edc55ccca2e4	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-02-05	\N	2026-02-06 00:13:46.442566+00	servings
+00e09bb6-5cab-4a3a-accb-b4a360430db7	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-02-05	\N	2026-02-06 00:13:46.442566+00	g
+af50d922-ffa8-44cb-950c-7f84ee0c982f	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	1	Dinner	2026-02-05	\N	2026-02-06 00:13:46.442566+00	servings
+0fb94841-fbd3-4017-8f3c-51e0266f7ca2	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-02-05	\N	2026-02-06 00:13:46.442566+00	g
+cdecbdcc-659c-475b-acf0-3808d8817c73	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f700e91-709d-4b05-a353-1f5a48bd85f4	\N	\N	52	Snacks	2026-02-05	\N	2026-02-06 00:13:46.442566+00	g
+92388958-c245-4ca4-be80-59c63d580594	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	84	Breakfast	2026-02-05	\N	2026-02-06 00:14:52.159741+00	g
+84e172b4-90fc-4e5a-b9ec-5216857b2bba	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	70	Dinner	2026-02-06	\N	2026-02-07 00:33:35.09944+00	g
+d48d240b-2879-4870-b861-ed23da1c6075	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Snacks	2026-02-05	\N	2026-02-06 00:24:03.811835+00	ml
+f41ba499-9a88-495f-960f-44e3a17d259c	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-02-05	\N	2026-02-06 00:13:46.442566+00	g
+dfd6d216-a71c-4893-98f0-5488b8fced92	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	60	Breakfast	2026-02-05	\N	2026-02-06 00:25:00.049364+00	g
+6160ce8f-42c3-4c52-ae89-386b7097fcfe	f64a8552-0cb5-4097-bb65-c86dd06d352e	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Breakfast	2026-02-05	\N	2026-02-06 04:58:00.453652+00	g
+d59c0bda-e216-4d91-9739-4b72328fff81	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	55	Dinner	2026-02-05	\N	2026-02-06 04:58:11.208717+00	g
+22384f8c-6e82-4d3e-b0d5-5240dbe5a770	f64a8552-0cb5-4097-bb65-c86dd06d352e	f51676a4-6098-447c-b54f-17a9bc555d3c	\N	\N	45	Dinner	2026-02-05	\N	2026-02-06 04:58:26.709641+00	g
+fb25a77e-f063-4107-b232-97b24286d68f	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	180	Breakfast	2026-02-06	\N	2026-02-06 22:47:32.280057+00	g
+e89ade4e-a449-4a05-be3c-89402da7c89b	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	3	Breakfast	2026-02-06	\N	2026-02-06 22:47:32.280057+00	g
+84438d9d-aa23-41cd-8e4a-cbb65c9546d5	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-02-06	\N	2026-02-06 22:47:32.280057+00	servings
+797c749b-fadb-46ee-b7a5-3978a31d320f	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	1	Dinner	2026-02-06	\N	2026-02-06 22:47:32.280057+00	servings
+543f6853-6cc2-47d6-a33d-1e61033f5591	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-02-06	\N	2026-02-06 22:47:32.280057+00	g
+c225fd9e-bd67-4602-8074-2ca64399a32d	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	84	Breakfast	2026-02-06	\N	2026-02-06 22:47:32.280057+00	g
+1bbffaab-c662-4452-a7eb-06255a64bbc6	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	200	Breakfast	2026-02-07	\N	2026-02-07 20:54:39.992309+00	g
+16318b71-45de-496b-854b-35563f6db373	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	200	Breakfast	2026-02-06	\N	2026-02-06 22:47:32.280057+00	g
+b6c6e63f-d495-4b74-80ea-1e2abf76f06e	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-06	\N	2026-02-07 02:22:33.7667+00	servings
+98c704cb-ee10-4eb0-82ca-a669c1599852	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-06	\N	2026-02-07 02:22:33.7667+00	g
+6833617c-c1d2-4314-afb8-405e05a5e266	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-06	\N	2026-02-07 02:22:33.7667+00	g
+5bee6ab4-80f2-462c-b157-442d1400cdc3	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Lunch	2026-02-06	\N	2026-02-07 02:22:33.7667+00	servings
+426baa62-15c6-4766-934c-842b69a908ae	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-02-06	\N	2026-02-07 02:22:33.7667+00	servings
+63889be5-56d1-4597-9ddf-9d3e0194243a	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Snacks	2026-02-06	\N	2026-02-07 02:22:33.7667+00	g
+77d02fff-11c6-4ea4-af8a-d7a3c85829f3	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Snacks	2026-02-06	\N	2026-02-07 02:22:33.7667+00	servings
+55526ea1-6bf7-476b-827e-9fc3dac1ee3f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	0.5	Dinner	2026-02-06	\N	2026-02-07 02:22:33.7667+00	servings
+03b71943-2e41-41ba-9865-68c900949637	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	100	Snacks	2026-02-06	\N	2026-02-07 02:22:33.7667+00	ml
+60ce2957-997b-40a2-892d-9da094794de1	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	140	Breakfast	2026-02-06	\N	2026-02-07 00:33:54.684193+00	g
+926c33b6-4de8-48d8-8d28-89485cc07de7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-07	\N	2026-02-07 20:53:32.467091+00	servings
+eeb195d3-27fd-4a72-a100-067591bf969e	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	25	Breakfast	2026-02-07	\N	2026-02-07 20:53:42.034345+00	g
+bb574977-271a-4aa2-9b98-cda77d9acae4	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-07	\N	2026-02-07 20:53:52.131888+00	g
+a285a9f8-08cc-4e4d-86b7-3bd2e64d6b63	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Lunch	2026-02-07	\N	2026-02-07 20:54:06.254799+00	g
+a3fe93a6-fd4f-4a04-9cdd-f05d75731c20	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	84	Lunch	2026-02-07	\N	2026-02-07 20:54:25.000734+00	g
+5fba2155-84a4-4393-995e-df70f9f3b29d	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	3	Breakfast	2026-02-07	\N	2026-02-07 20:54:39.992309+00	g
+f5cbbeb3-4171-453a-a6c8-081550c84146	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-02-07	\N	2026-02-07 20:54:39.992309+00	g
+690f1f76-8058-4e73-8fb6-2d7cb90c83b1	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-07	\N	2026-02-07 20:54:50.088699+00	g
+622048f7-5dec-485b-9090-66e0b3bb5d0f	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-02-07	\N	2026-02-07 20:55:30.166792+00	g
+672f326a-9ddf-4d8b-8768-fa98fcb11116	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-02-07	\N	2026-02-07 20:55:49.91194+00	g
+d4bde1bb-ea20-42fe-bd9a-215806c7a33a	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Breakfast	2026-02-07	\N	2026-02-07 20:56:05.545385+00	g
+132ae640-94bf-474f-883c-482866dcbf5b	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-02-07	\N	2026-02-07 20:56:19.641604+00	g
+5b3ba475-a4db-47c5-a7f4-d6604ef12f0b	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	240	Breakfast	2026-02-08	\N	2026-02-08 19:58:31.260423+00	ml
+55240937-6904-41c3-be21-e5ab080db8ee	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	25	Breakfast	2026-02-08	\N	2026-02-08 19:58:44.210133+00	g
+d1653822-3346-47e7-8f9d-52e6c10eeb42	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-08	\N	2026-02-08 19:58:56.170822+00	g
+534e30ff-775b-4dfd-9e67-427690d39009	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Lunch	2026-02-08	\N	2026-02-08 19:59:08.184347+00	g
+e3a49a2d-c047-4d25-9bf3-2f3c561d6317	8d3b5e03-a6ca-44bd-a275-fc406a775527	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Lunch	2026-02-08	\N	2026-02-08 19:59:18.399939+00	g
+57a4122a-9f2d-4c25-b3da-10abc9de8cbe	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-08	\N	2026-02-08 22:46:09.406274+00	g
+f6935a96-7915-441a-98d1-c7ab37a73015	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-09	\N	2026-02-09 19:43:28.949973+00	servings
+34d3a17c-e822-4c5d-af7f-a6f51a2837ab	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-09	\N	2026-02-09 19:43:54.885623+00	g
+b044e3d6-75cd-4de0-9f10-0c7ab9aae742	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-09	\N	2026-02-09 19:44:10.666081+00	g
+6003a233-5941-4d1f-9937-d3517a029597	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	4df1faad-6300-4b8e-b970-343b628b4e9a	\N	1	Lunch	2026-02-09	\N	2026-02-09 19:44:26.712399+00	servings
+581ddc1f-5746-4731-ae5c-f886b18a4da9	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-02-09	\N	2026-02-09 19:44:41.832863+00	g
+2a43f447-ff0d-4de2-805b-3618e51eed5f	8d3b5e03-a6ca-44bd-a275-fc406a775527	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Pre Workout	2026-02-09	\N	2026-02-09 19:44:54.782263+00	g
+b7b995ae-9b3a-40e4-88fd-51b0e719b02d	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	c499602f-a6d7-41e1-b5a9-c4fb5edb2827	\N	1	Post Workout	2026-02-09	\N	2026-02-09 23:29:46.323188+00	servings
+531e2562-562c-4197-8a48-c40a431b772e	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a64f3f20-d3fd-4b7f-8775-fbf92b1d4384	\N	1	Dinner	2026-02-09	\N	2026-02-09 23:31:24.291384+00	servings
+873589cb-deda-43b0-ad22-3c9154ec4f8f	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Dinner	2026-02-09	\N	2026-02-09 23:28:21.665516+00	g
+aa7083ae-c963-4af0-afa2-ef9b090d9b66	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-10	\N	2026-02-10 23:01:30.831357+00	servings
+a64dc241-28cb-42e9-a022-75bb77fb3706	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-10	\N	2026-02-10 23:01:30.831357+00	g
+122e7948-d289-4c3d-ab7b-4d4e2e61c5c9	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-10	\N	2026-02-10 23:01:30.831357+00	g
+8c795a6f-0c85-4075-88d4-b6a0e21e083b	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	4df1faad-6300-4b8e-b970-343b628b4e9a	\N	1	Lunch	2026-02-10	\N	2026-02-10 23:01:30.831357+00	servings
+c6dbc183-c545-42fa-80fd-a6c74a5c770e	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-02-10	\N	2026-02-10 23:01:30.831357+00	g
+37cf5701-6237-45dc-8f41-79445a3f66ef	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-10	\N	2026-02-10 23:04:57.747664+00	g
+99f8b21f-52aa-4ed4-a127-7e6520dfa9f9	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f700e91-709d-4b05-a353-1f5a48bd85f4	\N	\N	52	Breakfast	2026-02-10	\N	2026-02-10 23:07:01.376578+00	g
+5f49ffcb-5fbe-40e6-8ef7-00a7baca5bd8	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	180	Breakfast	2026-02-10	\N	2026-02-10 23:07:01.376578+00	g
+e05cb399-b31c-4807-9576-481cb37e00cd	f64a8552-0cb5-4097-bb65-c86dd06d352e	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	3	Breakfast	2026-02-10	\N	2026-02-10 23:07:01.376578+00	g
+7c8f98ae-f766-4316-be86-f6f518b748e5	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-02-10	\N	2026-02-10 23:07:01.376578+00	servings
+9dd1af01-b083-4af2-8c64-73213c063266	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	1	Dinner	2026-02-10	\N	2026-02-10 23:07:01.376578+00	servings
+ff6c5407-679d-4806-bcf2-3fb0db06a14d	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-02-10	\N	2026-02-10 23:07:01.376578+00	g
+9fd42cc8-1ef2-4b4f-a1b8-5fb6a6bb40d6	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	200	Breakfast	2026-02-10	\N	2026-02-10 23:07:01.376578+00	g
+c4433d30-5338-475d-9bfb-fa01046faf97	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	84	Breakfast	2026-02-10	\N	2026-02-10 23:07:01.376578+00	g
+a9bb8f7f-b5cd-4069-91b9-5fe5feaf61be	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	70	Dinner	2026-02-10	\N	2026-02-10 23:07:01.376578+00	g
+f487bbae-8589-4f2f-b044-bd103e9fdcc0	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	140	Breakfast	2026-02-10	\N	2026-02-10 23:07:01.376578+00	g
+b6142651-4d3c-4ad4-b67b-14fbe3eeb240	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	85	Dinner	2026-02-10	\N	2026-02-10 23:06:12.537104+00	g
+509b19b8-50ad-46e7-9948-68d1e4aa022a	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	e064a5db-7aa5-4f9f-bdba-71da5d4b29f0	\N	1	Dinner	2026-02-10	\N	2026-02-11 03:26:29.548479+00	servings
+445cd169-221f-4dc1-a154-f8d5c4dee7c8	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	200	Snacks	2026-02-10	\N	2026-02-11 03:27:59.481546+00	ml
+d93e1134-1436-4015-b69f-4b5157cfb463	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-11	\N	2026-02-11 12:08:44.971943+00	servings
+0dadbc57-beb8-477a-91ea-a6c002144117	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	e3fa1f6c-7399-4daf-a413-552f3d3823e2	\N	1	Breakfast	2026-02-11	\N	2026-02-11 12:08:54.70379+00	servings
+ec5c50d1-2ad7-4af5-8a4a-9e0d86250251	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	10	Breakfast	2026-02-11	\N	2026-02-11 12:09:05.907035+00	g
+3f149bdd-05ce-4443-b8ca-dd3cbd92768b	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-11	\N	2026-02-11 18:06:23.261039+00	g
+19ad323c-bbc6-492c-9bee-f601c568ef1f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	4df1faad-6300-4b8e-b970-343b628b4e9a	\N	1	Lunch	2026-02-11	\N	2026-02-11 18:06:56.187009+00	servings
+9bc13ca4-396d-448a-8a1e-c030a7b7514e	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-02-11	\N	2026-02-11 20:09:37.259438+00	g
+2f779945-5b19-4f01-a1f0-162d1b5b19d2	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	11	Pre Workout	2026-02-11	\N	2026-02-11 20:10:06.91409+00	g
+0f348f33-a98d-47d8-978b-35d0cc355fa6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	c499602f-a6d7-41e1-b5a9-c4fb5edb2827	\N	1	Post Workout	2026-02-11	\N	2026-02-12 01:29:53.662162+00	servings
+7e49907f-e062-4ca9-a867-69c55759ac67	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	90	Dinner	2026-02-11	\N	2026-02-12 01:30:06.992882+00	g
+13e454d4-70ca-49b8-b84c-34834f11e1e6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	e064a5db-7aa5-4f9f-bdba-71da5d4b29f0	\N	1.2	Dinner	2026-02-11	\N	2026-02-12 01:30:23.606956+00	servings
+f5e480c8-5eaa-49cb-8ea6-ba296244efd6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-12	\N	2026-02-12 20:28:06.887884+00	servings
+529c7910-03db-43d5-ab1c-b12ef0ddf742	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	10	Breakfast	2026-02-12	\N	2026-02-12 20:28:15.392547+00	g
+dafd4260-8c34-4626-a95e-18b97025bee1	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	761b723a-bade-48c3-b4ca-d2c83387014d	\N	2	Breakfast	2026-02-12	\N	2026-02-12 20:28:33.174735+00	servings
+1246bac7-818a-4f91-a034-a45ab167553a	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-12	\N	2026-02-12 20:28:50.379054+00	g
+d31d5985-afb2-4b58-b2d0-491f1cf3b7f8	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	1	Lunch	2026-02-12	\N	2026-02-12 20:29:08.423637+00	servings
+ca2c74a7-c6ac-47cc-9886-8eee9f1b092f	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-02-12	\N	2026-02-12 20:29:27.937672+00	g
+f7c5c5f9-1760-40a7-8110-5d56686fd587	8d3b5e03-a6ca-44bd-a275-fc406a775527	be8c3f69-bf39-406b-8333-9ea1a1c2f8a1	\N	\N	1	Pre Workout	2026-02-12	\N	2026-02-12 20:29:40.18919+00	g
+67646677-869b-46e4-8627-ecf3db115080	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-02-12	\N	2026-02-13 01:26:46.379964+00	g
+0b879e03-5ec6-4ab8-bb61-35b297661700	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	77145b37-0eaa-4f7d-b676-d5afb64a65a8	\N	1	Dinner	2026-02-12	\N	2026-02-13 01:27:01.05571+00	servings
+754b1ff9-0039-4ede-9ebf-f647e4919089	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-02-12	\N	2026-02-13 01:27:17.286176+00	g
+7609af0f-c6c9-4428-9b07-0353f3ceb51a	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-17	\N	2026-02-17 18:50:31.39603+00	servings
+7b98d631-7432-4417-b706-214efa762dd3	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-17	\N	2026-02-17 18:50:46.088925+00	g
+bc75ccd8-9c44-4982-9240-e8a984986104	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-17	\N	2026-02-17 18:51:00.687203+00	g
+8493a257-6c8a-4ab9-abe6-bf03bdf0f085	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	aeab82ed-3a88-45ad-a767-1619c41a57b0	\N	1	Lunch	2026-02-17	\N	2026-02-17 18:51:15.406163+00	servings
+d7d73834-7db6-4fc8-ba10-5cc4fa5ac969	8d3b5e03-a6ca-44bd-a275-fc406a775527	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Pre Workout	2026-02-17	\N	2026-02-17 18:51:33.915682+00	g
+e507b588-d59e-4e7a-9286-6a7f47266f4b	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-02-17	\N	2026-02-17 18:51:44.003732+00	g
+3eb272d3-d799-4a6e-a841-f36a51c244e5	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-02-17	\N	2026-02-17 18:54:44.477848+00	g
+746cfb52-555e-4f77-9f08-dc1912de5253	f64a8552-0cb5-4097-bb65-c86dd06d352e	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Breakfast	2026-02-17	\N	2026-02-17 18:54:57.323061+00	g
+93ccd30d-0644-448e-a49c-7798ce0ac56a	f64a8552-0cb5-4097-bb65-c86dd06d352e	2ea34745-ffa5-4548-b127-8f26c93c79af	\N	\N	6	Breakfast	2026-02-17	\N	2026-02-17 18:55:11.090247+00	g
+3cd01e83-081a-4e41-8a0b-975b9c8643ac	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Breakfast	2026-02-17	\N	2026-02-17 18:55:39.38647+00	g
+5b55275c-f01b-4630-8a66-c31453b1e37e	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-02-17	\N	2026-02-18 02:39:38.316568+00	g
+ada1be6b-72b9-427a-9112-8e734087c411	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	0.5	Dinner	2026-02-17	\N	2026-02-18 02:40:02.766196+00	servings
+622a4132-6ea9-4b31-b8c6-2e333578b6b6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-18	\N	2026-02-18 17:34:56.134162+00	servings
+0735bfdf-d92e-4b7c-b66f-50b798b94788	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-18	\N	2026-02-18 17:35:05.757794+00	g
+948ed83a-3fc6-4780-be15-7793d5ec3fcf	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-18	\N	2026-02-18 17:35:31.906765+00	g
+176c4f12-7909-4a94-b645-b039d004d5f1	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	35bd906e-4c15-4ea2-bb52-ec16cc3b0020	\N	1	Lunch	2026-02-18	\N	2026-02-18 17:37:09.178525+00	servings
+abf60109-d18e-49e3-8b2d-e875b43eaa5a	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-02-18	\N	2026-02-18 17:37:45.76797+00	g
+a1059b56-fb00-4338-8b67-4a668ac0c63a	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	140	Breakfast	2026-02-18	\N	2026-02-18 17:37:55.584557+00	g
+607166f0-6e82-48e0-9ebe-2b69937467bf	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	3	Breakfast	2026-02-18	\N	2026-02-18 17:40:36.106829+00	ml
+f3370894-3c0c-4c01-ae2d-4f8f5d80b2c1	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	35bd906e-4c15-4ea2-bb52-ec16cc3b0020	\N	1	Dinner	2026-02-18	\N	2026-02-18 17:41:21.355091+00	servings
+1f17eb96-7be5-4302-9be4-77193b82fd2f	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-18	\N	2026-02-18 17:42:44.113804+00	g
+f72c4023-eaa4-4530-9d8f-292a2e9a3944	f64a8552-0cb5-4097-bb65-c86dd06d352e	3a16c197-ca86-4411-9eaa-b4778044bf3a	\N	\N	100	Lunch	2026-02-18	\N	2026-02-18 17:43:33.172878+00	g
+16bd5303-1971-49c2-81a0-f615b7aeb0bf	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Breakfast	2026-02-18	\N	2026-02-18 17:44:47.863677+00	g
+8ae63621-d0b4-4cb8-b201-bcdfaed6dcff	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Snacks	2026-02-18	\N	2026-02-18 17:42:55.978899+00	g
+a136be16-08a2-4d53-b7d0-014a2e90ab31	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-02-18	\N	2026-02-18 17:46:40.74751+00	g
+2a6dbfee-810a-4889-b0a3-10fb397e5cb3	f64a8552-0cb5-4097-bb65-c86dd06d352e	73c80421-4af0-463c-86c5-4a2aa354058f	\N	\N	25	Breakfast	2026-02-18	\N	2026-02-18 17:46:55.011733+00	g
+654b3ee4-8059-43da-a631-c7167bd75787	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	120	Snacks	2026-02-18	\N	2026-02-18 17:48:01.671737+00	g
+98802d03-ab4c-446b-8196-3fd99b4c537c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	e9997906-3d21-4360-b789-d2255e60a7b6	\N	1	Post Workout	2026-02-17	\N	2026-02-18 22:31:13.21187+00	servings
+140fa196-8879-4fc0-a05a-cbdf6f0a9574	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	d5314ffb-2caf-4d1e-a9b1-a856005335af	\N	1	Snacks	2026-02-18	\N	2026-02-18 22:31:50.700714+00	servings
+69a2ec4d-65ba-46a1-b6e6-e30ec2db090c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Dinner	2026-02-18	\N	2026-02-18 22:32:54.905272+00	servings
+d5e2e716-f72a-4dce-8214-e99525f94a61	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	80	Dinner	2026-02-18	\N	2026-02-18 22:33:07.365639+00	g
+753f89b2-fcce-47e5-9074-c92925918a5a	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-19	\N	2026-02-19 15:28:54.726417+00	servings
+d3262a8a-7aa6-4163-a3c7-bb227a958af8	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-19	\N	2026-02-19 15:29:03.276675+00	g
+41678fdd-8673-4207-b986-4906118e0424	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-19	\N	2026-02-19 15:29:41.116942+00	g
+0649a83e-7af1-416a-bb35-33ae4893b804	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1ae6ed7c-d074-4ac9-916c-338f8d100989	\N	1	Lunch	2026-02-19	\N	2026-02-19 15:29:57.515275+00	servings
+52c86f61-04d7-4dc8-84a2-cca85ecd84b3	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-02-19	\N	2026-02-19 15:30:13.742846+00	g
+37a78413-3e70-4e91-a38f-7467dd38ae85	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-02-19	\N	2026-02-19 15:30:29.165647+00	g
+d2379a46-ee53-48b4-b894-7acce5c6d745	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-02-19	\N	2026-02-19 15:31:26.88947+00	servings
+020ae54a-f9a9-443f-b052-bec891fd8903	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Pre Workout	2026-02-19	\N	2026-02-19 18:25:05.022781+00	g
+b9517580-9b41-4eb0-a43d-a9d5128c9fc8	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	70	Dinner	2026-02-19	\N	2026-02-19 18:26:08.037441+00	g
+c0506127-48d4-44a2-b4f5-e3e1f0413a6b	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Dinner	2026-02-19	\N	2026-02-19 18:26:19.375161+00	servings
+a30f3025-e12c-4c2b-ae7b-dfbc659eeb7b	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Breakfast	2026-02-20	\N	2026-02-20 15:22:44.66779+00	servings
+6b845746-a731-4983-8ca5-8d687ae6cdf9	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-02-20	\N	2026-02-21 00:24:54.931925+00	servings
+c0dbc131-3918-4eae-b51d-cfd4876347a2	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-02-20	\N	2026-02-21 00:25:04.657264+00	g
+59fe69e9-cc36-4853-adeb-479fdfd6670c	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-02-20	\N	2026-02-21 00:25:15.766249+00	g
+95f70b9d-16df-4ec4-91c4-afe539722f80	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Lunch	2026-02-20	\N	2026-02-21 00:25:36.888633+00	servings
+db8d74b1-5238-48ec-a69c-633205ee0cc4	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	70	Lunch	2026-02-20	\N	2026-02-21 00:25:49.188683+00	g
+51a11cc7-8114-4f22-b26a-fb82832042c6	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Breakfast	2026-02-20	\N	2026-02-21 00:25:57.942124+00	g
+a5f4345b-14d9-4a79-99e4-c5e48c127cac	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Pre Workout	2026-02-20	\N	2026-02-21 00:26:07.137794+00	g
+c6da6bc5-fac6-4eb8-9b8e-8669f0796ef8	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-04	\N	2026-03-04 20:15:44.114511+00	servings
+11c78271-28c9-4e39-89a3-e81b25066a75	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-04	\N	2026-03-04 20:15:54.167033+00	g
+0a5a745a-c493-4815-bcd4-1df0008f9378	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-04	\N	2026-03-04 20:16:18.404861+00	g
+e0893a23-00b3-4a54-b269-7b250375086a	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	fd15e1b0-5476-48d1-a22b-b97bebd50d59	\N	1	Lunch	2026-03-04	\N	2026-03-04 20:16:55.66487+00	servings
+ea4fb0fb-0296-4942-88e6-c714bd57ac85	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-03-04	\N	2026-03-04 20:17:18.09997+00	g
+7efd3289-00ed-47f2-a8f2-d88b8c255746	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Dinner	2026-03-04	\N	2026-03-04 20:17:33.507714+00	servings
+f421650a-9dc1-4b98-bdfa-26e45429ea71	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	92	Dinner	2026-03-04	\N	2026-03-04 20:17:54.200139+00	g
+086980bb-28be-4431-a90c-568fb4e90877	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-05	\N	2026-03-05 22:09:45.199154+00	servings
+a2dc5b9d-cf39-48c4-9b12-d34a0038a4b3	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-05	\N	2026-03-05 22:09:58.912362+00	g
+ab584881-d448-497e-90d7-e389422a3b34	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-05	\N	2026-03-05 22:10:11.879505+00	g
+72a8f962-0b1f-4ad8-b3c3-cbb6f15be75f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	fd15e1b0-5476-48d1-a22b-b97bebd50d59	\N	1	Lunch	2026-03-05	\N	2026-03-05 22:10:25.566747+00	servings
+7235c2f1-0650-49e6-b17a-87c4096d1941	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-03-05	\N	2026-03-05 22:10:45.085277+00	g
+935f267a-5e51-4c73-8ff0-7abf3b676202	8d3b5e03-a6ca-44bd-a275-fc406a775527	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Pre Workout	2026-03-05	\N	2026-03-05 22:10:56.522386+00	g
+79322fc4-8ae7-430d-8b40-c9da1a975db7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-05	\N	2026-03-05 22:12:45.270399+00	servings
+82f33dae-16a1-495d-abcb-632eecafedaf	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	90	Dinner	2026-03-05	\N	2026-03-05 22:13:04.779479+00	g
+c825bac6-e58e-4d33-9613-8aa19a94e547	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a64f3f20-d3fd-4b7f-8775-fbf92b1d4384	\N	1	Dinner	2026-03-05	\N	2026-03-05 22:13:49.27471+00	servings
+7bcc15c9-511f-4bfa-ba7e-dec931df8ccb	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-06	\N	2026-03-07 01:00:08.085398+00	servings
+2e4e6ffe-0b57-4fbc-b6d4-d8c98636d532	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-06	\N	2026-03-07 01:00:17.00854+00	g
+a0f71b64-5adf-4016-860a-363992511e27	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-06	\N	2026-03-07 01:00:30.27004+00	g
+51062f32-7482-4bd9-a338-51a9e9780b71	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	fd15e1b0-5476-48d1-a22b-b97bebd50d59	\N	1	Lunch	2026-03-06	\N	2026-03-07 01:00:46.255459+00	servings
+b5fceb49-e655-42cd-bb81-e4e356511051	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	5ca671ab-9dbe-48e4-b90b-04f59729f0a5	\N	1	Post Workout	2026-03-06	\N	2026-03-07 01:15:11.26273+00	servings
+d90cae94-b411-4828-91d4-572bcc4721d0	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a64f3f20-d3fd-4b7f-8775-fbf92b1d4384	\N	1	Dinner	2026-03-06	\N	2026-03-07 01:20:09.491866+00	servings
+dbb568a1-b1b8-4985-a65e-b4d644ae3adf	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	80	Dinner	2026-03-06	\N	2026-03-07 01:20:24.709971+00	g
+f0abc9f4-0c6b-44b0-ba21-c3a3aceeb333	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-07	\N	2026-03-07 19:31:30.664026+00	servings
+1cc1804b-979d-4186-8981-4d3a0acdd835	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	25	Breakfast	2026-03-07	\N	2026-03-07 19:31:41.28755+00	g
+7ee4aa99-9fc2-4b61-862f-c44a68a5831b	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	06dfcdc9-b735-4327-bd77-68f41fba21a6	\N	1	Lunch	2026-03-07	\N	2026-03-07 19:31:59.326926+00	servings
+cca0651f-86d7-4514-8fb6-397a9a47db5b	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Lunch	2026-03-07	\N	2026-03-07 19:32:08.606362+00	g
+5c64b276-d67c-44f9-b4f0-194b7f1b3f09	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	70	Dinner	2026-03-07	\N	2026-03-07 20:44:08.323077+00	g
+aa88113e-45a5-47b6-9afe-d3a6dc0bf668	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	1	Dinner	2026-03-07	\N	2026-03-07 20:44:27.155078+00	servings
+e93bd0c7-8222-4cc8-95cf-f11df74529d5	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	84	Breakfast	2026-03-07	\N	2026-03-07 20:44:38.886802+00	g
+957308e4-b5e6-414e-98ec-6d86da3eea2e	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	06dfcdc9-b735-4327-bd77-68f41fba21a6	\N	1	Breakfast	2026-03-07	\N	2026-03-07 20:45:01.11143+00	servings
+aed2872f-abf6-48c0-96ce-d215fb5e15c9	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-07	\N	2026-03-07 20:45:13.982822+00	g
+77a630a7-a1ff-45c2-ae46-00da2569e98e	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	200	Snacks	2026-03-07	\N	2026-03-07 20:45:57.850455+00	g
+a53ad361-80f4-4fc9-8a04-a819893e20be	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-07	\N	2026-03-07 22:29:39.622334+00	g
+20d8aa73-175c-452f-b1f8-84117bd792f5	8d3b5e03-a6ca-44bd-a275-fc406a775527	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Pre Workout	2026-03-07	\N	2026-03-07 22:29:51.532473+00	g
+7a323b08-7d03-42ed-9b61-eb311ca70b3c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-07	\N	2026-03-08 00:41:41.800859+00	servings
+f670ff41-e7e5-4e12-9356-30da8ea55776	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-09	\N	2026-03-09 17:23:14.42896+00	servings
+9211c3f3-a0d4-497a-8438-cab6f48d3895	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-09	\N	2026-03-09 18:03:08.076228+00	g
+3876a6e5-528f-4ea8-8ee1-1a742bce2b30	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-09	\N	2026-03-09 18:03:17.134034+00	g
+7f3c9968-5413-416c-a2ec-06b0f5675a5a	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	953999da-cb65-4811-9123-8bda1b19d171	\N	1	Lunch	2026-03-09	\N	2026-03-09 18:03:47.273021+00	servings
+7ccad17a-223d-46bc-bd07-570083b80434	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-03-09	\N	2026-03-09 22:57:11.077822+00	g
+41527186-4a82-4392-8d21-d301f3b52615	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-09	\N	2026-03-09 22:57:24.133073+00	servings
+e5b3c416-be75-4759-bb38-44b03127c0c7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	1	Dinner	2026-03-09	\N	2026-03-09 22:58:04.452016+00	servings
+9616927a-939e-4f35-a429-3827947fb293	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-03-09	\N	2026-03-09 22:58:16.564351+00	g
+0da7eed3-c626-435a-8e1c-e270be291c18	f64a8552-0cb5-4097-bb65-c86dd06d352e	e694131b-2992-4216-b602-a9577ef708b3	\N	\N	80	Breakfast	2026-03-09	\N	2026-03-09 23:55:06.554955+00	g
+a57270f8-b34d-4548-b9eb-868bda40cca6	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-09	\N	2026-03-09 23:55:17.656924+00	g
+fdd263ce-b34b-4af4-93d5-30bdf90055d5	f64a8552-0cb5-4097-bb65-c86dd06d352e	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	290	Breakfast	2026-03-09	\N	2026-03-09 23:55:26.615683+00	ml
+b6e63e76-b38a-4110-95c3-6098e67d3f23	f64a8552-0cb5-4097-bb65-c86dd06d352e	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	\N	\N	15	Breakfast	2026-03-09	\N	2026-03-09 23:55:36.366287+00	g
+84508c6f-a8a7-4b86-a3a6-524b73d19191	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Lunch	2026-03-09	\N	2026-03-09 23:57:21.498715+00	g
+bb733b95-68c9-449b-b2c1-8f2a6a328f0f	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	73	Lunch	2026-03-09	\N	2026-03-09 23:57:34.219279+00	g
+32a5b1a8-6fae-40fe-a281-566b704cd66e	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Lunch	2026-03-09	\N	2026-03-09 23:57:55.289864+00	g
+e727149e-6a3e-4f41-bb14-2c29bb609812	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Lunch	2026-03-09	\N	2026-03-09 23:58:28.818334+00	ml
+97d4cd22-7d77-4b62-9206-31054b2716af	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Breakfast	2026-03-10	\N	2026-03-10 16:13:32.997428+00	servings
+a47c828d-7aa3-43fb-a170-d92aadff57ca	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	200	Breakfast	2026-03-10	\N	2026-03-10 16:13:40.90984+00	g
+8f2aa3dd-955a-482d-bc79-99b2b683f032	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Pre Workout	2026-03-10	\N	2026-03-10 16:14:22.615662+00	servings
+745c32c1-be32-469a-b3b3-3eb1aa076ad3	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	200	Lunch	2026-03-11	\N	2026-03-11 23:19:16.821065+00	g
+e36210bc-9c6c-474c-9edb-48d19abc2640	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-10	\N	2026-03-10 16:18:49.07474+00	g
+dcd410c8-cdfa-4f04-958b-ad990214707d	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Snacks	2026-03-10	\N	2026-03-10 16:19:38.416243+00	g
+d6581b56-ce06-4315-b408-47300d5d5259	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	3	Post Workout	2026-03-10	\N	2026-03-10 16:20:27.63467+00	ml
+b26aea6f-d506-43a7-ba63-2b5af611ecf7	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	1	Dinner	2026-03-10	\N	2026-03-10 16:21:33.367119+00	servings
+f5abb182-c141-4336-8871-6deb2508cb31	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	1	Lunch	2026-03-11	\N	2026-03-11 23:19:26.34164+00	servings
+30287685-5a78-4e4a-8a49-a2ac82b69f70	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	100	Post Workout	2026-03-10	\N	2026-03-10 16:15:42.948404+00	g
+b3900673-a126-4795-9c99-2cf7549e827b	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Lunch	2026-03-11	\N	2026-03-11 23:19:57.782072+00	g
+b57b9677-fc5f-48f9-9471-3234ffdbbb6c	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	15	Snacks	2026-03-10	\N	2026-03-10 16:19:13.553903+00	g
+e77518c2-aede-4263-b359-278a8509bb9f	f64a8552-0cb5-4097-bb65-c86dd06d352e	48e23829-47ab-49ee-bbc8-b04ad97e2d32	\N	\N	10	Breakfast	2026-03-10	\N	2026-03-10 16:46:59.562008+00	g
+5d459fc9-b90d-4b44-8678-487768f6eec1	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Post Workout	2026-03-10	\N	2026-03-10 16:14:34.321786+00	g
+2ae1ed75-9ba9-43d2-b97d-82953452dee3	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Breakfast	2026-03-10	\N	2026-03-10 16:59:12.571551+00	servings
+abb42168-b3cf-4ee2-a87a-abd7c73b3cfc	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-10	\N	2026-03-10 19:20:35.905085+00	servings
+a1887a17-8256-4aec-aab3-3f08c5040474	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	25	Breakfast	2026-03-10	\N	2026-03-10 19:20:44.070348+00	g
+441f796c-9fab-499c-b850-27f649428469	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Lunch	2026-03-10	\N	2026-03-10 19:20:57.471985+00	servings
+8b6a2142-cd15-49e1-b793-dc46c56ffe66	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-10	\N	2026-03-10 19:21:10.799385+00	g
+3f08c71a-0053-42d9-922b-c2ad2336f5b1	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-03-10	\N	2026-03-10 19:21:30.60925+00	servings
+2324a778-4870-4a52-b016-f6b265ef79c1	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-10	\N	2026-03-10 19:21:59.660129+00	servings
+13de33ea-6916-4cfc-9607-ebe0cb44044b	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-03-10	\N	2026-03-10 19:22:10.343386+00	g
+d990ff41-594e-4163-978d-46f399a2b92f	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	90	Dinner	2026-03-10	\N	2026-03-10 19:22:21.001094+00	g
+dc34dd57-7f0f-4269-93ca-9433a538740c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	1	Dinner	2026-03-10	\N	2026-03-10 23:19:01.627635+00	servings
+04b4eb44-518c-45cc-99ca-ba332756fb3a	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-03-10	\N	2026-03-10 23:20:03.378074+00	g
+d5ce8469-477d-4599-b333-2f9936c939fa	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-11	\N	2026-03-11 22:07:10.875094+00	servings
+7068f589-f0a7-45a0-97ac-d23565cbbb7b	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-11	\N	2026-03-11 22:07:40.871851+00	g
+a638ca32-61ca-49d7-98f0-2c960784719e	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-03-11	\N	2026-03-11 22:08:03.619538+00	g
+3299b623-eaa0-4e61-b192-60146bdd9ce9	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Lunch	2026-03-11	\N	2026-03-11 22:08:25.47652+00	servings
+74a4fdbf-62d9-4e6c-a1ae-378582fba1f3	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-03-11	\N	2026-03-11 22:08:42.981967+00	servings
+6857360c-ee29-4419-800a-08feb9cb0f40	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-11	\N	2026-03-11 22:08:54.991333+00	g
+b96b9123-c293-4c71-acee-ffb169e38903	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-11	\N	2026-03-11 22:09:11.036813+00	servings
+45e9cf77-4f57-4f14-943e-4a2dd297a4c6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a64f3f20-d3fd-4b7f-8775-fbf92b1d4384	\N	1	Dinner	2026-03-11	\N	2026-03-11 22:09:58.989487+00	servings
+6193c1ff-f12c-4c60-b7ca-6437823b96cb	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	90	Dinner	2026-03-11	\N	2026-03-11 22:10:11.763218+00	g
+7f8c2696-1e4a-4d85-942a-b0317cd7cefa	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Breakfast	2026-03-11	\N	2026-03-11 23:18:49.182997+00	servings
+12d1f508-c977-4b28-90c0-6c8c42c24d2a	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	1	Breakfast	2026-03-11	\N	2026-03-11 23:19:00.026144+00	servings
+2920203a-6dc4-4ec0-84e9-e2b0657cbe24	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	100	Breakfast	2026-03-11	\N	2026-03-11 23:20:13.634085+00	g
+25eebcd9-6fb1-4258-ab43-ec520b954210	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-11	\N	2026-03-11 23:27:36.565331+00	g
+8a21e4fa-ebdf-4522-9f26-5f14e2759c4f	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	15	Breakfast	2026-03-11	\N	2026-03-11 23:27:51.372115+00	g
+dd0e5b0f-b9f5-47a5-a5ed-b6aa8fe0c940	f64a8552-0cb5-4097-bb65-c86dd06d352e	48e23829-47ab-49ee-bbc8-b04ad97e2d32	\N	\N	11	Breakfast	2026-03-11	\N	2026-03-11 23:27:59.444833+00	g
+6e50d51d-752e-4754-866f-cbd8e329f70b	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-11	\N	2026-03-11 23:28:44.370911+00	ml
+2e7f7f85-f518-4d02-9325-4ee962316f1c	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Dinner	2026-03-11	\N	2026-03-11 23:30:24.782638+00	servings
+d8eeb7f1-83f0-464d-924f-c28f55c34c2a	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	150	Snacks	2026-03-11	\N	2026-03-11 23:30:51.418702+00	g
+5df3d03b-276d-4cbb-a8ac-2f55f46cb2b1	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	953999da-cb65-4811-9123-8bda1b19d171	\N	1	Breakfast	2026-03-12	\N	2026-03-11 23:40:05.558779+00	servings
+05a8addc-6d02-48e6-918f-bf8348cd3f4b	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	200	Breakfast	2026-03-12	\N	2026-03-11 23:40:34.655708+00	g
+435847ff-50bd-4cb0-b83f-af224936a733	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-12	\N	2026-03-11 23:40:53.798559+00	servings
+93040d41-4646-44c9-a16f-bf63fe38fe0e	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-12	\N	2026-03-11 23:41:34.575076+00	ml
+d5a02208-c818-475e-a65b-1015551ba98e	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Breakfast	2026-03-12	\N	2026-03-11 23:41:12.023914+00	g
+1fe9beb1-a1d5-4071-a1bc-d430e34d62ef	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-12	\N	2026-03-11 23:41:50.437354+00	g
+0d95b59a-c63a-4914-965f-34a92a881471	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	1	Breakfast	2026-03-12	\N	2026-03-11 23:42:34.701052+00	servings
+a695f924-d0be-4ec7-a8a8-ad4e9feac371	f64a8552-0cb5-4097-bb65-c86dd06d352e	48e23829-47ab-49ee-bbc8-b04ad97e2d32	\N	\N	15	Breakfast	2026-03-12	\N	2026-03-11 23:41:57.86148+00	g
+b530258e-9822-498e-a3ef-e50475676c66	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	15	Breakfast	2026-03-12	\N	2026-03-11 23:42:09.245516+00	g
+ab386f26-fd60-4c13-b6dd-fd780a76cc2e	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Breakfast	2026-03-14	\N	2026-03-15 03:33:54.288317+00	g
+93e83122-9c7b-4d0b-bcd6-101adb6be6cc	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	73	Breakfast	2026-03-12	\N	2026-03-11 23:41:24.593909+00	g
+d7d4ec74-9fbb-4b11-a13a-016a7b87c0be	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Breakfast	2026-03-12	\N	2026-03-11 23:48:02.684992+00	g
+484d811f-17fb-4b30-92a7-96a5f858afc3	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-12	\N	2026-03-12 17:48:44.799129+00	servings
+939a6eb5-af06-477f-a753-9b3d73ad56b7	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-12	\N	2026-03-12 17:48:57.025277+00	g
+0e9f7b23-9deb-442d-9f2e-290cc2b8dd43	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-12	\N	2026-03-12 17:49:06.673674+00	g
+d17eb156-6712-4bc0-9183-002dade7ef68	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	953999da-cb65-4811-9123-8bda1b19d171	\N	1	Lunch	2026-03-12	\N	2026-03-12 17:49:18.473175+00	servings
+60997bcf-81b9-419c-976f-375dcacf1578	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Pre Workout	2026-03-12	\N	2026-03-12 17:49:43.404335+00	g
+d77a0234-3bbe-4bc0-98d0-6942f51e797f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-12	\N	2026-03-12 17:49:57.131255+00	servings
+dc197fa9-05b1-422e-a734-d77b117da0a6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a64f3f20-d3fd-4b7f-8775-fbf92b1d4384	\N	1	Dinner	2026-03-12	\N	2026-03-12 17:50:11.673912+00	servings
+50175cef-d3cb-4245-9880-b0c9d683deb5	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Pre Workout	2026-03-12	\N	2026-03-12 21:32:54.135734+00	g
+ed039126-5038-41dd-af08-f2502a8f98a1	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	1ae6ed7c-d074-4ac9-916c-338f8d100989	\N	1	Breakfast	2026-03-13	\N	2026-03-13 13:48:29.040303+00	servings
+5bcab819-71b3-428d-9960-cd21d2df13ac	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	100	Breakfast	2026-03-13	\N	2026-03-13 13:49:33.903107+00	g
+8305a450-6b8f-43ea-8c06-ef52dcac7732	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-13	\N	2026-03-13 13:49:45.383379+00	servings
+27cf1e84-c601-41f6-91cd-de756285f41b	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-03-13	\N	2026-03-13 13:51:35.236191+00	g
+c5865a37-56ba-470e-970e-1ac1aa0616d1	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	1	Breakfast	2026-03-13	\N	2026-03-13 13:52:05.991686+00	servings
+c1d0bd8e-b3d0-40c3-b344-3292a8745a42	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-13	\N	2026-03-13 13:52:20.948503+00	g
+f321d064-2907-46a2-8b78-1530b06501fc	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-03-14	\N	2026-03-14 15:05:52.403941+00	g
+22634c91-a83d-41d6-ac11-2c4606de3dac	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	70	Breakfast	2026-03-13	\N	2026-03-13 13:52:50.927033+00	g
+c7387cc3-2fb6-4f04-bbcf-1bdfd32fa28b	f64a8552-0cb5-4097-bb65-c86dd06d352e	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	15	Breakfast	2026-03-13	\N	2026-03-13 13:53:52.969463+00	g
+4f64b8fc-9673-40ba-a7e5-a6793e18f546	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	150	Breakfast	2026-03-13	\N	2026-03-13 13:54:06.814403+00	g
+a6c8c362-aa41-45ef-b971-1890546b02af	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	200	Breakfast	2026-03-13	\N	2026-03-13 13:50:10.986555+00	g
+6a4e084f-dd4d-4805-887a-a347610b58c4	f64a8552-0cb5-4097-bb65-c86dd06d352e	48e23829-47ab-49ee-bbc8-b04ad97e2d32	\N	\N	10	Breakfast	2026-03-13	\N	2026-03-13 13:53:41.899842+00	g
+25288153-97fb-4164-8683-a4fc261feab9	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-13	\N	2026-03-13 16:33:03.054046+00	ml
+9f683424-a45a-481d-9d46-2a1ab2797a36	f64a8552-0cb5-4097-bb65-c86dd06d352e	73c80421-4af0-463c-86c5-4a2aa354058f	\N	\N	20	Breakfast	2026-03-14	\N	2026-03-15 13:45:48.128844+00	g
+33cf1d64-e74e-418b-b25e-312e6259ed09	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Breakfast	2026-03-13	\N	2026-03-13 13:51:19.740624+00	g
+1000bf0b-25ea-411e-9058-c746a455c8f5	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-13	\N	2026-03-13 19:01:10.079271+00	servings
+fe0d16ab-1f4b-4b5d-8ff2-c076b49b91bf	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	23	Breakfast	2026-03-13	\N	2026-03-13 19:01:19.243861+00	g
+0752bbac-696e-4435-8345-2151db0b4f27	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-03-13	\N	2026-03-13 19:01:33.177803+00	g
+bb8a6875-db4f-4667-819e-87da4f33d2f4	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-13	\N	2026-03-13 19:01:47.204735+00	g
+e5fcfc6b-a400-4929-b5cf-1503904e7531	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	953999da-cb65-4811-9123-8bda1b19d171	\N	1	Lunch	2026-03-13	\N	2026-03-13 19:02:02.044316+00	servings
+61d6487d-4649-4047-848b-6f3b78460cf3	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-13	\N	2026-03-13 19:02:17.140412+00	servings
+c8a7ba78-39eb-4f73-87ca-bc66dddc6c97	f64a8552-0cb5-4097-bb65-c86dd06d352e	73c80421-4af0-463c-86c5-4a2aa354058f	\N	\N	25	Breakfast	2026-03-13	\N	2026-03-13 23:13:19.131341+00	g
+1d65fd78-b334-4231-b1fa-ad78720f0c61	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Breakfast	2026-03-14	\N	2026-03-14 15:04:03.97541+00	g
+5e0dd9c3-222f-4bea-94ac-359445983a27	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	70	Breakfast	2026-03-14	\N	2026-03-14 15:04:13.849491+00	g
+de707bc8-318d-40f6-b4a4-cce64f3acc4f	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	3	Breakfast	2026-03-14	\N	2026-03-14 15:04:33.501617+00	ml
+0faa1403-7f27-448b-b9b6-cbea30e0ce42	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	150	Lunch	2026-03-14	\N	2026-03-14 15:04:48.597318+00	g
+b43ca487-93a6-4a94-8658-3e8a39e6bfda	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	1ae6ed7c-d074-4ac9-916c-338f8d100989	\N	1	Lunch	2026-03-14	\N	2026-03-14 15:04:57.790341+00	servings
+46ea165f-a087-4a74-add0-fdc47e7a24b1	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Snacks	2026-03-14	\N	2026-03-14 15:05:17.709767+00	servings
+1b8a60ec-1715-4acd-bbb7-7df45809b52a	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Snacks	2026-03-14	\N	2026-03-14 15:05:35.478151+00	g
+1813e59f-1a1e-4d0d-b8a3-a32c84aa09f3	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-03-14	\N	2026-03-14 15:07:12.996575+00	g
+d958c44e-9344-424e-b716-229f7378d821	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	23	Breakfast	2026-03-15	\N	2026-03-15 20:00:51.357167+00	g
+e7afda82-167d-48fa-8355-2bacf68c6678	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-15	\N	2026-03-15 18:35:39.133105+00	servings
+566bcf9b-2e1b-45ae-aa0e-7ea21e934547	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	f0d1c69e-7ca5-4abc-8602-03be0697e783	\N	2	Breakfast	2026-03-15	\N	2026-03-15 18:35:56.918368+00	servings
+328f202c-10f2-41af-90a8-f8924759b544	f64a8552-0cb5-4097-bb65-c86dd06d352e	3b1ece8a-60f5-4439-9837-2ecbb55f381c	\N	\N	12.5	Breakfast	2026-03-15	\N	2026-03-15 19:58:52.957508+00	g
+1f2229ab-9ddb-4be5-86d4-847585e1ae8e	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	f0d1c69e-7ca5-4abc-8602-03be0697e783	\N	2	Breakfast	2026-03-15	\N	2026-03-15 19:59:17.820738+00	servings
+fc4320b6-8741-4fd0-8c3c-7dedd1cae82b	8d3b5e03-a6ca-44bd-a275-fc406a775527	3b1ece8a-60f5-4439-9837-2ecbb55f381c	\N	\N	12.5	Breakfast	2026-03-15	\N	2026-03-15 19:59:29.911274+00	g
+d6508ec9-f866-462a-9d72-f50ac0ab2517	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Breakfast	2026-03-15	\N	2026-03-15 20:00:24.250349+00	servings
+0a47a2e0-0f03-4872-8749-521615f6d0c3	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-15	\N	2026-03-15 20:00:31.202849+00	g
+791530f2-135b-4d5b-9bbe-f9b5f8714102	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-15	\N	2026-03-15 20:00:40.095005+00	servings
+acc35b74-8e56-418d-a5d9-367cabb10994	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-03-15	\N	2026-03-15 20:02:28.201365+00	g
+ef026d6d-1604-4a2c-9eef-0de9bfc97e14	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	200	Breakfast	2026-03-15	\N	2026-03-16 01:25:23.877682+00	g
+73f41d3a-1073-41c9-b101-2c08f4ef6509	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	90	Breakfast	2026-03-15	\N	2026-03-15 20:03:07.280584+00	g
+19fd2e69-d0bc-40bd-a3ee-0cf6d3f105b9	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	100	Breakfast	2026-03-15	\N	2026-03-16 01:25:07.266231+00	g
+884195f9-7091-4aab-af42-d6633548ca37	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-15	\N	2026-03-16 01:25:38.825323+00	g
+c3de6304-2f67-463b-92c2-3732f272b75f	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Breakfast	2026-03-15	\N	2026-03-16 01:25:48.543499+00	g
+76841711-aa68-41b4-923b-517e14c94213	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	84	Breakfast	2026-03-15	\N	2026-03-16 01:27:02.774913+00	g
+f36a772a-0c66-4557-bf10-1d454ea7f126	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-15	\N	2026-03-16 01:27:23.948789+00	ml
+4dbef9b3-c182-4938-9de9-d23ffdd6c590	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	100	Breakfast	2026-03-16	\N	2026-03-16 14:26:13.80274+00	g
+4426ed1d-536d-4d06-9af7-98dc8c8553cf	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-03-16	\N	2026-03-16 14:26:21.63262+00	g
+7aec4cdb-262e-42f2-8667-88ab3efff02e	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-16	\N	2026-03-16 14:26:32.917423+00	ml
+942b7d5f-4696-495d-83c9-273a163dce6f	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Breakfast	2026-03-16	\N	2026-03-16 14:27:33.342785+00	g
+b5c2bd5b-fa63-4c80-9bb7-9f5ab255baf7	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-16	\N	2026-03-16 14:27:56.593901+00	servings
+69992d49-2af2-46a1-b768-6fec351c615a	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	200	Breakfast	2026-03-16	\N	2026-03-16 14:28:10.561778+00	g
+ba3d60dc-60cf-4676-820f-a0b1b2f4513a	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-16	\N	2026-03-16 14:28:35.830334+00	g
+02010e2c-128d-48f5-95f7-9901d54b9b24	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	70	Breakfast	2026-03-16	\N	2026-03-16 14:28:58.767525+00	g
+178f5965-4b45-4c67-b408-bbce337cf9b9	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	f0d1c69e-7ca5-4abc-8602-03be0697e783	\N	2	Breakfast	2026-03-16	\N	2026-03-16 14:31:22.141721+00	servings
+109129b2-6796-46cd-b26c-ea573d856d3f	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	150	Breakfast	2026-03-16	\N	2026-03-16 14:28:47.615931+00	g
+8823f36c-aa93-4b56-b404-817f831adccb	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-16	\N	2026-03-16 18:29:24.259184+00	servings
+114cfbd6-3e1e-4d3d-b94c-b885953aa312	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-16	\N	2026-03-16 18:29:34.128904+00	g
+536773bb-e456-45fd-a028-5aa556e071d9	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-16	\N	2026-03-16 18:29:44.854617+00	g
+1fcacdd2-004a-4f1a-8b39-1c3a985308b7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	eb29fde0-bd14-437d-b82a-be4b8a4129fb	\N	1	Lunch	2026-03-16	\N	2026-03-16 18:30:07.410758+00	servings
+f2670f56-05f6-414f-a0ba-45f89bf4aa60	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Lunch	2026-03-16	\N	2026-03-16 18:30:17.198052+00	g
+bdd81eaa-61ec-46b6-b271-74688ab6cd36	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Pre Workout	2026-03-16	\N	2026-03-16 18:30:31.816505+00	g
+052b332c-ca20-4024-9808-65c4d5ac3b53	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Pre Workout	2026-03-16	\N	2026-03-16 18:30:47.605705+00	g
+b18095e0-1723-4fe8-90ec-f22c50c8e791	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-16	\N	2026-03-16 18:31:00.926765+00	servings
+96f070ea-3eb8-4b2b-a5c9-c8bb502a5d76	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-03-16	\N	2026-03-16 18:32:29.9869+00	g
+9b1c2c47-ca76-4f53-9175-61a30b90f2ca	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	5	Snacks	2026-03-16	\N	2026-03-16 18:32:50.780282+00	g
+dcecc2b8-8b6f-4d42-b565-75268328d76f	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	fb0bf74a-9c4a-4f5a-9596-a53c81359e1a	\N	1	Dinner	2026-03-16	\N	2026-03-17 01:35:21.508471+00	servings
+5efa643b-98ae-4d48-96ad-74856659f411	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	fb0bf74a-9c4a-4f5a-9596-a53c81359e1a	\N	1	Breakfast	2026-03-16	\N	2026-03-17 01:36:08.288997+00	servings
+a3354bec-8f8d-4ce9-bbb9-311590c80e6c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-17	\N	2026-03-17 20:37:40.807998+00	servings
+48ff8d2e-0086-4ce8-b874-7097f02e258f	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-17	\N	2026-03-17 20:37:40.807998+00	g
+01d307f7-003f-4a34-b71e-0ac04df5b91f	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-17	\N	2026-03-17 20:37:40.807998+00	g
+cd7bc5d7-20c9-4695-9a3e-11087d5b59a4	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	eb29fde0-bd14-437d-b82a-be4b8a4129fb	\N	1	Lunch	2026-03-17	\N	2026-03-17 20:37:40.807998+00	servings
+cc07f3fe-9d2c-473c-b4d5-a1e0e122df64	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-17	\N	2026-03-17 20:37:40.807998+00	servings
+95521008-ce41-4d11-8921-bcce646e2cbd	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-03-17	\N	2026-03-17 20:37:40.807998+00	g
+fada7ca9-45ea-4b9f-9bca-8fe749897006	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	fb0bf74a-9c4a-4f5a-9596-a53c81359e1a	\N	1	Dinner	2026-03-17	\N	2026-03-17 20:37:40.807998+00	servings
+93e8ee7e-f605-406b-9f91-4379ce2d8de3	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	100	Lunch	2026-03-17	\N	2026-03-17 20:37:40.807998+00	g
+15fed9d7-7ca9-4e9c-8f7a-2e0410d97237	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-03-17	\N	2026-03-17 20:37:40.807998+00	g
+eab3b55f-a42d-4bfc-bb05-82d8b47a9240	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-03-17	\N	2026-03-17 20:38:57.205398+00	g
+f6afccf7-ee85-44e3-9f43-d7998a2388e6	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	g
+93586e71-da79-4c04-a0eb-6b84508fbe20	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	ml
+3434d18b-8d53-456d-b8d1-18623a041fb5	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	g
+0e7be755-221f-414a-a574-fd5b506a7a21	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	servings
+14756959-94a5-48e1-b693-456ff00e8ddd	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	g
+d83a016f-8520-4fc9-84a2-a3d619f15f68	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	150	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	g
+74be32cb-3727-42f3-b292-fa8baf38dddc	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	70	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	g
+6879df65-35fc-49d1-a0d8-da650f78bd90	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	f0d1c69e-7ca5-4abc-8602-03be0697e783	\N	2	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	servings
+63c75d87-c70c-49d4-bef3-3df4250b6fd7	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-03-17	\N	2026-03-17 20:39:37.200194+00	g
+d3127301-ca35-4a19-baad-4f36a6cc4059	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	g
+b98d9019-fad4-426b-8362-b91a90791e7d	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	ml
+f1577c05-a0df-4a5b-bc04-0b505fda916b	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	g
+fe595964-a3a1-46f8-8853-1cfaa91076ce	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	servings
+3a3e398c-f695-4a5f-a833-44722ad3c898	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	g
+09446e85-00e4-4f0c-945b-ecf3734677f9	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	g
+96087002-a316-4a80-a464-a79e43fbc84b	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	150	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	g
+03ee78c7-35ae-4c37-9cea-1ed94cef09ca	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	f0d1c69e-7ca5-4abc-8602-03be0697e783	\N	2	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	servings
+9b4b9577-101a-4b09-acfb-03240dbff915	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-18	\N	2026-03-18 19:13:05.507329+00	servings
+7ca43e5e-9685-4b49-a145-ba1a9b8f6a34	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-18	\N	2026-03-18 19:13:15.188184+00	g
+f9d0d8a2-2319-4c42-b831-8f76eabdbb44	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-18	\N	2026-03-18 19:13:24.12803+00	g
+cc36fb3b-01b1-45de-8246-d9fefc1597ee	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	74	Breakfast	2026-03-18	\N	2026-03-18 18:45:11.351902+00	g
+52e45ed8-269d-4e4c-b873-78b64a09372c	8d3b5e03-a6ca-44bd-a275-fc406a775527	48e23829-47ab-49ee-bbc8-b04ad97e2d32	\N	\N	10	Breakfast	2026-03-18	\N	2026-03-18 19:13:34.617495+00	g
+35e575d6-f1d1-4320-be82-ecb8b83e6e2a	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-03-18	\N	2026-03-18 19:13:50.10309+00	g
+3142b5f4-6d17-42b3-98f7-459b60e4f6d7	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1ae6ed7c-d074-4ac9-916c-338f8d100989	\N	1	Lunch	2026-03-18	\N	2026-03-18 19:14:08.825712+00	servings
+402d5411-bfa0-4141-b3db-4eb17952b5d5	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	fb0bf74a-9c4a-4f5a-9596-a53c81359e1a	\N	1	Breakfast	2026-03-18	\N	2026-03-18 19:14:15.848038+00	servings
+8d04c21f-1384-43ec-b791-a28e92b82e5f	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-03-18	\N	2026-03-18 19:14:23.646755+00	g
+49e59bbd-0de5-4aa1-815d-3a2161025945	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-03-18	\N	2026-03-18 19:14:52.987787+00	servings
+f32f6a3e-bc97-4383-ae14-afa5355bd8ad	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	baacd4f3-ade2-4366-aeb4-b29201cab8a0	\N	1	Dinner	2026-03-18	\N	2026-03-18 19:15:28.798079+00	servings
+efb85a7f-a639-4faa-b0c1-342f2c88c5ce	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-03-18	\N	2026-03-18 19:15:39.881787+00	g
+a2c3e420-ae66-48a0-8140-15e2df04faa8	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	b7b6384e-06f7-40b1-885e-2e41dfd4f29b	\N	1	Breakfast	2026-03-18	\N	2026-03-18 19:16:24.948789+00	servings
+837f1d01-7b45-495a-862a-055fe605519a	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	100	Breakfast	2026-03-18	\N	2026-03-18 19:17:43.304321+00	g
+b0069554-e7b0-448c-9a65-10128f82fb43	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	90	Dinner	2026-03-18	\N	2026-03-19 01:35:03.218685+00	g
+4d0fd9d8-0611-4c63-b5c5-be7f6e63ee6e	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-19	\N	2026-03-19 21:25:16.703811+00	servings
+39c8bad2-3728-4ce2-b669-9c33b66ab2fc	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-19	\N	2026-03-19 21:25:25.547268+00	g
+a494e712-1884-4d4b-bddb-512894dc4959	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-19	\N	2026-03-19 21:25:37.398493+00	g
+06590dbe-e450-40a6-b211-fdb62c0c39fe	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	b7b6384e-06f7-40b1-885e-2e41dfd4f29b	\N	1	Lunch	2026-03-19	\N	2026-03-19 21:25:54.307729+00	servings
+b829397e-49ea-4204-be94-d50a727ba268	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-03-19	\N	2026-03-19 21:26:08.325705+00	g
+735c56f7-70e6-4f62-aeb8-e8c9483e9bec	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Pre Workout	2026-03-19	\N	2026-03-19 21:26:18.252659+00	g
+3877efb2-15c1-4817-a742-685e27f6fe6b	8d3b5e03-a6ca-44bd-a275-fc406a775527	e694131b-2992-4216-b602-a9577ef708b3	\N	\N	20	Post Workout	2026-03-19	\N	2026-03-19 21:26:30.692627+00	g
+838603e9-6dba-48c2-a575-6a0042b92a93	8d3b5e03-a6ca-44bd-a275-fc406a775527	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	186	Post Workout	2026-03-19	\N	2026-03-19 21:26:43.298528+00	ml
+876882a0-69ae-4b7e-ace6-f2e2bf4d8d28	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Post Workout	2026-03-19	\N	2026-03-19 21:26:56.370521+00	g
+63c88b63-70d0-452f-870f-0ebd296642f1	8d3b5e03-a6ca-44bd-a275-fc406a775527	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	\N	\N	13	Post Workout	2026-03-19	\N	2026-03-19 21:27:06.382058+00	g
+e85b1f76-1229-4bea-9719-1f12c0c11eb3	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-03-19	\N	2026-03-19 21:27:17.830816+00	g
+3adbee39-d2bf-4796-9f3b-ac3e3c1c6055	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	60	Dinner	2026-03-19	\N	2026-03-19 21:27:28.110612+00	g
+efeaf36d-ac8a-497f-9a4f-413d09b6e454	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	g
+09e098f0-134f-43c8-a231-6a9fd61e396a	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	ml
+735a9464-1764-4999-97bd-094530080633	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	g
+fe7c1ab0-9256-4af6-b938-7c103a4b04f2	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	servings
+86427363-397c-4c14-a0a0-977a2785e270	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	g
+d93a3600-cf27-4c53-a724-52ce7e74105d	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	150	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	g
+0776007c-6f88-4e4f-9efe-d384e9435b54	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	f0d1c69e-7ca5-4abc-8602-03be0697e783	\N	2	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	servings
+95b9d429-9450-4d0b-a58e-7c86771a3dee	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	b7b6384e-06f7-40b1-885e-2e41dfd4f29b	\N	1	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	servings
+239b3478-dd10-4765-97b2-4760fd23db26	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	100	Breakfast	2026-03-19	\N	2026-03-20 01:20:18.945254+00	g
+0bc99411-0f7f-42a8-9fa0-14ef6836ca5c	f64a8552-0cb5-4097-bb65-c86dd06d352e	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	26	Breakfast	2026-03-19	\N	2026-03-20 02:33:26.299728+00	g
+b1710b7d-26c5-4d1d-ac1d-470308f5d833	f64a8552-0cb5-4097-bb65-c86dd06d352e	721d4ae8-34d0-41f3-99eb-735c54a57544	\N	\N	50	Breakfast	2026-03-21	\N	2026-03-21 16:21:27.467756+00	g
+8bf16b16-cf8d-4081-8d14-4653ac5d135a	f64a8552-0cb5-4097-bb65-c86dd06d352e	3b1ece8a-60f5-4439-9837-2ecbb55f381c	\N	\N	25	Breakfast	2026-03-21	\N	2026-03-21 16:22:21.964453+00	g
+3a97b555-e081-49fe-9803-a704e094832c	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Breakfast	2026-03-21	\N	2026-03-21 16:23:51.893432+00	servings
+304f5a43-29d0-405b-8448-59ad8f8b0e50	f64a8552-0cb5-4097-bb65-c86dd06d352e	2ea34745-ffa5-4548-b127-8f26c93c79af	\N	\N	29	Breakfast	2026-03-19	\N	2026-03-20 02:34:10.815807+00	g
+b2603a0d-8b88-45c8-a552-4bf62426da66	f64a8552-0cb5-4097-bb65-c86dd06d352e	e694131b-2992-4216-b602-a9577ef708b3	\N	\N	80	Breakfast	2026-03-20	\N	2026-03-20 14:00:25.900377+00	g
+bbff5eda-e870-489b-8526-203cd7db41fb	f64a8552-0cb5-4097-bb65-c86dd06d352e	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	\N	\N	16	Breakfast	2026-03-20	\N	2026-03-20 14:00:48.54878+00	g
+66780e67-4576-4679-842e-6e96a9a3a97c	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-20	\N	2026-03-20 14:01:00.088533+00	g
+d150e0ee-1e0b-4e9f-9eb7-d40ebc27cd65	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Lunch	2026-03-20	\N	2026-03-20 14:01:34.666709+00	g
+b0a4f48d-fc06-4bca-80f9-cb422e2489dd	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Lunch	2026-03-20	\N	2026-03-20 14:01:50.440675+00	g
+4677ce36-98fa-4f6f-8121-ad26b45cb71d	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	100	Dinner	2026-03-20	\N	2026-03-20 14:02:37.730697+00	g
+71e6f730-d1f5-480f-8a6b-a5f5aa4d823e	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Dinner	2026-03-20	\N	2026-03-20 14:02:26.561217+00	servings
+3526e40f-d3ad-46db-9f11-525cffcb1c6f	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-20	\N	2026-03-20 14:04:03.591715+00	g
+99b7cb5a-6a13-40fe-8d0d-98fe77d02e1c	f64a8552-0cb5-4097-bb65-c86dd06d352e	19f957ee-7d69-47a7-b0bf-c6303dac16fd	\N	\N	340	Breakfast	2026-03-20	\N	2026-03-20 14:00:38.85195+00	ml
+be5c8d9d-261d-4e9e-a17b-bd20c8cae717	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-03-20	\N	2026-03-20 22:21:52.753885+00	servings
+84ea06af-c34e-4e11-b745-2fae17339c7a	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-03-20	\N	2026-03-20 22:22:13.094715+00	g
+5c3f12d2-d729-44e6-a07f-62ac79b0ae35	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-20	\N	2026-03-20 22:22:26.383513+00	g
+aaf1684e-1e7e-4a46-8e3b-b4b7131fbacb	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-03-20	\N	2026-03-20 22:22:44.145905+00	g
+2c169a5c-ff07-4381-ba9f-e1f7983f2f92	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Lunch	2026-03-20	\N	2026-03-20 22:23:01.861825+00	servings
+9d8fb73e-d4fb-4415-9792-e3830dc01d8c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Lunch	2026-03-20	\N	2026-03-20 22:23:20.983459+00	servings
+db658ec4-e7a4-4d6f-b179-1f2f20a2bd2d	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-20	\N	2026-03-20 22:23:38.182599+00	g
+46d46ea3-f175-4622-a574-90e917073d0e	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	90	Dinner	2026-03-20	\N	2026-03-20 22:24:05.056318+00	g
+c32f3e94-c5ce-4ce4-9824-38d6f74fce0b	f64a8552-0cb5-4097-bb65-c86dd06d352e	4f700e91-709d-4b05-a353-1f5a48bd85f4	\N	\N	52	Breakfast	2026-03-20	\N	2026-03-20 22:25:19.955099+00	g
+912e4cc0-3019-4446-b3c7-a0c7cc8eacf6	8d3b5e03-a6ca-44bd-a275-fc406a775527	895a9866-541e-4339-9b20-1b3576ef2b92	\N	\N	75	Dinner	2026-03-20	\N	2026-03-21 02:28:01.752283+00	g
+18485571-bf10-4023-9ae5-bc8b9ee700f6	f64a8552-0cb5-4097-bb65-c86dd06d352e	895a9866-541e-4339-9b20-1b3576ef2b92	\N	\N	75	Breakfast	2026-03-20	\N	2026-03-21 02:35:07.522971+00	g
+e150c56b-cf7c-489a-acfc-5fa60074cd2e	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Breakfast	2026-03-20	\N	2026-03-21 02:35:28.584949+00	g
+2e62d994-e944-42c7-b0bf-7ae855a03343	f64a8552-0cb5-4097-bb65-c86dd06d352e	c6740c40-6ad4-417a-8060-e92602781266	\N	\N	71	Breakfast	2026-03-21	\N	2026-03-21 16:20:54.176369+00	g
+91e873b6-f4c1-4a2e-8666-c43003671f77	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	150	Breakfast	2026-03-21	\N	2026-03-21 16:21:17.551403+00	g
+16273b0c-6470-494e-bd05-46815909eb47	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-21	\N	2026-03-21 16:25:09.868433+00	servings
+3d4d3e48-8f8c-4154-ac66-f78e387c5542	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-03-21	\N	2026-03-21 16:25:22.391702+00	g
+2fa625c2-b985-400b-9fe2-494df0cb7a23	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	f0d1c69e-7ca5-4abc-8602-03be0697e783	\N	2	Breakfast	2026-03-21	\N	2026-03-21 16:26:54.521349+00	servings
+81a8560c-37c6-4b8d-b231-fb3534ec1d36	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Breakfast	2026-03-21	\N	2026-03-21 16:24:14.378846+00	g
+0cf72577-c001-41e6-9dda-ed40bd4ac81c	f64a8552-0cb5-4097-bb65-c86dd06d352e	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	\N	\N	200	Breakfast	2026-03-22	\N	2026-03-22 16:16:53.190808+00	g
+886751dc-e2db-45a6-8134-4cf87c7bb094	f64a8552-0cb5-4097-bb65-c86dd06d352e	bd6d52fc-a7a0-42a8-bec3-f321733bfcaa	\N	\N	100	Breakfast	2026-03-22	\N	2026-03-22 16:17:17.691648+00	g
+849ab0d3-02dd-4070-9a4c-eb2e40c78154	f64a8552-0cb5-4097-bb65-c86dd06d352e	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	\N	\N	2	Breakfast	2026-03-22	\N	2026-03-22 16:17:29.30327+00	ml
+9e0124ac-f85c-4a21-9df3-03961fab9637	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-03-22	\N	2026-03-22 16:17:41.092919+00	servings
+6fe399b7-564f-4747-ac92-3bbf4fcb52e1	f64a8552-0cb5-4097-bb65-c86dd06d352e	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	100	Breakfast	2026-03-22	\N	2026-03-22 16:17:58.705527+00	g
+9efd8c25-aef1-4eca-832a-6445291e138e	f64a8552-0cb5-4097-bb65-c86dd06d352e	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	56	Breakfast	2026-03-22	\N	2026-03-22 16:33:48.621834+00	g
+b670aa91-4136-4513-aa42-f92aaaaef0f0	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	\N	1	Dinner	2026-03-22	\N	2026-03-22 16:34:21.553973+00	servings
+3a7da414-916a-48da-bc40-c49ca2f29b45	f64a8552-0cb5-4097-bb65-c86dd06d352e	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Dinner	2026-03-22	\N	2026-03-22 16:34:33.797619+00	g
+707b072d-956f-4ef3-9bcb-64c5b7c3585b	f64a8552-0cb5-4097-bb65-c86dd06d352e	489cda86-cd2a-409b-a854-ea7ebb8b281c	\N	\N	100	Snacks	2026-03-22	\N	2026-03-22 16:34:43.452565+00	g
+16d3b18f-7fd2-424a-b440-1bd182551073	f64a8552-0cb5-4097-bb65-c86dd06d352e	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	170	Dinner	2026-03-22	\N	2026-03-22 16:34:59.5876+00	g
+39e09cf7-278d-4bef-99be-64d684957ed8	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	f0d1c69e-7ca5-4abc-8602-03be0697e783	\N	2	Breakfast	2026-03-22	\N	2026-03-22 16:36:06.070991+00	servings
+2cc09409-bc2b-4e8b-9193-4f04f1361915	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	94131989-f241-4bc9-9e5f-dcf1b4e641d0	\N	1	Breakfast	2026-03-22	\N	2026-03-22 22:21:04.078068+00	servings
+645dffa1-5475-474f-a47e-fc4964178acb	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	10	Breakfast	2026-03-22	\N	2026-03-22 22:21:19.852885+00	g
+095177b4-3252-4902-ad3a-d809b4224359	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	95	Lunch	2026-03-22	\N	2026-03-22 22:21:42.198711+00	g
+afc772d9-fbe5-4ba0-ae50-3820127e2f21	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Lunch	2026-03-22	\N	2026-03-22 22:21:56.142649+00	servings
+a1f27098-4ef6-43f6-bb9d-503de5a8acd7	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-03-22	\N	2026-03-22 22:22:33.427374+00	g
+60f7ae8c-5faf-4508-98a9-7d69b52ba98b	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	61dddbab-c735-4e20-af28-b5e8f8c98441	\N	1	Dinner	2026-03-22	\N	2026-03-22 22:22:57.544618+00	servings
+34d15719-8961-4671-b607-2feba434bf4c	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-04-01	\N	2026-04-01 18:49:37.936457+00	servings
+45a2334d-1aa2-45cc-b3ee-a40b1d932c95	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-04-01	\N	2026-04-01 18:49:45.591656+00	g
+f6f8855e-c095-483b-82a0-8f752a6e88db	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-04-01	\N	2026-04-01 18:49:58.060781+00	g
+8ac9b6b8-2010-4aa4-b7b2-bfc73eac21d6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	14384779-fadf-4add-a491-00c024835a6f	\N	1	Lunch	2026-04-01	\N	2026-04-01 18:50:09.838024+00	servings
+8df57a7a-7e0a-43eb-9b36-b354bd1a57b7	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-04-01	\N	2026-04-01 18:50:33.342844+00	g
+15b88439-dae9-49e3-9e49-a3e002edd21a	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Pre Workout	2026-04-01	\N	2026-04-01 18:50:45.862934+00	g
+55bad2c7-af65-4206-b746-c330bae44bc6	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Post Workout	2026-04-01	\N	2026-04-01 20:42:47.335366+00	servings
+c484c4bf-774f-4aaa-9f1a-d009a2daf72b	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	90	Dinner	2026-04-01	\N	2026-04-01 20:43:04.514718+00	g
+00be0792-d07d-4167-8cc8-2bfdb111d213	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	400a1e6f-c4cf-4667-944a-1743cf5f4799	\N	2	Dinner	2026-04-01	\N	2026-04-01 20:43:21.784745+00	servings
+43f7afd3-47c5-4149-9697-b612d3472bfb	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	6bd42f85-e7c9-4e91-be94-0acb85674592	\N	1	Dinner	2026-04-01	\N	2026-04-01 23:21:00.24237+00	servings
+f222c9e5-1f6f-4014-910a-3e697eab420e	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-04-02	\N	2026-04-02 23:33:58.408802+00	servings
+151b0e79-7095-4862-abc4-99ecefa6faec	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-04-02	\N	2026-04-02 23:34:07.439439+00	g
+85f67640-4e61-47bc-9720-007cdc58405e	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-04-02	\N	2026-04-02 23:34:16.616968+00	g
+bcabc459-65f3-441c-8150-dab799299861	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	14384779-fadf-4add-a491-00c024835a6f	\N	1	Lunch	2026-04-02	\N	2026-04-02 23:34:27.531007+00	servings
+00eef80a-fc9a-49ae-b2d2-ca41c0e912de	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Lunch	2026-04-02	\N	2026-04-02 23:34:39.748403+00	g
+dfa16eb8-c93d-42f2-8a8d-678bdf606ad3	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	1c98c1f8-82c4-4549-81be-24bbc0847589	\N	1	Snacks	2026-04-02	\N	2026-04-02 23:34:55.211612+00	servings
+7cb1416c-9412-41db-b1d9-61b668c40e98	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	72	Dinner	2026-04-02	\N	2026-04-02 23:35:07.272089+00	g
+aa9307d6-f229-41df-9c18-2d33f74c8bb3	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	30	Dinner	2026-04-02	\N	2026-04-02 23:35:29.505768+00	g
+5a276157-09ec-4a1e-ba4b-03ef6befe9c3	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	50	Dinner	2026-04-02	\N	2026-04-02 23:35:39.092974+00	g
+d091368a-d745-480e-8836-283dd43469bc	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-04-03	\N	2026-04-03 14:47:42.294032+00	servings
+38893f46-f141-4d2f-bd00-4613979a7380	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-04-03	\N	2026-04-03 14:47:51.988888+00	g
+16ef12d9-04c5-4830-81da-fe0087e9dd99	8d3b5e03-a6ca-44bd-a275-fc406a775527	1232e839-e940-4da5-a815-a8e620c5e1df	\N	\N	28	Breakfast	2026-04-03	\N	2026-04-03 14:48:01.630072+00	g
+974f01db-447c-40a4-9ef4-9c2aec164848	8d3b5e03-a6ca-44bd-a275-fc406a775527	189a84e7-43b7-4b80-a116-e718c6e2d960	\N	\N	5	Breakfast	2026-04-03	\N	2026-04-03 14:48:10.618727+00	g
+0176ca92-e2c0-4f73-8283-4ef66b300a2c	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Snacks	2026-04-03	\N	2026-04-03 14:48:22.277975+00	g
+5f53308b-2c5e-413c-b128-5b796534e373	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-04-03	\N	2026-04-03 14:48:47.570622+00	g
+e93980c9-601b-4985-b23f-535daa006d6b	8d3b5e03-a6ca-44bd-a275-fc406a775527	48e23829-47ab-49ee-bbc8-b04ad97e2d32	\N	\N	5	Snacks	2026-04-03	\N	2026-04-03 14:48:55.467471+00	g
+3f5f633c-cee6-4dcb-8e8f-dba31cf61d26	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	\N	1	Breakfast	2026-04-06	\N	2026-04-06 21:01:03.074001+00	servings
+223f6564-58aa-4f8b-b222-be3493c70933	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	\N	1	Breakfast	2026-04-06	\N	2026-04-06 21:05:58.583943+00	servings
+39bc6945-567a-435a-b60c-bf7e867d71fb	8d3b5e03-a6ca-44bd-a275-fc406a775527	abe38d67-4dba-4850-8f0b-aa9e194017c4	\N	\N	20	Breakfast	2026-04-06	\N	2026-04-06 21:06:09.193393+00	g
+957cd849-9d39-4fa2-a3ec-9bba208c789c	8d3b5e03-a6ca-44bd-a275-fc406a775527	20e38624-5d83-4ac5-aa33-d5d8b352ae44	\N	\N	30	Breakfast	2026-04-06	\N	2026-04-06 21:06:18.264492+00	g
+82d52157-407d-4e72-a3aa-395a2300b1f3	8d3b5e03-a6ca-44bd-a275-fc406a775527	484acd94-b042-4599-acc8-032b46e086b7	\N	\N	10	Snacks	2026-04-06	\N	2026-04-06 21:06:27.192647+00	g
+ac8822f6-89f2-4525-bdb5-831467f08650	8d3b5e03-a6ca-44bd-a275-fc406a775527	48e23829-47ab-49ee-bbc8-b04ad97e2d32	\N	\N	5	Snacks	2026-04-06	\N	2026-04-06 21:06:40.499584+00	g
+a249b583-5921-43f1-8905-a709cabd1004	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	b7b6384e-06f7-40b1-885e-2e41dfd4f29b	\N	1	Lunch	2026-04-06	\N	2026-04-06 21:07:09.130655+00	servings
+a3edee00-a5a3-47ab-946e-3a9760f1588f	8d3b5e03-a6ca-44bd-a275-fc406a775527	24a8661d-d81c-4110-9715-e3470e589abf	\N	\N	100	Lunch	2026-04-06	\N	2026-04-06 21:07:20.987661+00	g
+4b18f278-9454-4534-b9b0-71ef8f7a9f02	8d3b5e03-a6ca-44bd-a275-fc406a775527	d9532837-98f1-4059-b643-61f2500f93f9	\N	\N	50	Pre Workout	2026-04-06	\N	2026-04-06 21:07:29.608023+00	g
+a492dfde-2a18-4cff-8f60-7dfe94ccb477	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	d44d74c6-a74d-4765-8c77-8d59db25c9b8	\N	1	Post Workout	2026-04-06	\N	2026-04-06 21:07:46.724325+00	servings
+04200b81-163c-49e6-b3a0-41c81756d38d	f64a8552-0cb5-4097-bb65-c86dd06d352e	\N	293b1acb-b9e7-4576-a608-88119bbdf1a7	\N	3	Snacks	2026-04-06	\N	2026-04-06 22:26:02.830596+00	servings
+3e0c9094-c78f-4d2b-b548-7ae7142d7145	8d3b5e03-a6ca-44bd-a275-fc406a775527	\N	293b1acb-b9e7-4576-a608-88119bbdf1a7	\N	1	Snacks	2026-04-06	\N	2026-04-06 22:27:39.982253+00	servings
+674f7490-78b6-4f89-90af-33a066ae69fe	f64a8552-0cb5-4097-bb65-c86dd06d352e	a31a29ad-1ee0-44ca-901f-bc922c1fb173	\N	\N	156	Breakfast	2026-04-06	\N	2026-04-06 22:36:02.239286+00	g
+5d784972-c653-4297-bf6d-e2a80e9eaa34	8d3b5e03-a6ca-44bd-a275-fc406a775527	267f413a-a138-437e-b5c4-01636a5d8172	\N	\N	13	Breakfast	2026-04-06	\N	2026-04-06 23:02:16.511413+00	g
+\.
+
+
+--
+-- Data for Name: recipe_ingredients; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.recipe_ingredients (id, recipe_id, food_id, quantity) FROM stdin;
+0214b50c-2d17-443c-9f6e-b212b430646e	77145b37-0eaa-4f7d-b676-d5afb64a65a8	36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	120
+725246d8-c4f3-4061-bfc6-0c12740c2a98	77145b37-0eaa-4f7d-b676-d5afb64a65a8	61ae0668-bf27-415d-ab4b-bbac9b64f029	40
+bf91fa28-7341-449d-8261-597e42747a5a	77145b37-0eaa-4f7d-b676-d5afb64a65a8	3767d7a2-986d-4f45-b2d9-3d274d4950af	15
+0d01e19c-c952-4f2f-8d71-828285582a33	7e22102c-272d-4a35-a57e-c4965ecacb50	84fc0ecb-49c0-4126-a366-3bf4b47ef865	100
+2719216e-649a-408e-bc62-f7fc3fa11573	7e22102c-272d-4a35-a57e-c4965ecacb50	3767d7a2-986d-4f45-b2d9-3d274d4950af	8
+84fcf32b-6d86-41c2-bcf3-3e89674992df	9f76a624-f670-4dbd-b7c9-34f7b454b1f1	0b4d6278-dca3-4d9a-9d59-3616b92f5835	80
+1f06c773-8e22-43df-9de5-1ea06ae4f4e3	9f76a624-f670-4dbd-b7c9-34f7b454b1f1	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	60
+3b03764a-3d6a-4bf4-a8f8-3036831cf42c	a283524b-5395-420d-90a5-0a7f4613d4fd	36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	60
+3d7bdede-4734-4f30-99b2-95a6db0bf8ab	a283524b-5395-420d-90a5-0a7f4613d4fd	61ae0668-bf27-415d-ab4b-bbac9b64f029	20
+00ca7714-2e47-4a6c-b979-a93c49178f70	a283524b-5395-420d-90a5-0a7f4613d4fd	3767d7a2-986d-4f45-b2d9-3d274d4950af	10
+2068bf5e-3fcd-42cb-9367-aefd9e8a6fad	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	84fc0ecb-49c0-4126-a366-3bf4b47ef865	100
+22ac2ca8-0f77-4263-918f-58b79b816821	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	352efce9-8bb2-4cd3-8ac3-7eeee0292972	32
+4fe68f54-d5d8-40fc-99ca-5101443f7cb6	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	256
+dc652518-0cf7-47b4-9383-86f53cc7c309	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	352efce9-8bb2-4cd3-8ac3-7eeee0292972	145
+ddf73a37-c3f4-4e39-bad7-d81119a1e404	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	200
+c3b1899d-25a0-4daa-9b7b-1c78fbb7d909	b634159d-9915-4db1-8ab2-69673ecbfac4	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	112
+a04cabf0-7201-40b5-ac68-2ced983a86f8	b634159d-9915-4db1-8ab2-69673ecbfac4	9c144720-daa4-4ff8-bf2c-a6a18c8e84a6	170
+9c210d8e-aa7e-4a7f-a3d0-d7d56c3d7e67	b634159d-9915-4db1-8ab2-69673ecbfac4	352efce9-8bb2-4cd3-8ac3-7eeee0292972	52
+a7da9eb1-fafd-4eab-865b-db8d1f52cbef	b634159d-9915-4db1-8ab2-69673ecbfac4	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	72
+39165274-1036-4cb8-95e2-133aabf82961	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	235
+b201eafb-9485-4b64-8503-0db5361f609d	6378967e-fa6f-4b92-b44a-c2c7ecb1a08b	3767d7a2-986d-4f45-b2d9-3d274d4950af	10
+ed21d2e7-2b75-4cfc-8707-084362bd8ff3	fd15e1b0-5476-48d1-a22b-b97bebd50d59	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	176
+15faf799-629f-4c19-9acb-7cd939d275c0	fd15e1b0-5476-48d1-a22b-b97bebd50d59	352efce9-8bb2-4cd3-8ac3-7eeee0292972	94
+86c87be8-ad1a-4fe9-8f98-cf945016c822	fd15e1b0-5476-48d1-a22b-b97bebd50d59	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	129
+19bdca52-de20-4a83-8449-5af86edfb2ad	fd15e1b0-5476-48d1-a22b-b97bebd50d59	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	186
+4bd2aabd-2601-4797-9176-60037f32c891	fd15e1b0-5476-48d1-a22b-b97bebd50d59	3767d7a2-986d-4f45-b2d9-3d274d4950af	8
+9fc76514-604e-4a43-b1de-8958a9571363	fbe6102b-5245-49fd-ba79-ef02748d5443	e694131b-2992-4216-b602-a9577ef708b3	60
+a1f5064f-31db-4377-9504-60a4f0f85c4c	fbe6102b-5245-49fd-ba79-ef02748d5443	19f957ee-7d69-47a7-b0bf-c6303dac16fd	240
+34b0d822-7ff4-4b8b-8e86-ab5e6c925a94	e07545a1-4d02-449f-9b01-b3e8ff112807	b78945a3-c18a-4de5-99e9-7f9ef7c39e9b	100
+e9217a06-0d26-4716-9492-8403c6f7e9e2	e07545a1-4d02-449f-9b01-b3e8ff112807	84933a2f-fb82-4789-984a-2b9e484a944a	30
+6aac79e6-6a74-4452-8b39-e7a811584287	e07545a1-4d02-449f-9b01-b3e8ff112807	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	120
+444c6217-7d16-4317-ae78-9e764ba300cc	fbe6102b-5245-49fd-ba79-ef02748d5443	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+20c2ddfd-53ff-435e-b192-7d9ea0d98557	a5429b0e-c095-4a76-ae0b-fd6ccb4ebae2	3767d7a2-986d-4f45-b2d9-3d274d4950af	10
+459d51e8-5da3-48d0-ad3a-75c7235c5ef4	c499602f-a6d7-41e1-b5a9-c4fb5edb2827	19f957ee-7d69-47a7-b0bf-c6303dac16fd	100
+ceee8e8f-a362-4b48-888d-a8d51e87ca10	c499602f-a6d7-41e1-b5a9-c4fb5edb2827	e694131b-2992-4216-b602-a9577ef708b3	20
+207c5f40-4ab1-473d-b2fd-d663e5323c1a	c499602f-a6d7-41e1-b5a9-c4fb5edb2827	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+33854ba7-2186-45ff-b9ef-e77beebd33e1	c499602f-a6d7-41e1-b5a9-c4fb5edb2827	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	6
+25c40c90-5d87-48d0-a71b-0b670c336ce1	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b	e694131b-2992-4216-b602-a9577ef708b3	50
+39f69774-fd4f-4de3-86aa-7ae49219d854	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b	19f957ee-7d69-47a7-b0bf-c6303dac16fd	200
+e560678b-05d4-4bce-beb6-ebd077bebf18	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+71b27e13-5f16-4999-8df3-ac683d2b7de7	3ad4f175-d7a2-4054-85e7-1b6d8b4d553b	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	13
+3de41aea-8e97-4cb9-b573-fe29faa05c99	e3fa1f6c-7399-4daf-a413-552f3d3823e2	3767d7a2-986d-4f45-b2d9-3d274d4950af	8
+530e5879-511b-4815-b0ba-2a789965467e	e3fa1f6c-7399-4daf-a413-552f3d3823e2	24a8661d-d81c-4110-9715-e3470e589abf	100
+4313bf90-089f-4130-bde1-e527333e8075	e3fa1f6c-7399-4daf-a413-552f3d3823e2	352efce9-8bb2-4cd3-8ac3-7eeee0292972	50
+6decd5b6-cc76-4415-9cea-48d1dd07a916	0422bae5-0d25-4bf9-9cd6-46b6a99fbfd2	816e9699-5a1f-41a1-8c93-67828a6d4182	100
+af2e3638-44d0-46df-b1ea-5e516e32a277	0422bae5-0d25-4bf9-9cd6-46b6a99fbfd2	d9532837-98f1-4059-b643-61f2500f93f9	200
+9384b107-f5cf-4275-9122-75ff0bce0e81	0422bae5-0d25-4bf9-9cd6-46b6a99fbfd2	3767d7a2-986d-4f45-b2d9-3d274d4950af	8
+44f8ac9b-dba9-4ff8-adcd-cf2e7601cf70	0422bae5-0d25-4bf9-9cd6-46b6a99fbfd2	352efce9-8bb2-4cd3-8ac3-7eeee0292972	61
+cc95d8b6-f4c6-461f-b2db-4298f247d35c	0422bae5-0d25-4bf9-9cd6-46b6a99fbfd2	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	75
+7e6dd1da-41f9-4e22-bf56-6e4b6d0ed9e2	aeab82ed-3a88-45ad-a767-1619c41a57b0	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	224
+943d1a3b-5bac-42e8-ad8a-becb8c096b0a	aeab82ed-3a88-45ad-a767-1619c41a57b0	352efce9-8bb2-4cd3-8ac3-7eeee0292972	94
+ad4134cf-3721-4bc2-9e43-d676694af48d	aeab82ed-3a88-45ad-a767-1619c41a57b0	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	250
+68378f02-4b68-4166-8356-505de7a12114	aeab82ed-3a88-45ad-a767-1619c41a57b0	189a84e7-43b7-4b80-a116-e718c6e2d960	14
+e4b72a4d-413e-434a-8191-0833b5d9b4d7	aeab82ed-3a88-45ad-a767-1619c41a57b0	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	240
+73505e22-fe97-4b82-8e74-b23c1b3b90ed	61dddbab-c735-4e20-af28-b5e8f8c98441	36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	20
+a3fe60e5-d628-4ce5-8936-7cc7fe32cf10	61dddbab-c735-4e20-af28-b5e8f8c98441	24a8661d-d81c-4110-9715-e3470e589abf	50
+adc65c3a-2f9b-482d-8d8e-ff7f16106e5c	aeab82ed-3a88-45ad-a767-1619c41a57b0	84933a2f-fb82-4789-984a-2b9e484a944a	30
+26249153-a315-4b67-b465-b9239f138f55	4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75	e694131b-2992-4216-b602-a9577ef708b3	20
+86982069-409a-4df3-a610-a8c30a3c8230	4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+3fd75506-1ea3-4cbb-b4f6-35ef9b49bbe2	4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75	19f957ee-7d69-47a7-b0bf-c6303dac16fd	80
+6150ab56-3db0-47c1-81e4-7c47ae3ba2aa	4827ee3e-7b2b-4eb8-b02b-6d9c7d1afe75	b93a381d-a372-496b-a872-2ed4113cd016	20
+6934229a-7a83-4bcf-b904-734d7ed51b68	dbf25f66-3b2d-419f-933d-abe7de74ba5a	771e0156-e3cf-4126-b4ea-6a4016ff2be1	104
+67530e6e-5027-4834-9a94-0079dc83828c	dbf25f66-3b2d-419f-933d-abe7de74ba5a	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	35
+26b98617-a388-4a99-a2e5-70b6620b94e5	2ecab1a5-4ac2-44a0-be1c-af07322ed58f	d9532837-98f1-4059-b643-61f2500f93f9	340
+6f9a5883-4bad-4a76-bf68-d0819458e9fa	2ecab1a5-4ac2-44a0-be1c-af07322ed58f	83c5b322-876c-4358-8635-f8f8c3675271	250
+b0dd633e-eea1-4204-9bcc-477226170f6d	2ecab1a5-4ac2-44a0-be1c-af07322ed58f	3a16c197-ca86-4411-9eaa-b4778044bf3a	10
+c3921644-9135-4cab-8859-1a86fe4a021d	2ecab1a5-4ac2-44a0-be1c-af07322ed58f	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	84
+4f1ce970-1cb5-4ecb-a80b-4f9fe8cc545c	e9997906-3d21-4360-b789-d2255e60a7b6	e694131b-2992-4216-b602-a9577ef708b3	30
+effd49c7-5a24-4aa4-a706-1a4a63e4b6c5	e9997906-3d21-4360-b789-d2255e60a7b6	19f957ee-7d69-47a7-b0bf-c6303dac16fd	100
+6a86ae5a-f6ec-4136-8536-49390bb62a95	e9997906-3d21-4360-b789-d2255e60a7b6	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+9fa509fb-4acd-42f6-841e-1f76e1b847c7	e9997906-3d21-4360-b789-d2255e60a7b6	2ea34745-ffa5-4548-b127-8f26c93c79af	20
+41c046bc-c871-4186-b461-76c5573ac500	1af4f1e8-5200-4edf-a04f-6a9f30648272	e694131b-2992-4216-b602-a9577ef708b3	20
+1973feca-b691-4128-ab4d-424827940b4e	1af4f1e8-5200-4edf-a04f-6a9f30648272	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+260e5497-fda0-4eec-8876-d3e9069e723d	1af4f1e8-5200-4edf-a04f-6a9f30648272	19f957ee-7d69-47a7-b0bf-c6303dac16fd	100
+fabea4bc-ec83-4bfe-b532-698e9daaa7df	1af4f1e8-5200-4edf-a04f-6a9f30648272	b93a381d-a372-496b-a872-2ed4113cd016	20
+fb7f6c1a-150a-44c8-b964-9a0193f3d024	f420ddef-a84e-49fc-b71f-54b024e3844f	b78945a3-c18a-4de5-99e9-7f9ef7c39e9b	45
+7835d1ae-8845-426f-b318-6b24aa634ef3	f420ddef-a84e-49fc-b71f-54b024e3844f	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	40
+4cf9aa9b-7b05-4741-b5f8-ddbaabd140c2	46dca9aa-9aaf-4ba8-8b55-2ebe44d605d5	d9532837-98f1-4059-b643-61f2500f93f9	100
+c0ce17ca-e140-4b65-839f-ff948d0abf18	46dca9aa-9aaf-4ba8-8b55-2ebe44d605d5	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	90
+e5655973-9772-453f-8abf-3bd0ee083cdc	46dca9aa-9aaf-4ba8-8b55-2ebe44d605d5	83c5b322-876c-4358-8635-f8f8c3675271	250
+1455cda7-e6a3-4a2f-8992-f3b066dc48a4	46dca9aa-9aaf-4ba8-8b55-2ebe44d605d5	352efce9-8bb2-4cd3-8ac3-7eeee0292972	80
+eb9d6983-6a86-49f0-99d3-916f3a29af77	46dca9aa-9aaf-4ba8-8b55-2ebe44d605d5	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	107
+08da6c21-ec92-4a9a-b726-a6ead75d1f95	46dca9aa-9aaf-4ba8-8b55-2ebe44d605d5	24a8661d-d81c-4110-9715-e3470e589abf	150
+f8194e2e-3119-47f6-b7d8-88cd300bf055	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	19f957ee-7d69-47a7-b0bf-c6303dac16fd	205
+e37951aa-5c12-4af3-8b25-a399456fc6d1	bcc0d4a7-c2ee-4720-95d9-8c957f1ddffa	61ae0668-bf27-415d-ab4b-bbac9b64f029	20
+f7b22ced-17df-4e60-916a-9090dd6965a9	0765c69d-925f-4d30-b561-fcc53db46514	e694131b-2992-4216-b602-a9577ef708b3	30
+b4401178-a491-413b-9fd7-972e3e212226	0765c69d-925f-4d30-b561-fcc53db46514	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+a643d545-80c8-4849-bb40-a7520291afb8	0765c69d-925f-4d30-b561-fcc53db46514	19f957ee-7d69-47a7-b0bf-c6303dac16fd	100
+d5f9ce27-c816-4b77-8b5e-ef4821206b5d	0765c69d-925f-4d30-b561-fcc53db46514	b93a381d-a372-496b-a872-2ed4113cd016	20
+358019cf-512d-44d8-a79a-3ad4a33479d4	6d2b1d5b-ca3f-4345-891a-83da77c7703d	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	112
+1131dc74-5bdb-46ff-88cc-02f7e76bddc4	6d2b1d5b-ca3f-4345-891a-83da77c7703d	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	185
+b5c324a6-518d-4339-8c52-56a5ade459fb	6d2b1d5b-ca3f-4345-891a-83da77c7703d	352efce9-8bb2-4cd3-8ac3-7eeee0292972	61
+7a329a74-e6e1-40f2-8c13-d0bae902206c	6d2b1d5b-ca3f-4345-891a-83da77c7703d	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	83
+2d2e2320-9b08-4dbf-a3dd-2f9b66b01ee0	6d2b1d5b-ca3f-4345-891a-83da77c7703d	36acc9d8-b010-42f2-b635-690e40e6a335	15
+f127546f-ff88-442f-8b0c-fc9aee56a952	6d2b1d5b-ca3f-4345-891a-83da77c7703d	3767d7a2-986d-4f45-b2d9-3d274d4950af	5
+c1d9e218-9119-4223-a9c9-7ca4c59a8329	a3a91fd5-3516-4f01-b9c5-8fa389f28751	771e0156-e3cf-4126-b4ea-6a4016ff2be1	150
+ac3ed6b1-fc21-4861-a26a-6b3d374e3877	a3a91fd5-3516-4f01-b9c5-8fa389f28751	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	140
+cb7831b1-e306-4e0e-a1ff-8148595bb409	a3a91fd5-3516-4f01-b9c5-8fa389f28751	d9532837-98f1-4059-b643-61f2500f93f9	200
+d8cc6c87-2b6a-4bb9-b2d8-18a7eeb38675	a3a91fd5-3516-4f01-b9c5-8fa389f28751	352efce9-8bb2-4cd3-8ac3-7eeee0292972	80
+0409deeb-c3c7-4297-b567-4a4bea19fb5b	94131989-f241-4bc9-9e5f-dcf1b4e641d0	19f957ee-7d69-47a7-b0bf-c6303dac16fd	200
+7f4c985c-4ed6-4526-b0ff-8143f9c46ab4	94131989-f241-4bc9-9e5f-dcf1b4e641d0	61ae0668-bf27-415d-ab4b-bbac9b64f029	20
+13ebb002-96f7-4768-8233-930b58e294e7	14384779-fadf-4add-a491-00c024835a6f	3767d7a2-986d-4f45-b2d9-3d274d4950af	6
+94c10daf-d5fe-4ec3-8a9f-c2529554d14e	16dd936c-09a0-45fe-ae27-d43aa5b0a14a	0b4d6278-dca3-4d9a-9d59-3616b92f5835	100
+db4334e2-03fd-4a70-8233-94da39426c38	16dd936c-09a0-45fe-ae27-d43aa5b0a14a	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	60
+dd06e751-e5d8-4ddc-b846-c314092503fe	16dd936c-09a0-45fe-ae27-d43aa5b0a14a	84933a2f-fb82-4789-984a-2b9e484a944a	30
+04c4c0ac-35f1-4c0c-8aa1-429f3f1bd7e2	14384779-fadf-4add-a491-00c024835a6f	84933a2f-fb82-4789-984a-2b9e484a944a	40
+c8dd5fb4-2756-420c-9f54-959ca74348f9	14384779-fadf-4add-a491-00c024835a6f	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	92
+79747353-dbed-461f-877b-bc4e8d764f6f	14384779-fadf-4add-a491-00c024835a6f	352efce9-8bb2-4cd3-8ac3-7eeee0292972	91
+20d23744-4533-4627-85a6-1956adc95c46	14384779-fadf-4add-a491-00c024835a6f	816e9699-5a1f-41a1-8c93-67828a6d4182	100
+23ccf146-9e4e-44b3-a376-96206261bf06	14384779-fadf-4add-a491-00c024835a6f	d9532837-98f1-4059-b643-61f2500f93f9	170
+41367ca9-079e-4099-bb2a-f849132c559c	272ce18c-eae9-4eb0-bec5-d5b09326f3cb	d9532837-98f1-4059-b643-61f2500f93f9	200
+0feb7f5c-ed80-417c-9d73-075cfc4162c0	272ce18c-eae9-4eb0-bec5-d5b09326f3cb	36acc9d8-b010-42f2-b635-690e40e6a335	65
+5e9c148a-b834-4cf7-8462-db8daa4f5ee4	272ce18c-eae9-4eb0-bec5-d5b09326f3cb	352efce9-8bb2-4cd3-8ac3-7eeee0292972	45
+621c7419-5327-4153-b2a2-46c49cef6e1d	272ce18c-eae9-4eb0-bec5-d5b09326f3cb	93821da6-270b-4b6d-a628-b67f2fb4cf73	43
+1e665fd9-2625-4d9d-9f0b-dbe3e25abf26	400a1e6f-c4cf-4667-944a-1743cf5f4799	0b4d6278-dca3-4d9a-9d59-3616b92f5835	100
+5965ba9a-90ad-4b29-be03-1755fdbb04c9	400a1e6f-c4cf-4667-944a-1743cf5f4799	3767d7a2-986d-4f45-b2d9-3d274d4950af	8
+00785102-5e8e-4514-aec4-d3bdda05e465	4a86b07c-d51d-497e-b32f-3d38403f2045	e694131b-2992-4216-b602-a9577ef708b3	20
+72c25a5a-73d4-493b-a699-6b42229b0f6d	4a86b07c-d51d-497e-b32f-3d38403f2045	19f957ee-7d69-47a7-b0bf-c6303dac16fd	100
+06f6bca4-954e-403e-85ba-f1ede2dd7b79	4a86b07c-d51d-497e-b32f-3d38403f2045	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+515384d5-5fdb-4217-b2e9-bca2341856c1	15d90a1f-78bf-4f7d-8d5f-3014c2814d7b	e694131b-2992-4216-b602-a9577ef708b3	60
+8e3add2e-6446-47fe-9cf7-7d814f6b7757	15d90a1f-78bf-4f7d-8d5f-3014c2814d7b	19f957ee-7d69-47a7-b0bf-c6303dac16fd	240
+d2ef48af-c180-4453-92ef-5ee0265448c5	15d90a1f-78bf-4f7d-8d5f-3014c2814d7b	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+bfad4bbb-0547-42f3-b28c-fceca71e06f9	15d90a1f-78bf-4f7d-8d5f-3014c2814d7b	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	16
+30071238-8b00-4d76-bde3-a38dff1b8404	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	e694131b-2992-4216-b602-a9577ef708b3	60
+ebfdc6a5-1cda-4d3f-9835-c141147d9d65	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	19f957ee-7d69-47a7-b0bf-c6303dac16fd	240
+69b15c29-c777-4b99-85db-34dc66828caa	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+fccc5bb7-7429-4956-a19f-1a053d12056c	cc93fd1b-07c5-4065-a895-bc9dd77f1f73	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	16
+c016a112-240c-4788-8891-453fbebcc696	6fd2794c-d0dd-46d9-a360-419c0f1c48cb	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	65
+0d5cf7bc-a89b-4370-8468-c2cd2a445064	6fd2794c-d0dd-46d9-a360-419c0f1c48cb	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	62
+8de4cf62-859a-4c41-9297-842ffbd7ae5b	6fd2794c-d0dd-46d9-a360-419c0f1c48cb	352efce9-8bb2-4cd3-8ac3-7eeee0292972	31
+4c811bf2-b34b-4459-9372-b5f764eec4c7	6fd2794c-d0dd-46d9-a360-419c0f1c48cb	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	43
+ee6d6177-d95f-440b-8972-f10b44579846	6fd2794c-d0dd-46d9-a360-419c0f1c48cb	36acc9d8-b010-42f2-b635-690e40e6a335	15
+7a19f3d0-52c4-4a76-8518-163bb64ed545	6fd2794c-d0dd-46d9-a360-419c0f1c48cb	3767d7a2-986d-4f45-b2d9-3d274d4950af	5
+f4764528-fa19-4424-9903-c872f19f79c3	797afd32-cb07-492c-ae1c-fb5b85411dd5	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	114
+5bcccb4f-bf26-4ded-929d-a4d4b37c388c	797afd32-cb07-492c-ae1c-fb5b85411dd5	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	170
+62ccb1ae-b30b-45ae-a42b-f1e4b3b262ff	797afd32-cb07-492c-ae1c-fb5b85411dd5	352efce9-8bb2-4cd3-8ac3-7eeee0292972	80
+954f0f21-e8e3-4201-bfd1-8eed9ed69538	797afd32-cb07-492c-ae1c-fb5b85411dd5	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	92
+a20639dc-b7d7-49a9-b8b0-78fc39b740e8	797afd32-cb07-492c-ae1c-fb5b85411dd5	36acc9d8-b010-42f2-b635-690e40e6a335	35
+562e2ccf-195d-4ead-981b-c72bffbb6993	1c98c1f8-82c4-4549-81be-24bbc0847589	19f957ee-7d69-47a7-b0bf-c6303dac16fd	100
+2ceb6d03-e79a-4d64-ba1e-b85b9ae551a7	1c98c1f8-82c4-4549-81be-24bbc0847589	e694131b-2992-4216-b602-a9577ef708b3	20
+13d720c6-aa12-4cae-9add-62fe3ac8f573	1c98c1f8-82c4-4549-81be-24bbc0847589	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+131253a8-7d1d-462c-8681-22a2b1ed9f79	1c98c1f8-82c4-4549-81be-24bbc0847589	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	13
+4d748466-c89a-4f3c-aa7a-e96936e1157e	4df1faad-6300-4b8e-b970-343b628b4e9a	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	340
+05875e9a-b24a-43d1-8723-825d11df202e	4df1faad-6300-4b8e-b970-343b628b4e9a	8ec31fd4-7eb5-4572-872b-57f73cf7bf03	336
+b77e0156-acce-4dae-9450-527d879ebf07	4df1faad-6300-4b8e-b970-343b628b4e9a	189a84e7-43b7-4b80-a116-e718c6e2d960	17
+3308558a-15d0-4b43-91e3-67477bb20c1b	4df1faad-6300-4b8e-b970-343b628b4e9a	84933a2f-fb82-4789-984a-2b9e484a944a	50
+1ea6bcad-2af7-4f73-a5fe-bc959e4971a6	4df1faad-6300-4b8e-b970-343b628b4e9a	352efce9-8bb2-4cd3-8ac3-7eeee0292972	138
+4cd0f75e-65b0-48be-b92d-2f2968e142bc	4df1faad-6300-4b8e-b970-343b628b4e9a	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	337
+8b1f2c6a-b1ec-49d2-bb5a-189940259aeb	a64f3f20-d3fd-4b7f-8775-fbf92b1d4384	36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	35
+c51fe4ad-59eb-4ca6-8121-f1fdc06d1517	a64f3f20-d3fd-4b7f-8775-fbf92b1d4384	24a8661d-d81c-4110-9715-e3470e589abf	70
+251bcc93-7df1-44d7-b2ce-19e722523d4e	e064a5db-7aa5-4f9f-bdba-71da5d4b29f0	36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	60
+1745f491-6388-4f92-a33c-aa45c19c3fd7	e064a5db-7aa5-4f9f-bdba-71da5d4b29f0	24a8661d-d81c-4110-9715-e3470e589abf	140
+d931a5a0-d2c3-4e2a-acb5-23c73df9fb3d	761b723a-bade-48c3-b4ca-d2c83387014d	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	60
+9f2a0da7-5808-478f-8554-3471dd57ca9b	761b723a-bade-48c3-b4ca-d2c83387014d	84933a2f-fb82-4789-984a-2b9e484a944a	25
+35c6b792-b6f0-42ac-b283-09b4acb81343	761b723a-bade-48c3-b4ca-d2c83387014d	0b4d6278-dca3-4d9a-9d59-3616b92f5835	200
+038f099e-9bbc-4f12-8a86-f9dd4949a8f6	baacd4f3-ade2-4366-aeb4-b29201cab8a0	36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	120
+defbd609-faf8-4994-81e1-4d4bf159f364	baacd4f3-ade2-4366-aeb4-b29201cab8a0	61ae0668-bf27-415d-ab4b-bbac9b64f029	52
+faf64a1a-65ba-4e70-91f5-74a578eac6cf	baacd4f3-ade2-4366-aeb4-b29201cab8a0	3767d7a2-986d-4f45-b2d9-3d274d4950af	15
+2ab2740e-c0e6-4bf9-9be4-34f34311e51d	35bd906e-4c15-4ea2-bb52-ec16cc3b0020	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	56
+da4a51dc-2c03-4ada-99ba-d709b11fce76	35bd906e-4c15-4ea2-bb52-ec16cc3b0020	83c5b322-876c-4358-8635-f8f8c3675271	250
+eeb3f8aa-58a2-4577-9839-e04e01975339	35bd906e-4c15-4ea2-bb52-ec16cc3b0020	352efce9-8bb2-4cd3-8ac3-7eeee0292972	39
+39e637fc-a633-4dda-9f56-b4f779f36542	35bd906e-4c15-4ea2-bb52-ec16cc3b0020	3767d7a2-986d-4f45-b2d9-3d274d4950af	5
+2fbede63-8c4d-4452-980b-af360d44b0a7	35bd906e-4c15-4ea2-bb52-ec16cc3b0020	d9532837-98f1-4059-b643-61f2500f93f9	50
+85ae035f-2cc0-4086-a1f4-42f6bf351c88	35bd906e-4c15-4ea2-bb52-ec16cc3b0020	2100d345-6ecf-47a8-acf4-d182b3095001	142
+86a856ec-0d00-44aa-9edd-fe8f47c6c8de	d5314ffb-2caf-4d1e-a9b1-a856005335af	19f957ee-7d69-47a7-b0bf-c6303dac16fd	100
+07f50115-176c-45e0-bffe-361a65bb04b0	d5314ffb-2caf-4d1e-a9b1-a856005335af	e694131b-2992-4216-b602-a9577ef708b3	20
+33ce1546-861f-422e-aeee-27a342075c34	d5314ffb-2caf-4d1e-a9b1-a856005335af	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+deb91e84-37d6-466e-96e4-f9d982168c2e	1ae6ed7c-d074-4ac9-916c-338f8d100989	d1509a69-780c-421b-842b-c8703f751d63	51
+d27d9488-6fa4-4dce-8590-2c349370a7a8	1ae6ed7c-d074-4ac9-916c-338f8d100989	61ae0668-bf27-415d-ab4b-bbac9b64f029	23
+045b91a0-3437-411c-a414-43ccda539d4c	1ae6ed7c-d074-4ac9-916c-338f8d100989	3767d7a2-986d-4f45-b2d9-3d274d4950af	7
+21a1893f-8344-4f85-85b4-f90ee8ff3900	5ca671ab-9dbe-48e4-b90b-04f59729f0a5	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+fc4cd8a1-829e-42d8-a10b-f063272a7421	5ca671ab-9dbe-48e4-b90b-04f59729f0a5	e694131b-2992-4216-b602-a9577ef708b3	20
+42875129-21e9-40a1-9741-829449041e4c	5ca671ab-9dbe-48e4-b90b-04f59729f0a5	4f228f37-03e8-4231-b247-8e2c6cc7b75c	24
+5848e959-eb4b-4451-a75b-03b29cc8cbec	5ca671ab-9dbe-48e4-b90b-04f59729f0a5	19f957ee-7d69-47a7-b0bf-c6303dac16fd	135
+c5a28e30-a2cd-48c5-b5e3-ebacca0503ee	06dfcdc9-b735-4327-bd77-68f41fba21a6	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	200
+64deab3b-0ad3-4577-bff0-a8f37b9c7b36	06dfcdc9-b735-4327-bd77-68f41fba21a6	352efce9-8bb2-4cd3-8ac3-7eeee0292972	53
+9a485683-d3cd-4401-a525-2c644fcf1bef	06dfcdc9-b735-4327-bd77-68f41fba21a6	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	105
+9a93ea0f-6f65-45a2-b0b5-888ebc721f8d	06dfcdc9-b735-4327-bd77-68f41fba21a6	3767d7a2-986d-4f45-b2d9-3d274d4950af	3
+e46eea2d-3259-40f7-91eb-8dbd79ade3a3	953999da-cb65-4811-9123-8bda1b19d171	816e9699-5a1f-41a1-8c93-67828a6d4182	50
+dbd4762f-76f0-40ae-a92f-459526d57a15	953999da-cb65-4811-9123-8bda1b19d171	d9532837-98f1-4059-b643-61f2500f93f9	113
+250ea93d-a0d1-4f97-bc34-fb412be9f06d	953999da-cb65-4811-9123-8bda1b19d171	352efce9-8bb2-4cd3-8ac3-7eeee0292972	25
+b26fbe42-c602-4df5-8486-bc79540e47d6	953999da-cb65-4811-9123-8bda1b19d171	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	38
+8b16bec8-0b0c-4b9f-8c1c-7620fcec2779	f0d1c69e-7ca5-4abc-8602-03be0697e783	73d849ea-8dcf-4d86-b530-9e43d15db907	113
+6a0a7277-7c97-4361-b0b5-6875bd8c1482	f0d1c69e-7ca5-4abc-8602-03be0697e783	1232e839-e940-4da5-a815-a8e620c5e1df	56
+f7ab9010-652e-4e5a-9ea1-ed01209b3a37	eb29fde0-bd14-437d-b82a-be4b8a4129fb	a0646884-c6fd-404b-a305-a12aba10e947	260
+3a0f2047-b645-4ca4-adfc-9d04ab18e3ea	eb29fde0-bd14-437d-b82a-be4b8a4129fb	36acc9d8-b010-42f2-b635-690e40e6a335	38
+7a8e07b4-8134-442b-a0e7-e703faea4ca1	eb29fde0-bd14-437d-b82a-be4b8a4129fb	352efce9-8bb2-4cd3-8ac3-7eeee0292972	27
+9d57687d-b497-4a1f-9e15-d6bccfaba14d	eb29fde0-bd14-437d-b82a-be4b8a4129fb	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	34
+1c118d72-a215-4cbe-8ec8-f84dc5b2c524	eb29fde0-bd14-437d-b82a-be4b8a4129fb	1131f4e6-5ee6-4d89-bfa5-548ac1b43393	100
+90b9a75f-439b-44f7-b4a2-b272f1e76fc5	eb29fde0-bd14-437d-b82a-be4b8a4129fb	3a16c197-ca86-4411-9eaa-b4778044bf3a	15
+028ace85-1fff-4244-8119-d527e770aefd	fb0bf74a-9c4a-4f5a-9596-a53c81359e1a	36d8e61a-ec94-4b93-902e-48bdbe4b8dfa	120
+30d9d85a-1fea-4a88-bfb0-553eae732d8a	fb0bf74a-9c4a-4f5a-9596-a53c81359e1a	61ae0668-bf27-415d-ab4b-bbac9b64f029	52
+b15af3d7-eec1-48c4-8763-50823c2d92b6	fb0bf74a-9c4a-4f5a-9596-a53c81359e1a	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	10
+ad32cb21-fe5a-45c7-9fb3-e293712aab5a	b7b6384e-06f7-40b1-885e-2e41dfd4f29b	d1509a69-780c-421b-842b-c8703f751d63	204
+623c0df6-b126-4f1c-accb-7d5cf7682e01	b7b6384e-06f7-40b1-885e-2e41dfd4f29b	61ae0668-bf27-415d-ab4b-bbac9b64f029	63
+9df5bc43-feeb-410c-b89d-233deac44143	b7b6384e-06f7-40b1-885e-2e41dfd4f29b	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	24
+b5a00270-c53a-46ea-99de-d1422c5a0d39	6bd42f85-e7c9-4e91-be94-0acb85674592	352efce9-8bb2-4cd3-8ac3-7eeee0292972	36
+dc8689af-e12d-40ed-99fd-023c0cac511e	6bd42f85-e7c9-4e91-be94-0acb85674592	cdd8a9fe-dc12-4ad0-9648-aee7866a9d6b	9
+72f9c4a0-e306-4b68-bcfd-ddf9e17ad16d	6bd42f85-e7c9-4e91-be94-0acb85674592	f24c38b5-5c22-46ad-9ac1-dc8ece4e34f6	398
+6dcf4ca5-0979-4e4b-85d7-126a6e1d581d	6bd42f85-e7c9-4e91-be94-0acb85674592	2001a697-1e7f-4052-8e98-9430ff0ecba5	35
+87a8f4cc-e472-4bd9-ac66-dfdf9e5a8ed7	6bd42f85-e7c9-4e91-be94-0acb85674592	31af3d47-98d5-49b8-9510-ecf45602e5d5	9
+ebdb0e7b-0b62-4995-8515-a87cf69c42bb	d44d74c6-a74d-4765-8c77-8d59db25c9b8	19f957ee-7d69-47a7-b0bf-c6303dac16fd	150
+c02d4bc9-6834-4bd0-b1e8-36f271733857	d44d74c6-a74d-4765-8c77-8d59db25c9b8	e694131b-2992-4216-b602-a9577ef708b3	30
+eb121a14-7fcf-4244-bae2-27428dc79da4	d44d74c6-a74d-4765-8c77-8d59db25c9b8	20e38624-5d83-4ac5-aa33-d5d8b352ae44	30
+7081a3c7-6497-43d5-b337-a6a0ac488ce6	d44d74c6-a74d-4765-8c77-8d59db25c9b8	0b882454-c2f1-4e08-9eee-d7a7390e4e5e	13
+b29d7d97-b8af-455f-ba8a-be0bc3d6d18e	293b1acb-b9e7-4576-a608-88119bbdf1a7	d9532837-98f1-4059-b643-61f2500f93f9	100
+855fa510-88a8-4452-b60a-4157a6f9467e	293b1acb-b9e7-4576-a608-88119bbdf1a7	b9cfae13-284f-4cd2-bbb8-c85b2e4fabcb	200
+\.
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.schema_migrations (version, inserted_at) FROM stdin;
+20211116024918	2025-07-17 15:31:26
+20211116045059	2025-07-17 15:31:29
+20211116050929	2025-07-17 15:31:31
+20211116051442	2025-07-17 15:31:33
+20211116212300	2025-07-17 15:31:35
+20211116213355	2025-07-17 15:31:37
+20211116213934	2025-07-17 15:31:40
+20211116214523	2025-07-17 15:31:42
+20211122062447	2025-07-17 15:31:44
+20211124070109	2025-07-17 15:31:47
+20211202204204	2025-07-17 15:31:49
+20211202204605	2025-07-17 15:31:51
+20211210212804	2025-07-17 15:31:57
+20211228014915	2025-07-17 15:31:59
+20220107221237	2025-07-17 15:32:01
+20220228202821	2025-07-17 15:32:03
+20220312004840	2025-07-17 15:32:05
+20220603231003	2025-07-17 15:32:09
+20220603232444	2025-07-17 15:32:11
+20220615214548	2025-07-17 15:32:13
+20220712093339	2025-07-17 15:32:15
+20220908172859	2025-07-17 15:32:17
+20220916233421	2025-07-17 15:32:19
+20230119133233	2025-07-17 15:32:21
+20230128025114	2025-07-17 15:32:24
+20230128025212	2025-07-17 15:32:26
+20230227211149	2025-07-17 15:32:28
+20230228184745	2025-07-17 15:32:30
+20230308225145	2025-07-17 15:32:32
+20230328144023	2025-07-17 15:32:34
+20231018144023	2025-07-17 15:32:37
+20231204144023	2025-07-17 15:32:40
+20231204144024	2025-07-17 15:32:42
+20231204144025	2025-07-17 15:32:44
+20240108234812	2025-07-17 15:32:46
+20240109165339	2025-07-17 15:32:48
+20240227174441	2025-07-17 15:32:52
+20240311171622	2025-07-17 15:32:55
+20240321100241	2025-07-17 15:32:59
+20240401105812	2025-07-17 15:33:05
+20240418121054	2025-07-17 15:33:08
+20240523004032	2025-07-17 15:33:16
+20240618124746	2025-07-17 15:33:18
+20240801235015	2025-07-17 15:33:20
+20240805133720	2025-07-17 15:33:22
+20240827160934	2025-07-17 15:33:24
+20240919163303	2025-07-17 15:33:27
+20240919163305	2025-07-17 15:33:29
+20241019105805	2025-07-17 15:33:31
+20241030150047	2025-07-17 15:33:39
+20241108114728	2025-07-17 15:33:41
+20241121104152	2025-07-17 15:33:43
+20241130184212	2025-07-17 15:33:46
+20241220035512	2025-07-17 15:33:48
+20241220123912	2025-07-17 15:33:50
+20241224161212	2025-07-17 15:33:52
+20250107150512	2025-07-17 15:33:54
+20250110162412	2025-07-17 15:33:56
+20250123174212	2025-07-17 15:33:58
+20250128220012	2025-07-17 15:34:00
+20250506224012	2025-07-17 15:34:02
+20250523164012	2025-07-17 15:34:04
+20250714121412	2025-07-31 18:26:33
+20250905041441	2026-02-07 21:10:14
+20251103001201	2026-02-07 21:10:14
+20251120212548	2026-02-07 21:10:14
+20251120215549	2026-02-07 21:10:15
+20260218120000	2026-04-06 23:25:59
+\.
+
+
+--
+-- Data for Name: subscription; Type: TABLE DATA; Schema: realtime; Owner: supabase_admin
+--
+
+COPY realtime.subscription (id, subscription_id, entity, filters, claims, created_at, action_filter) FROM stdin;
+\.
+
+
+--
+-- Data for Name: buckets; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.buckets (id, name, owner, created_at, updated_at, public, avif_autodetection, file_size_limit, allowed_mime_types, owner_id, type) FROM stdin;
+\.
+
+
+--
+-- Data for Name: buckets_analytics; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.buckets_analytics (name, type, format, created_at, updated_at, id, deleted_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: buckets_vectors; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.buckets_vectors (id, type, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: migrations; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.migrations (id, name, hash, executed_at) FROM stdin;
+0	create-migrations-table	e18db593bcde2aca2a408c4d1100f6abba2195df	2025-07-17 15:31:22.973791
+1	initialmigration	6ab16121fbaa08bbd11b712d05f358f9b555d777	2025-07-17 15:31:22.978501
+3	pathtoken-column	2cb1b0004b817b29d5b0a971af16bafeede4b70d	2025-07-17 15:31:22.993894
+4	add-migrations-rls	427c5b63fe1c5937495d9c635c263ee7a5905058	2025-07-17 15:31:23.000911
+5	add-size-functions	79e081a1455b63666c1294a440f8ad4b1e6a7f84	2025-07-17 15:31:23.003678
+7	add-rls-to-buckets	e7e7f86adbc51049f341dfe8d30256c1abca17aa	2025-07-17 15:31:23.011331
+8	add-public-to-buckets	fd670db39ed65f9d08b01db09d6202503ca2bab3	2025-07-17 15:31:23.014045
+11	add-trigger-to-auto-update-updated_at-column	7425bdb14366d1739fa8a18c83100636d74dcaa2	2025-07-17 15:31:23.024194
+12	add-automatic-avif-detection-flag	8e92e1266eb29518b6a4c5313ab8f29dd0d08df9	2025-07-17 15:31:23.027639
+13	add-bucket-custom-limits	cce962054138135cd9a8c4bcd531598684b25e7d	2025-07-17 15:31:23.032017
+14	use-bytes-for-max-size	941c41b346f9802b411f06f30e972ad4744dad27	2025-07-17 15:31:23.036507
+15	add-can-insert-object-function	934146bc38ead475f4ef4b555c524ee5d66799e5	2025-07-17 15:31:23.051029
+16	add-version	76debf38d3fd07dcfc747ca49096457d95b1221b	2025-07-17 15:31:23.053845
+17	drop-owner-foreign-key	f1cbb288f1b7a4c1eb8c38504b80ae2a0153d101	2025-07-17 15:31:23.056984
+18	add_owner_id_column_deprecate_owner	e7a511b379110b08e2f214be852c35414749fe66	2025-07-17 15:31:23.061738
+19	alter-default-value-objects-id	02e5e22a78626187e00d173dc45f58fa66a4f043	2025-07-17 15:31:23.067555
+20	list-objects-with-delimiter	cd694ae708e51ba82bf012bba00caf4f3b6393b7	2025-07-17 15:31:23.070932
+21	s3-multipart-uploads	8c804d4a566c40cd1e4cc5b3725a664a9303657f	2025-07-17 15:31:23.077685
+22	s3-multipart-uploads-big-ints	9737dc258d2397953c9953d9b86920b8be0cdb73	2025-07-17 15:31:23.088653
+23	optimize-search-function	9d7e604cddc4b56a5422dc68c9313f4a1b6f132c	2025-07-17 15:31:23.097702
+24	operation-function	8312e37c2bf9e76bbe841aa5fda889206d2bf8aa	2025-07-17 15:31:23.101434
+25	custom-metadata	d974c6057c3db1c1f847afa0e291e6165693b990	2025-07-17 15:31:23.104283
+37	add-bucket-name-length-trigger	3944135b4e3e8b22d6d4cbb568fe3b0b51df15c1	2025-11-18 15:33:04.117707
+44	vector-bucket-type	99c20c0ffd52bb1ff1f32fb992f3b351e3ef8fb3	2025-11-18 15:33:04.168337
+45	vector-buckets	049e27196d77a7cb76497a85afae669d8b230953	2025-11-18 15:33:04.173883
+46	buckets-objects-grants	fedeb96d60fefd8e02ab3ded9fbde05632f84aed	2025-11-18 15:33:04.187487
+47	iceberg-table-metadata	649df56855c24d8b36dd4cc1aeb8251aa9ad42c2	2025-11-18 15:33:04.193122
+49	buckets-objects-grants-postgres	072b1195d0d5a2f888af6b2302a1938dd94b8b3d	2025-12-28 20:40:48.525563
+2	storage-schema	f6a1fa2c93cbcd16d4e487b362e45fca157a8dbd	2025-07-17 15:31:22.980866
+6	change-column-name-in-get-size	ded78e2f1b5d7e616117897e6443a925965b30d2	2025-07-17 15:31:23.007264
+9	fix-search-function	af597a1b590c70519b464a4ab3be54490712796b	2025-07-17 15:31:23.016845
+10	search-files-search-function	b595f05e92f7e91211af1bbfe9c6a13bb3391e16	2025-07-17 15:31:23.021092
+26	objects-prefixes	215cabcb7f78121892a5a2037a09fedf9a1ae322	2025-11-18 15:33:03.992168
+27	search-v2	859ba38092ac96eb3964d83bf53ccc0b141663a6	2025-11-18 15:33:04.045311
+28	object-bucket-name-sorting	c73a2b5b5d4041e39705814fd3a1b95502d38ce4	2025-11-18 15:33:04.056153
+29	create-prefixes	ad2c1207f76703d11a9f9007f821620017a66c21	2025-11-18 15:33:04.064372
+30	update-object-levels	2be814ff05c8252fdfdc7cfb4b7f5c7e17f0bed6	2025-11-18 15:33:04.068735
+31	objects-level-index	b40367c14c3440ec75f19bbce2d71e914ddd3da0	2025-11-18 15:33:04.075711
+32	backward-compatible-index-on-objects	e0c37182b0f7aee3efd823298fb3c76f1042c0f7	2025-11-18 15:33:04.08331
+33	backward-compatible-index-on-prefixes	b480e99ed951e0900f033ec4eb34b5bdcb4e3d49	2025-11-18 15:33:04.093971
+34	optimize-search-function-v1	ca80a3dc7bfef894df17108785ce29a7fc8ee456	2025-11-18 15:33:04.096112
+35	add-insert-trigger-prefixes	458fe0ffd07ec53f5e3ce9df51bfdf4861929ccc	2025-11-18 15:33:04.103338
+36	optimise-existing-functions	6ae5fca6af5c55abe95369cd4f93985d1814ca8f	2025-11-18 15:33:04.108532
+38	iceberg-catalog-flag-on-buckets	02716b81ceec9705aed84aa1501657095b32e5c5	2025-11-18 15:33:04.123962
+39	add-search-v2-sort-support	6706c5f2928846abee18461279799ad12b279b78	2025-11-18 15:33:04.135247
+40	fix-prefix-race-conditions-optimized	7ad69982ae2d372b21f48fc4829ae9752c518f6b	2025-11-18 15:33:04.140759
+41	add-object-level-update-trigger	07fcf1a22165849b7a029deed059ffcde08d1ae0	2025-11-18 15:33:04.150008
+42	rollback-prefix-triggers	771479077764adc09e2ea2043eb627503c034cd4	2025-11-18 15:33:04.155794
+43	fix-object-level	84b35d6caca9d937478ad8a797491f38b8c2979f	2025-11-18 15:33:04.162411
+48	iceberg-catalog-ids	e0e8b460c609b9999ccd0df9ad14294613eed939	2025-11-18 15:33:04.198132
+50	search-v2-optimised	6323ac4f850aa14e7387eb32102869578b5bd478	2026-02-13 01:56:50.469007
+51	index-backward-compatible-search	2ee395d433f76e38bcd3856debaf6e0e5b674011	2026-02-13 01:56:50.550522
+52	drop-not-used-indexes-and-functions	5cc44c8696749ac11dd0dc37f2a3802075f3a171	2026-02-13 01:56:50.552581
+53	drop-index-lower-name	d0cb18777d9e2a98ebe0bc5cc7a42e57ebe41854	2026-02-13 01:56:50.591236
+54	drop-index-object-level	6289e048b1472da17c31a7eba1ded625a6457e67	2026-02-13 01:56:50.593843
+55	prevent-direct-deletes	262a4798d5e0f2e7c8970232e03ce8be695d5819	2026-02-13 01:56:50.596594
+56	fix-optimized-search-function	cb58526ebc23048049fd5bf2fd148d18b04a2073	2026-02-13 01:56:50.609392
+57	s3-multipart-uploads-metadata	f127886e00d1b374fadbc7c6b31e09336aad5287	2026-04-06 23:26:01.301112
+58	operation-ergonomics	00ca5d483b3fe0d522133d9002ccc5df98365120	2026-04-06 23:26:01.321111
+\.
+
+
+--
+-- Data for Name: objects; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.objects (id, bucket_id, name, owner, created_at, updated_at, last_accessed_at, metadata, version, owner_id, user_metadata) FROM stdin;
+\.
+
+
+--
+-- Data for Name: s3_multipart_uploads; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.s3_multipart_uploads (id, in_progress_size, upload_signature, bucket_id, key, version, owner_id, created_at, user_metadata, metadata) FROM stdin;
+\.
+
+
+--
+-- Data for Name: s3_multipart_uploads_parts; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.s3_multipart_uploads_parts (id, upload_id, size, part_number, bucket_id, key, etag, owner_id, version, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: vector_indexes; Type: TABLE DATA; Schema: storage; Owner: supabase_storage_admin
+--
+
+COPY storage.vector_indexes (id, name, bucket_id, data_type, dimension, distance_metric, metadata_configuration, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: secrets; Type: TABLE DATA; Schema: vault; Owner: supabase_admin
+--
+
+COPY vault.secrets (id, name, description, secret, key_id, nonce, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
+--
+
+SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1, false);
+
+
+--
+-- Name: subscription_id_seq; Type: SEQUENCE SET; Schema: realtime; Owner: supabase_admin
+--
+
+SELECT pg_catalog.setval('realtime.subscription_id_seq', 1, false);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict UTR7RVF3IHp3JTSzhacjzCq0Pjyik7xeLTuzPA14M148Hsrodq7SBe2Vb8VQidS
+

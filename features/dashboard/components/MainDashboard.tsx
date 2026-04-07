@@ -66,6 +66,7 @@ export function MainDashboard({
   };
 
   const [selectedUserId] = useState(currentUser.id);
+  const [activeUser, setActiveUser] = useState<AppUser>(currentUser);
 
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -94,7 +95,7 @@ export function MainDashboard({
         const baseRecipes = await getAllRecipes(); // ✅ Use getAllRecipes for shared recipes
 
         const recipesWithIngredients = await Promise.all(
-          baseRecipes.map((r) => getRecipeWithIngredients(r.id))
+          baseRecipes.map((r) => getRecipeWithIngredients(r.id)),
         );
 
         setFoods(foodsData);
@@ -135,7 +136,7 @@ export function MainDashboard({
     // ✅ FIXED: Use getAllRecipes() instead of getUserRecipes()
     const base = await getAllRecipes();
     const full = await Promise.all(
-      base.map((r) => getRecipeWithIngredients(r.id))
+      base.map((r) => getRecipeWithIngredients(r.id)),
     );
     setRecipes(full);
   };
@@ -209,6 +210,10 @@ export function MainDashboard({
             recipes={recipes}
             meals={meals}
             onRefreshMeals={refreshMeals}
+            currentUser={activeUser}
+            onUserUpdated={(updated) => {
+              setActiveUser(updated);
+            }}
           />
         )}
 

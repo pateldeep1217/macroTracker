@@ -628,3 +628,23 @@ export async function getAllUsers() {
   if (error) throw error;
   return data as AppUser[];
 }
+
+
+export async function updateUserTargets(userId: string, targets: {
+  target_calories?: number | null;
+  target_protein?: number | null;
+  target_carbs?: number | null;
+  target_fat?: number | null;
+  target_fiber?: number | null;
+}) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("app_users")
+    .update(targets)
+    .eq("id", userId)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as AppUser;
+}
