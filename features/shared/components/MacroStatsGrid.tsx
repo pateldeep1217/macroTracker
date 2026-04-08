@@ -153,7 +153,7 @@ function NoTargetsBanner({ onEditTargets }: { onEditTargets?: () => void }) {
       `}</style>
       <button
         onClick={onEditTargets}
-        className="msg-root group relative w-full overflow-hidden rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-800/80 p-4 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+        className="cursor-pointer msg-root group relative w-full overflow-hidden rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-800/80 p-4 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
       >
         <div className="msg-shimmer absolute top-0 left-0 h-[2px] w-full" />
         <div className="flex items-center gap-3.5">

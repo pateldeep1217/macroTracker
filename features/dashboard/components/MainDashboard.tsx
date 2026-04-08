@@ -71,7 +71,7 @@ export function MainDashboard({
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [meals, setMeals] = useState<MealEntryWithDetails[]>([]);
-
+  const [mounted, setMounted] = useState(false);
   // ✅ FIXED: Use local timezone instead of UTC
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     const today = new Date();
@@ -82,7 +82,9 @@ export function MainDashboard({
   });
 
   const [isLoading, setIsLoading] = useState(true);
-
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const selectedUser =
     allUsers.find((u) => u.id === selectedUserId) ?? currentUser;
 
@@ -141,11 +143,20 @@ export function MainDashboard({
     setRecipes(full);
   };
 
-  if (isLoading) {
+  if (!mounted || isLoading) {
     return <LoadingState message="Loading your dashboard..." />;
   }
 
-  function onUserUpdated(user: { created_at: string | null; id: string; name: string; target_calories: number | null; target_carbs: number | null; target_fat: number | null; target_fiber: number | null; target_protein: number | null; }): void {
+  function onUserUpdated(user: {
+    created_at: string | null;
+    id: string;
+    name: string;
+    target_calories: number | null;
+    target_carbs: number | null;
+    target_fat: number | null;
+    target_fiber: number | null;
+    target_protein: number | null;
+  }): void {
     setActiveUser(user);
   }
   return (
@@ -240,8 +251,8 @@ export function MainDashboard({
             userName={selectedUser.name}
             selectedDate={selectedDate}
             meals={meals}
-              currentUser={currentUser}       // ← add this
-        onUserUpdated={onUserUpdated}  
+            currentUser={currentUser} // ← add this
+            onUserUpdated={onUserUpdated}
           />
         )}
       </div>

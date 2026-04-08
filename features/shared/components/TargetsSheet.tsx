@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { AppUser } from "@/utils/supabase/queries";
-import { updateUserTargets } from "@/utils/supabase/queries";
+import { updateUserTargets, updateUserCalcInputs } from "@/utils/supabase/queries";
 import { Button } from "@/app/components/button";
 import { Input } from "@/app/components/input";
 import { Text } from "@/app/components/text";
@@ -24,10 +24,10 @@ interface TargetsSheetProps {
 }
 
 const JOB_TYPES = [
-  { label: "Desk / Seated",  neat: 0,    desc: "Office, driving, WFH" },
-  { label: "Light Standing", neat: 0.1,  desc: "Retail, cashier, teacher" },
-  { label: "On Your Feet",   neat: 0.2,  desc: "Server, store clerk, nurse" },
-  { label: "Physical Labor", neat: 0.3,  desc: "Construction, warehouse, farming" },
+  { label: "Desk / Seated",  neat: 0,   desc: "Office, driving, WFH" },
+  { label: "Light Standing", neat: 0.1, desc: "Retail, cashier, teacher" },
+  { label: "On Your Feet",   neat: 0.2, desc: "Server, store clerk, nurse" },
+  { label: "Physical Labor", neat: 0.3, desc: "Construction, warehouse, farming" },
 ] as const;
 
 const EXERCISE_LEVELS = [
@@ -52,49 +52,16 @@ const PROTEIN_TARGETS = [
   { label: "Aggressive", value: 2.2,  desc: "2.2g/kg · Bodybuilding / cut" },
 ] as const;
 
-// ── localStorage helpers ──────────────────────────────────────────────────
-const STORAGE_KEY = (userId: string) => `calc_inputs_${userId}`;
-
-interface StoredCalcInputs {
-  useImperial: boolean;
-  sex: "male" | "female";
-  age: string;
-  weightKg: string;
-  weightLbs: string;
-  heightCm: string;
-  heightFt: string;
-  heightIn: string;
-  jobTypeLabel: string;
-  exerciseLabel: string;
-  goalLabel: string;
-  proteinTargetValue: number;
-}
-
-function loadCalcInputs(userId: string): Partial<StoredCalcInputs> {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY(userId));
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveCalcInputs(userId: string, data: StoredCalcInputs) {
-  try {
-    localStorage.setItem(STORAGE_KEY(userId), JSON.stringify(data));
-  } catch {}
-}
-
 export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsSheetProps) {
 
-  // ── Manual targets — pre-filled from saved user data ───────────────
+  // ── Manual targets — pre-filled from DB ────────────────────────────
   const [calories, setCalories] = useState(String(currentUser.target_calories ?? ""));
-  const [protein, setProtein]   = useState(String(currentUser.target_protein  ?? ""));
-  const [carbs, setCarbs]       = useState(String(currentUser.target_carbs    ?? ""));
-  const [fat, setFat]           = useState(String(currentUser.target_fat      ?? ""));
-  const [fiber, setFiber]       = useState(String(currentUser.target_fiber    ?? ""));
+  const [protein,  setProtein]  = useState(String(currentUser.target_protein  ?? ""));
+  const [carbs,    setCarbs]    = useState(String(currentUser.target_carbs    ?? ""));
+  const [fat,      setFat]      = useState(String(currentUser.target_fat      ?? ""));
+  const [fiber,    setFiber]    = useState(String(currentUser.target_fiber    ?? ""));
 
-  // Re-sync manual fields when sheet opens or user changes
+  // Re-sync when sheet opens or user changes (e.g. after save)
   useEffect(() => {
     if (open) {
       setCalories(String(currentUser.target_calories ?? ""));
@@ -105,51 +72,53 @@ export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsShe
     }
   }, [open, currentUser]);
 
-  // ── Calculator inputs — restored from localStorage ─────────────────
-  const saved = loadCalcInputs(currentUser.id);
+  // ── Calculator inputs — seeded from DB columns (cross-device) ──────
+  // Falls back to defaults if the user has never saved calc inputs before.
+  const [useImperial, setUseImperial] = useState(currentUser.calc_use_imperial ?? false);
+  const [sex,         setSex]         = useState<"male" | "female">(currentUser.calc_sex ?? "female");
+  const [age,         setAge]         = useState(currentUser.calc_age != null ? String(currentUser.calc_age) : "");
 
-  const [useImperial, setUseImperial] = useState(saved.useImperial ?? false);
-  const [sex, setSex]                 = useState<"male" | "female">(saved.sex ?? "female");
-  const [age, setAge]                 = useState(saved.age ?? "");
-  const [weightKg, setWeightKg]       = useState(saved.weightKg ?? "");
-  const [weightLbs, setWeightLbs]     = useState(saved.weightLbs ?? "");
-  const [heightCm, setHeightCm]       = useState(saved.heightCm ?? "");
-  const [heightFt, setHeightFt]       = useState(saved.heightFt ?? "");
-  const [heightIn, setHeightIn]       = useState(saved.heightIn ?? "");
+  const [weightKg,  setWeightKg]  = useState(currentUser.calc_weight_kg  != null ? String(currentUser.calc_weight_kg)  : "");
+  const [weightLbs, setWeightLbs] = useState(currentUser.calc_weight_lbs != null ? String(currentUser.calc_weight_lbs) : "");
+  const [heightCm,  setHeightCm]  = useState(currentUser.calc_height_cm  != null ? String(currentUser.calc_height_cm)  : "");
+  const [heightFt,  setHeightFt]  = useState(currentUser.calc_height_ft  != null ? String(currentUser.calc_height_ft)  : "");
+  const [heightIn,  setHeightIn]  = useState(currentUser.calc_height_in  != null ? String(currentUser.calc_height_in)  : "");
 
   const [jobType, setJobType] = useState<typeof JOB_TYPES[number]>(
-    JOB_TYPES.find(j => j.label === saved.jobTypeLabel) ?? JOB_TYPES[0]
+    JOB_TYPES.find(j => j.label === currentUser.calc_job_type) ?? JOB_TYPES[0]
   );
   const [exerciseLevel, setExerciseLevel] = useState<typeof EXERCISE_LEVELS[number]>(
-    EXERCISE_LEVELS.find(e => e.label === saved.exerciseLabel) ?? EXERCISE_LEVELS[2]
+    EXERCISE_LEVELS.find(e => e.label === currentUser.calc_exercise_level) ?? EXERCISE_LEVELS[2]
   );
   const [goal, setGoal] = useState<typeof GOALS[number]>(
-    GOALS.find(g => g.label === saved.goalLabel) ?? GOALS[2]
+    GOALS.find(g => g.label === currentUser.calc_goal) ?? GOALS[2]
   );
   const [proteinTarget, setProteinTarget] = useState<typeof PROTEIN_TARGETS[number]>(
-    PROTEIN_TARGETS.find(p => p.value === saved.proteinTargetValue) ?? PROTEIN_TARGETS[2]
+    PROTEIN_TARGETS.find(p => p.value === currentUser.calc_protein_target) ?? PROTEIN_TARGETS[2]
   );
 
-  // Persist to localStorage whenever any calc input changes
+  // Also re-seed calculator inputs whenever the sheet re-opens
+  // (handles the case where currentUser was updated after a save)
   useEffect(() => {
-    saveCalcInputs(currentUser.id, {
-      useImperial, sex, age, weightKg, weightLbs,
-      heightCm, heightFt, heightIn,
-      jobTypeLabel: jobType.label,
-      exerciseLabel: exerciseLevel.label,
-      goalLabel: goal.label,
-      proteinTargetValue: proteinTarget.value,
-    });
-  }, [
-    useImperial, sex, age, weightKg, weightLbs,
-    heightCm, heightFt, heightIn,
-    jobType, exerciseLevel, goal, proteinTarget,
-    currentUser.id,
-  ]);
+    if (open) {
+      setUseImperial(currentUser.calc_use_imperial ?? false);
+      setSex(currentUser.calc_sex ?? "female");
+      setAge(currentUser.calc_age != null ? String(currentUser.calc_age) : "");
+      setWeightKg(currentUser.calc_weight_kg   != null ? String(currentUser.calc_weight_kg)  : "");
+      setWeightLbs(currentUser.calc_weight_lbs != null ? String(currentUser.calc_weight_lbs) : "");
+      setHeightCm(currentUser.calc_height_cm   != null ? String(currentUser.calc_height_cm)  : "");
+      setHeightFt(currentUser.calc_height_ft   != null ? String(currentUser.calc_height_ft)  : "");
+      setHeightIn(currentUser.calc_height_in   != null ? String(currentUser.calc_height_in)  : "");
+      setJobType(JOB_TYPES.find(j => j.label === currentUser.calc_job_type) ?? JOB_TYPES[0]);
+      setExerciseLevel(EXERCISE_LEVELS.find(e => e.label === currentUser.calc_exercise_level) ?? EXERCISE_LEVELS[2]);
+      setGoal(GOALS.find(g => g.label === currentUser.calc_goal) ?? GOALS[2]);
+      setProteinTarget(PROTEIN_TARGETS.find(p => p.value === currentUser.calc_protein_target) ?? PROTEIN_TARGETS[2]);
+    }
+  }, [open, currentUser]);
 
-  // ── UI state ─────────────────────────────────────────────────────────
+  // ── UI state ──────────────────────────────────────────────────────────
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError]       = useState<string | null>(null);
+  const [error,    setError]    = useState<string | null>(null);
 
   // ── Derived weight in kg ──────────────────────────────────────────────
   const getWeightKg = (): number | null => {
@@ -205,18 +174,38 @@ export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsShe
   const fatKcal        = parseFloat(fat) * 9;
   const totalMacroKcal = proteinKcal + carbsKcal + fatKcal;
 
-  // ── Save / Clear ──────────────────────────────────────────────────────
+  // ── Collect current calc inputs for DB save ───────────────────────────
+  const buildCalcInputs = () => ({
+    calc_use_imperial:   useImperial,
+    calc_sex:            sex,
+    calc_age:            age         ? parseInt(age)          : null,
+    calc_weight_kg:      weightKg    ? parseFloat(weightKg)   : null,
+    calc_weight_lbs:     weightLbs   ? parseFloat(weightLbs)  : null,
+    calc_height_cm:      heightCm    ? parseFloat(heightCm)   : null,
+    calc_height_ft:      heightFt    ? parseInt(heightFt)     : null,
+    calc_height_in:      heightIn    ? parseFloat(heightIn)   : null,
+    calc_job_type:       jobType.label,
+    calc_exercise_level: exerciseLevel.label,
+    calc_goal:           goal.label,
+    calc_protein_target: proteinTarget.value,
+  });
+
+  // ── Save ──────────────────────────────────────────────────────────────
   const handleSave = async () => {
     setIsSaving(true);
     setError(null);
     try {
-      const updated = await updateUserTargets(currentUser.id, {
-        target_calories: calories ? parseInt(calories)  : null,
-        target_protein:  protein  ? parseFloat(protein) : null,
-        target_carbs:    carbs    ? parseFloat(carbs)   : null,
-        target_fat:      fat      ? parseFloat(fat)     : null,
-        target_fiber:    fiber    ? parseFloat(fiber)   : null,
-      });
+      // Save both targets and calculator inputs in parallel
+      const [updated] = await Promise.all([
+        updateUserTargets(currentUser.id, {
+          target_calories: calories ? parseInt(calories)  : null,
+          target_protein:  protein  ? parseFloat(protein) : null,
+          target_carbs:    carbs    ? parseFloat(carbs)   : null,
+          target_fat:      fat      ? parseFloat(fat)     : null,
+          target_fiber:    fiber    ? parseFloat(fiber)   : null,
+        }),
+        updateUserCalcInputs(currentUser.id, buildCalcInputs()),
+      ]);
       onSaved(updated);
       onClose();
     } catch (err) {
@@ -227,6 +216,7 @@ export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsShe
     }
   };
 
+  // ── Clear ─────────────────────────────────────────────────────────────
   const handleClear = async () => {
     setIsSaving(true);
     setError(null);
@@ -235,6 +225,8 @@ export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsShe
         target_calories: null, target_protein: null,
         target_carbs:    null, target_fat:     null, target_fiber: null,
       });
+      // Note: we keep calc inputs on clear — user probably wants to re-run
+      // the calculator again, so we leave their body stats intact.
       setCalories(""); setProtein(""); setCarbs(""); setFat(""); setFiber("");
       onSaved(updated);
       onClose();
@@ -495,7 +487,7 @@ export function TargetsSheet({ open, onClose, currentUser, onSaved }: TargetsShe
               ))}
             </div>
 
-            {/* Live macro breakdown bar */}
+            {/* Live macro bar */}
             {hasCalories && totalMacroKcal > 0 && (
               <div className="space-y-1.5">
                 <div className="flex gap-0.5 h-1.5 rounded-full overflow-hidden">
@@ -557,7 +549,9 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   return <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{children}</p>;
 }
 
-function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
+function Field({ label, children, className = "" }: {
+  label: string; children: React.ReactNode; className?: string;
+}) {
   return (
     <div className={className}>
       <FieldLabel>{label}</FieldLabel>

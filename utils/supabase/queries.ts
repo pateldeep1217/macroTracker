@@ -648,3 +648,32 @@ export async function updateUserTargets(userId: string, targets: {
   if (error) throw error;
   return data as AppUser;
 }
+
+
+export interface CalcInputs {
+  calc_use_imperial:   boolean;
+  calc_sex:            "male" | "female";
+  calc_age:            number | null;
+  calc_weight_kg:      number | null;
+  calc_weight_lbs:     number | null;
+  calc_height_cm:      number | null;
+  calc_height_ft:      number | null;
+  calc_height_in:      number | null;
+  calc_job_type:       string | null;
+  calc_exercise_level: string | null;
+  calc_goal:           string | null;
+  calc_protein_target: number | null;
+}
+ 
+export async function updateUserCalcInputs(
+  userId: string,
+  inputs: CalcInputs
+): Promise<void> {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from("app_users")
+    .update(inputs)
+    .eq("id", userId);
+ 
+  if (error) throw error;
+}
